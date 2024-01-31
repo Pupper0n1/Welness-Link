@@ -84,7 +84,7 @@ class UserController(Controller):
             HTTPException: If a user with the same username already exists.
         '''
         current_time = datetime.datetime.now(pytz.utc)
-        user_data = data.create_instance(id=uuid7(),communities=[], posts=[], created_at=current_time, updated_at=current_time, is_active=True, last_login=current_time)
+        user_data = data.create_instance(id=uuid7(), created_at=current_time, updated_at=current_time)
         validated_user_data = UserSchema.model_validate(user_data)
         validated_user_data.set_password(validated_user_data.password)
         try:
@@ -92,7 +92,6 @@ class UserController(Controller):
             token = oauth2_auth.login(identifier=str(validated_user_data.id))
             session_key = f'session:{validated_user_data.id}'
             await redis.hmset(session_key, {'user_id': str(validated_user_data.id), 'username': validated_user_data.username, 'token': str(token.cookies)})
-            
             return token
         except Exception as e:
             raise HTTPException(status_code=409, detail=f'User with that username exists')

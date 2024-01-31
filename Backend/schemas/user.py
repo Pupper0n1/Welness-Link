@@ -34,6 +34,7 @@ class UserSchema(Schema):
             return ph.verify(self.password, password)
         except argon2.exceptions.VerifyMismatchError:
             return False
+    
 
 
 # Define a DTO for user data

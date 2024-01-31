@@ -8,32 +8,33 @@ from litestar.dto import DTOConfig
 from litestar.contrib.pydantic import PydanticDTO
 from .schema import Schema
 
-class MedicineSchema(Schema):
+
+class CompanySchema(Schema):
     id: UUID
     name: str
-    DIN: int
-    Notes: str
-    usage: str
-    type: str
-    image: str
+    logo: Optional[str]
 
-    company_id: UUID
+    address_street: Optional[str]
+    address_zip: Optional[str]
+    address_city: Optional[str]
+    address_province: Optional[str]
+    address_country: Optional[str]
 
 
 
 
 
 # Define a DTO for user data
-class MedicineDTO(PydanticDTO[MedicineSchema]):
+class CompanyDTO(PydanticDTO[CompanySchema]):
     config = DTOConfig(
         max_nested_depth=2,
     )
 
-class CreateMedicineDTO(MedicineDTO):
+class CreateCompanyDTO(CompanyDTO):
     config = DTOConfig(
-        include={'name', 'DIN', 'Notes', 'usage', 'type', 'company_id'}
+        include={'name'}
     )
 
 
-MedicineSchema.model_rebuild()
+CompanySchema.model_rebuild()
 
