@@ -12,6 +12,6 @@ class Doctor(UUIDAuditBase):
     name: Mapped[str] = mapped_column(String(255))
     email: Mapped[str] = mapped_column(String(100))
     profile_picture: Mapped[str] = mapped_column(String(100), nullable=True)
-    speciality: Mapped[str] = mapped_column(String(100))
+    specialty: Mapped[str] = mapped_column(String(100))
 
     appointments = relationship('Appointment', back_populates='doctor')

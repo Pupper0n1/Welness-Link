@@ -14,7 +14,7 @@ async def get_company_list(session: AsyncSession, limit, offset) -> list[Company
 
 
 async def get_company_by_name(session: AsyncSession, name: str) -> Company:
-    query = select(Company).where(Company.name == name)
+    query = select(Company).options(orm.selectinload(Company.medicines)).where(Company.name == name)
     result = await session.execute(query)
     return result.scalar_one_or_none()
 

@@ -19,10 +19,10 @@ import aiofiles
 
 from schemas.user import UserDTO, UserOutDTO, CreateUserDTO,UserSchema
 from models.company import Company
-from crud.company import get_company_list, get_company_by_name
+from crud.company import get_company_list, get_company_by_name, get_company_by_id
 from controllers.auth import oauth2_auth
 
-from schemas.company import CompanyDTO, CompanySchema, CreateCompanyDTO
+from schemas.company import CompanyDTO, CompanySchema, CreateCompanyDTO, UpdateCompanyDTO
 
 class CompanyController(Controller):
     path = '/company'
@@ -46,8 +46,41 @@ class CompanyController(Controller):
         return validated_company_data
     
 
-    @post('/{name:str}')
-    async def get_company(self, session:AsyncSession, name: str) -> CompanySchema:
-        company = await get_company_by_name(session, name)
+    @get('/{id_or_name:str}')
+    async def get_company_with_name(self, session:AsyncSession, id_or_name: str) -> CompanySchema:
+        try:
+            company = await get_company_by_name(session, id_or_name)
+        except:
+            print("Failed id trying")
+        try:
+            company = await get_company_by_id(session, id_or_name)
+        except Exception as e:
+            return("Error: {e}")
         return CompanySchema.model_validate(company)
+    
+
+
+    @patch('/{company_id: str}', dto=UpdateCompanyDTO)
+    async def update_company(self, session: AsyncSession, company_id: str, data: DTOData[CompanySchema]) -> CompanySchema:
+        company = await get_company_by_id(session, company_id)
+        data.update_instance(company)
+        return CompanySchema.model_validate(company)
+
+
+
+    @patch('/{company_id:str}/image', media_type=MediaType.TEXT)
+    async def update_company_picture(self, company_id: str, session: AsyncSession, data: Annotated[UploadFile, Body(media_type=RequestEncodingType.MULTI_PART)]) -> str:
+        company = await get_company_by_id(session, company_id)
+        content = await data.read()
+        filename = f'{company.id}.jpg'
+
+        image_dir = "static/images/companies"
+        os.makedirs(image_dir, exist_ok=True)
+
+        file_path = os.path.join(image_dir, filename)
+        async with aiofiles.open(file_path, 'wb') as outfile:
+            await outfile.write(content)
+
+        return f"Doctor picture added at: {file_path}"
+
 

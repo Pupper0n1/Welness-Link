@@ -20,5 +20,6 @@ class Company(UUIDBase):
 
     medicines: Mapped[list['Medicine']] = relationship(
         secondary=company_medicine_association,
-        back_populates='companies'
+        back_populates='companies',
+        lazy='selectin'
     )

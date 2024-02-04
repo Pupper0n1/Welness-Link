@@ -14,7 +14,7 @@ class DoctorSchema(Schema):
     name: str
     email: str
     profile_picture: Optional[str] = None
-    speciality: str
+    specialty: str
 
     
 
@@ -28,7 +28,7 @@ class DoctorDTO(PydanticDTO[DoctorSchema]):
 
 class CreateDoctorDTO(DoctorDTO):
     config = DTOConfig(
-        include={'name', 'email', 'speciality'}
+        include={'name', 'email', 'specialty'}
     )
 
 

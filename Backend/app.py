@@ -20,6 +20,7 @@ from controllers.user import UserController
 from controllers.company import CompanyController
 from controllers.medicine import MedicineController
 from controllers.doctor import DoctorController
+from controllers.day import DayController
 
 from models.base import Base
 
@@ -79,7 +80,7 @@ cors_config = CORSConfig(allow_origins=["*"]) # NOTE: Change it for production
 
 # Create the Litestar application instance
 app = Litestar(
-    [UserController, MedicineController, CompanyController, DoctorController, login_handler, logout_handler],  # List of endpoint functions
+    [UserController, MedicineController, CompanyController, DoctorController, DayController, login_handler, logout_handler],  # List of endpoint functions
     dependencies={"session": provide_transaction},  # Dependency to inject session into endpoints
     plugins=[SQLAlchemyPlugin(db_config)],  # Plugin for SQLAlchemy support
     stores=StoreRegistry(default_factory=cache.redis_store_factory),
@@ -90,6 +91,7 @@ app = Litestar(
     static_files_config=[   # Static files configuration for user and post images
         StaticFilesConfig(directories=['static/images/users'], path='/user/image'),
         StaticFilesConfig(directories=['static/images/doctors'], path='/doctor/image'),
-        StaticFilesConfig(directories=['static/images/medicines'], path='/medicine/image'),
+        StaticFilesConfig(directories=['static/images/medicine'], path='/medicine/image'),
+        StaticFilesConfig(directories=['static/images/companies'], path='/company/image'),
     ]
 )

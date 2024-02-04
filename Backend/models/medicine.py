@@ -22,7 +22,8 @@ class Medicine(UUIDBase):
     company_id: Mapped[UUID] = mapped_column(ForeignKey('company_table.id'))
     companies: Mapped[list['Company']] = relationship(
         secondary=company_medicine_association,
-        back_populates='medicines'
+        back_populates='medicines',
+        lazy='selectin'
     )
 
     users = relationship('UserMedicineAssociation', back_populates='medicine')

@@ -13,7 +13,7 @@ class Appointment(UUIDAuditBase):
     user_id = Column(UUID, ForeignKey('user_table.id'))
     doctor_id = Column(UUID, ForeignKey('doctor_table.id'))
 
-    date = Column(Date)
+    date = Column(DateTime)
     description = Column(String)
 
     doctor = relationship('Doctor', back_populates='appointments')

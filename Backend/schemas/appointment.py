@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING, Optional
 import argon2
 from uuid import UUID
 
-from datetime import date
+from datetime import date, datetime
 
 from litestar.dto import DTOConfig
 from litestar.contrib.pydantic import PydanticDTO
@@ -18,7 +18,7 @@ class AppointmentSchema(Schema):
     user_id: UUID
     doctor_id: UUID
 
-    date: date
+    date: datetime
     description: str
 
 

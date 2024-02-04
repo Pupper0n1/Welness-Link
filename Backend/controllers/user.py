@@ -2,6 +2,7 @@
 from typing import Any, Annotated
 import os
 import datetime
+import argon2
 import pytz
 from uuid import UUID
 from litestar import Response, Request, get, post, put, patch, MediaType
@@ -26,7 +27,9 @@ from schemas.user_medicine import AddUserMedicineAssociationDTO, UserMedicineAss
 from models.user_medicine import UserMedicineAssociation
 from schemas.appointment import AppointmentSchema, AppointmentDTO, CreateAppointmentDTO
 from models.appointment import Appointment
+from crud.day import get_day_by_id, get_day_by_name
 
+ph = argon2.PasswordHasher()
 
 class UserController(Controller):
     path = '/user'
@@ -108,16 +111,23 @@ class UserController(Controller):
             raise HTTPException(status_code=409, detail=f'error: {e}')
         
     
-    @post('/medicine{medicine_name: str}', dto=AddUserMedicineAssociationDTO, return_dto=UserMedicineAssociationDTO)
-    async def add_medicine_by_id(self, request: 'Request[User, Token, Any]', session: AsyncSession, data: DTOData[UserMedicineAssociationSchema]) -> str:
+    @post('/medicine{medicine_id: str}', dto=AddUserMedicineAssociationDTO)
+    async def add_medicine_by(self, request: 'Request[User, Token, Any]', session: AsyncSession, data: DTOData[UserMedicineAssociationSchema]) -> str:
         user = await get_user_by_id(session, request.user)
         data_values = data.as_builtins()
 
         today = datetime.date.today()
         user_medicine = data.create_instance(id=uuid7(), user_id=request.user, bought_on=today, current_amount=data_values['total'])
         validated_user_medicine = UserMedicineAssociationSchema.model_validate(user_medicine)
-        user.medicines.append(UserMedicineAssociation(**validated_user_medicine.__dict__))
+        days = user_medicine.days
+        validated_user_medicine.days = []
+        user_medicine = UserMedicineAssociation(**validated_user_medicine.__dict__)
 
+        for day in days:
+            day_object = await get_day_by_name(session, day.day)
+            user_medicine.days.append(day_object)
+
+        user.medicines.append(user_medicine)
         return "Added medicine"
 
 
@@ -130,6 +140,12 @@ class UserController(Controller):
         user.appointments.append(Appointment(**validated_appointment.__dict__))
         
         return "Added Appointment"
+    
+    @patch('/', dto=CreateUserDTO)
+    async def update_user(self, request: 'Request[User, Token, Any]', session: AsyncSession, data: DTOData[UserSchema]) -> UserSchema:
+        user = data.update_instance(await get_user_by_id(session, request.user))
+        user.password = ph.hash(user.password)
+        return UserSchema.model_validate(user)
 
 
 

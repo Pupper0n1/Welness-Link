@@ -54,6 +54,9 @@ class UserLoginDTO(UserDTO):
 class CreateUserDTO(UserDTO):
     config = DTOConfig(include={'username', 'first_name', 'last_name', 'email', 'password'})
 
+
+
+
 class UserOutDTO(UserDTO):
     config = DTOConfig(
         exclude = {'password'},

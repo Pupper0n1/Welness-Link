@@ -22,7 +22,7 @@ from models.user import User
 from crud.user import get_user_by_id, get_user_by_username, get_user_list
 from controllers.auth import oauth2_auth
 
-from crud.medicine import get_medicine_list
+from crud.medicine import get_medicine_list, get_medicine_by_id
 from models.medicine import Medicine
 
 from crud.company import get_company_by_id
@@ -33,7 +33,7 @@ class MedicineController(Controller):
     return_dto = MedicineDTO
 
     @get('/', exclude_from_auth=True)
-    async def get_medicines(self, request: 'Request[User, Token, Any]', session: AsyncSession, limit: int = 100, offset: int = 0) -> list[MedicineSchema]:
+    async def get_medicine(self, request: 'Request[User, Token, Any]', session: AsyncSession, limit: int = 100, offset: int = 0) -> list[MedicineSchema]:
         user = await get_medicine_list(session, limit, offset)
         return user
     
@@ -62,4 +62,19 @@ class MedicineController(Controller):
 
 
 
- 
+    @patch('/{medicine: str}/image', media_type=MediaType.TEXT)
+    async def update_medicine_image(self, medicine_id: str, session: AsyncSession, data: Annotated[UploadFile, Body(media_type=RequestEncodingType.MULTI_PART)]) -> str:
+        medicine = await get_medicine_by_id(session, medicine_id)
+        content = await data.read()
+        filename = f'{medicine.id}.jpg'
+
+        image_dir = "static/images/medicine"
+        os.makedirs(image_dir, exist_ok=True)
+
+        file_path = os.path.join(image_dir, filename)
+        async with aiofiles.open(file_path, 'wb') as outfile:
+            await outfile.write(content)
+
+        return f"Doctor picture added at: {file_path}"
+
+

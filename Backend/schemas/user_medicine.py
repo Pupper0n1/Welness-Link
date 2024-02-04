@@ -5,11 +5,11 @@ from enum import Enum
 from .schema import Schema
 
 from datetime import date
-
-
+from .day import DaySchema
 
 from litestar.dto import DTOConfig
 from litestar.contrib.pydantic import PydanticDTO
+
 
 class UserMedicineAssociationSchema(Schema):
     user_id: UUID
@@ -22,6 +22,9 @@ class UserMedicineAssociationSchema(Schema):
     total: int
     current_amount: int
 
+    days: list[DaySchema] = []
+
+
 
 class UserMedicineAssociationDTO(PydanticDTO[UserMedicineAssociationSchema]):
     config = DTOConfig(
@@ -29,4 +32,4 @@ class UserMedicineAssociationDTO(PydanticDTO[UserMedicineAssociationSchema]):
     )
 
 class AddUserMedicineAssociationDTO(UserMedicineAssociationDTO):
-    config = DTOConfig(include={'medicine_id', 'dosage', 'expires', 'total'})
+    config = DTOConfig(include={'medicine_id', 'dosage', 'expires', 'total', 'days.0.day'})

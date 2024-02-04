@@ -1,8 +1,9 @@
 # Association.py
 from sqlalchemy import Column, ForeignKey, String, UUID, Date, Integer
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, Mapped, mapped_column
 from litestar.contrib.sqlalchemy.base import UUIDBase
-import enum
+from .days import Day
+from .user_medicine_day import user_medicine_day
 
 from sqlalchemy.schema import UniqueConstraint
 
@@ -23,6 +24,8 @@ class UserMedicineAssociation(UUIDBase):
 
     medicine = relationship('Medicine', back_populates='users')
     user = relationship('User', back_populates='medicines')
+
+    days: Mapped[list[Day]] = relationship(secondary=user_medicine_day, lazy='selectin')
 
 
     __table_args__ = (

@@ -38,6 +38,11 @@ class CreateCompanyDTO(CompanyDTO):
         include={'name'}
     )
 
+class UpdateCompanyDTO(CompanyDTO):
+    config = DTOConfig(
+        exclude={'id', 'logo', 'medicines'}
+    )
+
 
 CompanySchema.model_rebuild()
 
