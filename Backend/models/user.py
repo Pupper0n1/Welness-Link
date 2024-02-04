@@ -5,7 +5,7 @@ from sqlalchemy import Column, Integer, String, Boolean, DateTime
 import datetime
 from litestar.contrib.sqlalchemy.base import UUIDAuditBase, UUIDBase
 from .user_medicine import  UserMedicineAssociation
-
+from .appointment import Appointment
 
 class User(UUIDAuditBase):
     __tablename__ = 'user_table'
@@ -17,12 +17,7 @@ class User(UUIDAuditBase):
     password: Mapped[str] = mapped_column(String(255))
 
 
-    # medicines = relationship(UserMedicine, back_populates='user')
-
-    # Add medicine
-    # Add appointments
-    # ???
 
 
-
-    medicines = relationship(UserMedicineAssociation, back_populates='user')
+    medicines = relationship(UserMedicineAssociation, back_populates='user', lazy='selectin')
+    appointments = relationship(Appointment, back_populates='user', lazy='selectin')

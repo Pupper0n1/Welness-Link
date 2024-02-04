@@ -7,9 +7,13 @@ from .schema import Schema
 from datetime import date
 
 
+
+from litestar.dto import DTOConfig
+from litestar.contrib.pydantic import PydanticDTO
+
 class UserMedicineAssociationSchema(Schema):
     user_id: UUID
-    community_id: UUID
+    medicine_id: UUID
     
     dosage: str
     bought_on: date
@@ -17,3 +21,12 @@ class UserMedicineAssociationSchema(Schema):
 
     total: int
     current_amount: int
+
+
+class UserMedicineAssociationDTO(PydanticDTO[UserMedicineAssociationSchema]):
+    config = DTOConfig(
+        max_nested_depth=2,
+    )
+
+class AddUserMedicineAssociationDTO(UserMedicineAssociationDTO):
+    config = DTOConfig(include={'medicine_id', 'dosage', 'expires', 'total'})

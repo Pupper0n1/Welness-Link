@@ -41,7 +41,7 @@ async def get_user_by_username(session: AsyncSession, username: str) -> User:
     """
     # Create a query to find the user by username and execute it.
     # query = select(User).options(orm.selectinload(User.communities)).where(User.username == username)
-    query = select(User).where(User.username == username)
+    query = select(User).options(orm.selectinload(User.medicines)).where(User.username == username)
 
     result = await session.execute(query)
     try:
@@ -68,7 +68,7 @@ async def get_user_by_id(session: AsyncSession, id: UUID) -> User:
     """
     # Create a query to find the user by username and execute it.
     # query = select(User).options(orm.selectinload(User.communities)).where(User.id == id)
-    query = select(User).where(User.id == id)
+    query = select(User).options(orm.selectinload(User.medicines)).where(User.id == id)
 
     result = await session.execute(query)
     try:

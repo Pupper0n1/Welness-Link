@@ -26,6 +26,8 @@ class UserSchema(Schema):
     updated_at: datetime
 
     medicines: "list[UserMedicineAssociationSchema]" = []
+    appointments: "list[AppointmentSchema]" = []
+    
 
     
 
@@ -60,5 +62,6 @@ class UserOutDTO(UserDTO):
 
 
 from .user_medicine import UserMedicineAssociationSchema
+from .appointment import AppointmentSchema
 UserSchema.model_rebuild()
 

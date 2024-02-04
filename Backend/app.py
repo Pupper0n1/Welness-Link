@@ -19,6 +19,7 @@ from controllers.auth import oauth2_auth, login_handler, logout_handler
 from controllers.user import UserController
 from controllers.company import CompanyController
 from controllers.medicine import MedicineController
+from controllers.doctor import DoctorController
 
 from models.base import Base
 
@@ -54,9 +55,9 @@ async def on_startup() -> None:
     async with db_config.get_engine().begin() as conn:
         # Drop and recreate tables (remove this line if persistence is needed)
 
-        await conn.run_sync(Base.metadata.drop_all)        
-        await conn.run_sync(UUIDBase.metadata.drop_all)
-        await conn.run_sync(UUIDAuditBase.metadata.drop_all)
+        # await conn.run_sync(Base.metadata.drop_all)        
+        # await conn.run_sync(UUIDBase.metadata.drop_all)
+        # await conn.run_sync(UUIDAuditBase.metadata.drop_all)
 
         await conn.run_sync(Base.metadata.create_all)
         await conn.run_sync(UUIDBase.metadata.create_all)
@@ -78,7 +79,7 @@ cors_config = CORSConfig(allow_origins=["*"]) # NOTE: Change it for production
 
 # Create the Litestar application instance
 app = Litestar(
-    [UserController, MedicineController, CompanyController, login_handler, logout_handler],  # List of endpoint functions
+    [UserController, MedicineController, CompanyController, DoctorController, login_handler, logout_handler],  # List of endpoint functions
     dependencies={"session": provide_transaction},  # Dependency to inject session into endpoints
     plugins=[SQLAlchemyPlugin(db_config)],  # Plugin for SQLAlchemy support
     stores=StoreRegistry(default_factory=cache.redis_store_factory),
@@ -88,5 +89,7 @@ app = Litestar(
     cors_config=cors_config, # CORS configuration
     static_files_config=[   # Static files configuration for user and post images
         StaticFilesConfig(directories=['static/images/users'], path='/user/image'),
+        StaticFilesConfig(directories=['static/images/doctors'], path='/doctor/image'),
+        StaticFilesConfig(directories=['static/images/medicines'], path='/medicine/image'),
     ]
 )

@@ -21,7 +21,11 @@ from schemas.user import UserDTO, UserOutDTO, CreateUserDTO,UserSchema
 from models.user import User
 from crud.user import get_user_by_id, get_user_by_username, get_user_list
 from controllers.auth import oauth2_auth
-
+from crud.medicine import get_medicine_by_id, get_medicine_by_name, get_medicine_list
+from schemas.user_medicine import AddUserMedicineAssociationDTO, UserMedicineAssociationSchema, UserMedicineAssociationDTO
+from models.user_medicine import UserMedicineAssociation
+from schemas.appointment import AppointmentSchema, AppointmentDTO, CreateAppointmentDTO
+from models.appointment import Appointment
 
 
 class UserController(Controller):
@@ -104,10 +108,30 @@ class UserController(Controller):
             raise HTTPException(status_code=409, detail=f'error: {e}')
         
     
-    @post('/medicine/{medicine_name: str}')
-    async def add_medicine(self, request: 'Request[User, Token, Any]', session: AsyncSession, medicine_name: str) -> str:
-        user = get_user_by_id(request.user)
-        return "CHILL"
+    @post('/medicine{medicine_name: str}', dto=AddUserMedicineAssociationDTO, return_dto=UserMedicineAssociationDTO)
+    async def add_medicine_by_id(self, request: 'Request[User, Token, Any]', session: AsyncSession, data: DTOData[UserMedicineAssociationSchema]) -> str:
+        user = await get_user_by_id(session, request.user)
+        data_values = data.as_builtins()
+
+        today = datetime.date.today()
+        user_medicine = data.create_instance(id=uuid7(), user_id=request.user, bought_on=today, current_amount=data_values['total'])
+        validated_user_medicine = UserMedicineAssociationSchema.model_validate(user_medicine)
+        user.medicines.append(UserMedicineAssociation(**validated_user_medicine.__dict__))
+
+        return "Added medicine"
+
+
+    @post('/appointment', dto=CreateAppointmentDTO, return_dto=AppointmentDTO)
+    async def add_appointment(self, request: 'Request[User, Token, Any]', session: AsyncSession, data: DTOData[AppointmentSchema]) -> str:
+        user = await get_user_by_id(session, request.user)
+        appointment = data.create_instance(id=uuid7(), user_id=request.user)
+        validated_appointment = AppointmentSchema.model_validate(appointment)
+
+        user.appointments.append(Appointment(**validated_appointment.__dict__))
+        
+        return "Added Appointment"
+
+
 
     # Define a GET route for testing, excluding it from authentication Delete later on!
     @get('/test', exclude_from_auth=True)
@@ -120,3 +144,6 @@ class UserController(Controller):
         '''
         await redis.set('foo', 'bar')
         return await redis.get('foo')
+    
+
+    # @post('/appointmentws')
