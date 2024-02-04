@@ -37,11 +37,9 @@ class CompanyController(Controller):
 
     @post('/', dto=CreateCompanyDTO)
     async def create_company(self, session:AsyncSession, data: DTOData[CompanySchema]) -> CompanySchema:
-        company_data = data.create_instance(id=uuid7(), logo=None, address_street=None, address_zip=None, address_city=None,address_province=None, address_country=None)
+        company_data = data.create_instance(id=uuid7(), logo=None, address_street=None, address_zip=None, address_city=None,address_province=None, address_country=None, medicines=[])
 
         validated_company_data = CompanySchema.model_validate(company_data)
-        print(validated_company_data)
-
         session.add(Company(**validated_company_data.__dict__))
 
         await session.commit()

@@ -7,6 +7,7 @@ from uuid import UUID
 from litestar.dto import DTOConfig
 from litestar.contrib.pydantic import PydanticDTO
 from .schema import Schema
+from .medicine import MedicineSchema
 
 
 class CompanySchema(Schema):
@@ -19,6 +20,8 @@ class CompanySchema(Schema):
     address_city: Optional[str]
     address_province: Optional[str]
     address_country: Optional[str]
+
+    medicines: list[MedicineSchema] = []
 
 
 

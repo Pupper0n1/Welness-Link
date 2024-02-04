@@ -54,9 +54,9 @@ async def on_startup() -> None:
     async with db_config.get_engine().begin() as conn:
         # Drop and recreate tables (remove this line if persistence is needed)
 
-        # await conn.run_sync(Base.metadata.drop_all)        
-        # await conn.run_sync(UUIDBase.metadata.drop_all)
-        # await conn.run_sync(UUIDAuditBase.metadata.drop_all)
+        await conn.run_sync(Base.metadata.drop_all)        
+        await conn.run_sync(UUIDBase.metadata.drop_all)
+        await conn.run_sync(UUIDAuditBase.metadata.drop_all)
 
         await conn.run_sync(Base.metadata.create_all)
         await conn.run_sync(UUIDBase.metadata.create_all)

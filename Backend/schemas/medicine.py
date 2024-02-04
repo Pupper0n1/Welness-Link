@@ -15,7 +15,7 @@ class MedicineSchema(Schema):
     Notes: str
     usage: str
     type: str
-    image: str
+    image: str = None
 
     company_id: UUID
 

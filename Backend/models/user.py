@@ -4,6 +4,7 @@ from sqlalchemy.orm import relationship, DeclarativeBase, Mapped, mapped_column
 from sqlalchemy import Column, Integer, String, Boolean, DateTime
 import datetime
 from litestar.contrib.sqlalchemy.base import UUIDAuditBase, UUIDBase
+from .user_medicine import  UserMedicineAssociation
 
 
 class User(UUIDAuditBase):
@@ -15,9 +16,13 @@ class User(UUIDAuditBase):
     profile_picture: Mapped[str] = mapped_column(String(100), nullable=True)
     password: Mapped[str] = mapped_column(String(255))
 
+
+    # medicines = relationship(UserMedicine, back_populates='user')
+
     # Add medicine
     # Add appointments
     # ???
 
 
 
+    medicines = relationship(UserMedicineAssociation, back_populates='user')

@@ -19,7 +19,7 @@ async def get_user_list(session: AsyncSession, limit: int = 100, offset: int = 0
     """
     # Create a query to select users with a limit and offset for pagination and execute it.
     # query = select(User).options(orm.selectinload(User.communities)).limit(limit).offset(offset)
-    query = select(User).limit(limit).offset(offset)
+    query = select(User).options(orm.selectinload(User.medicines)).limit(limit).offset(offset)
 
     result = await session.execute(query)
     return result.scalars().all()

@@ -37,6 +37,8 @@ class UserController(Controller):
 
     @get('/', exclude_from_auth=True)
     async def get_users(self, request: 'Request[User, Token, Any]', session: AsyncSession, limit: int = 100, offset: int = 0) -> list[UserSchema]:
+    # async def get_users(self, request: 'Request[User, Token, Any]', session: AsyncSession, limit: int = 100, offset: int = 0) -> str:
+
         '''
         Get a list of users.
 
@@ -70,6 +72,8 @@ class UserController(Controller):
 
     @post('/', dto=CreateUserDTO, exclude_from_auth=True)
     async def create_user_login(self, session: AsyncSession, data: DTOData[UserSchema]) -> Response[OAuth2Login]:
+    # async def create_user_login(self, session: AsyncSession, data: DTOData[UserSchema]) -> str:
+
         '''
         Create a new user and logs in. This might become the new default way of creating users.
 
@@ -87,6 +91,9 @@ class UserController(Controller):
         user_data = data.create_instance(id=uuid7(), created_at=current_time, updated_at=current_time)
         validated_user_data = UserSchema.model_validate(user_data)
         validated_user_data.set_password(validated_user_data.password)
+        # a = User(**validated_user_data.__dict__)
+        # b = User(username="Wilbur", first_name="we", last_name="Elbouni", email="email", password="wew", profile_picture=None)
+        # print(validated_user_data)
         try:
             session.add(User(**validated_user_data.__dict__))
             token = oauth2_auth.login(identifier=str(validated_user_data.id))
@@ -94,7 +101,13 @@ class UserController(Controller):
             await redis.hmset(session_key, {'user_id': str(validated_user_data.id), 'username': validated_user_data.username, 'token': str(token.cookies)})
             return token
         except Exception as e:
-            raise HTTPException(status_code=409, detail=f'User with that username exists')
+            raise HTTPException(status_code=409, detail=f'error: {e}')
+        
+    
+    @post('/medicine/{medicine_name: str}')
+    async def add_medicine(self, request: 'Request[User, Token, Any]', session: AsyncSession, medicine_name: str) -> str:
+        user = get_user_by_id(request.user)
+        return "CHILL"
 
     # Define a GET route for testing, excluding it from authentication Delete later on!
     @get('/test', exclude_from_auth=True)

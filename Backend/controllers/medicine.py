@@ -25,6 +25,8 @@ from controllers.auth import oauth2_auth
 from crud.medicine import get_medicine_list
 from models.medicine import Medicine
 
+from crud.company import get_company_by_id
+
 
 class MedicineController(Controller):
     path = '/medicine'
@@ -38,14 +40,25 @@ class MedicineController(Controller):
 
     @post('/', dto=CreateMedicineDTO)
     async def create_medicine(self, session:AsyncSession, data: DTOData[MedicineSchema]) -> MedicineSchema:
-        medicine_data = data.create_instance(id=uuid7(), image=None)
-
-        validated_medicine_data = MedicineSchema.model_validate(medicine_data)
         
-        session.add(User(**validated_medicine_data.__dict__))
+        medicine_data = data.create_instance(id=uuid7())
+        validated_medicine_data = MedicineSchema.model_validate(medicine_data)
 
-        await session.commit()
+        input_data = data.as_builtins()
+
+        company = await get_company_by_id(session, input_data['company_id'])
+        # print(company)
+        medicine = Medicine(**validated_medicine_data.__dict__)
+
+        session.add(medicine)
+        
+        # company.medicines.append(medicine)
+        company.medicines.append(medicine)
+
+        # await session.commit()
         return validated_medicine_data
+        # return "CHILL"
+
 
 
 

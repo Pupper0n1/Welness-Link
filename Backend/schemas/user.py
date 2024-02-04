@@ -6,6 +6,7 @@ from uuid import UUID
 
 from litestar.dto import DTOConfig
 from litestar.contrib.pydantic import PydanticDTO
+
 # Initialize Argon2 for password hashing
 ph = argon2.PasswordHasher()
 from datetime import datetime
@@ -23,6 +24,8 @@ class UserSchema(Schema):
     password: str
     created_at: datetime
     updated_at: datetime
+
+    medicines: "list[UserMedicineAssociationSchema]" = []
 
     
 
@@ -56,5 +59,6 @@ class UserOutDTO(UserDTO):
     )
 
 
+from .user_medicine import UserMedicineAssociationSchema
 UserSchema.model_rebuild()
 
