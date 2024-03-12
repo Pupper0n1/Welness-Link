@@ -4,6 +4,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialIcons } from '@expo/vector-icons';
 import Animated, { FadeIn, FadeInDown, FadeInUp } from 'react-native-reanimated';
 import { FontAwesome } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native'
 
 const Tab = createBottomTabNavigator();
 
@@ -130,13 +131,21 @@ const EventsScreen = () => (
     </>
 );
 
-const HomeScreen = () => (
+const HomeScreen = () => {
+  
+    const navigation = useNavigation();
+
+    const handleAddMedicine = () => {
+      navigation.navigate('Medicine');
+    };
+  
+    return(
     <>
     <ScrollView style={styles.scrollView}>
 
     <View style={styles.header}>
     <Text style={styles.welcomeText}>Welcome John,</Text>
-    <TouchableOpacity onPress={()=> console.log("hi")}>
+    <TouchableOpacity onPress={handleAddMedicine}>
         <Text style={styles.addButton}>+</Text>
     </TouchableOpacity>
     </View>
@@ -182,7 +191,8 @@ const HomeScreen = () => (
     </View>
     </ScrollView>
     </>
-  );
+    );
+  };
 
   const ProfileScreen = () => (
     <>
