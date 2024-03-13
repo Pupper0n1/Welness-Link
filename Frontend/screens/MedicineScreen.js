@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Button } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
 import DropDownPicker from 'react-native-dropdown-picker';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
-const MedicineScreen = () => {
+export const MedicineScreen = () => {
   const navigation = useNavigation();
 
   const handleGoBack = () => {
@@ -18,6 +19,21 @@ const MedicineScreen = () => {
     {label: 'Medicine B', value: 'MedB'},
     {label: 'Medicine C', value: 'MedC'}
   ]);
+
+  const [date, setDate] = useState(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [expiryDate, setExpiryDate] = useState(null);
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShowDatePicker(false);
+    setDate(currentDate);
+    setExpiryDate(currentDate);
+  };
+
+  const showDatepicker = () => {
+    setShowDatePicker(true);
+  };
 
   return (
     <>
@@ -42,8 +58,27 @@ const MedicineScreen = () => {
           setValue={setValue}
           setItems={setItems}
           containerStyle={{ width: '80%' }}
+          placeholder="Medicine name"
         />
       </View>
+
+      {/* Expiry Date Picker */}
+
+        <Text style={styles.label}>Expiry Date</Text>
+
+        <View style={styles.container}>
+
+        <Button onPress={showDatepicker} title="Select Expiry Date" />
+        {expiryDate && <Text style={styles.selectedDate}>Expiry Date is set to: {expiryDate.toLocaleDateString()}</Text>}
+        {showDatePicker && (
+          <DateTimePicker
+            value={date}
+            mode="date"
+            display="default"
+            onChange={onChange}
+          />
+        )}
+        </View>
     </>
   );
 };
@@ -65,8 +100,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   container: {
-    flex: 1,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   label: {
     marginTop: 20,
