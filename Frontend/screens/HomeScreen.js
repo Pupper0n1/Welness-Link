@@ -73,6 +73,10 @@ const EventsScreen = () => {
     navigation.navigate('Appointments');
   };
 
+  const handleAddSymptom = () => {
+    navigation.navigate('Symptoms');
+  }
+
     return(
     <>
     <ScrollView style={styles.scrollView}>
@@ -109,7 +113,7 @@ const EventsScreen = () => {
 
     <View style={styles.header}>
     <Text style={styles.welcomeText}>Symptoms Tracking,</Text>
-    <TouchableOpacity onPress={()=> console.log("hi")}>
+    <TouchableOpacity onPress={handleAddSymptom}>
         <Text style={styles.addButton}>+</Text>
     </TouchableOpacity>
     </View>
