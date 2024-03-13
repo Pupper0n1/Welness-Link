@@ -66,13 +66,20 @@ const styles = StyleSheet.create({
     }
   });
 
-const EventsScreen = () => (
+const EventsScreen = () => {
+  const navigation = useNavigation();
+
+  const handleAddAppointment = () => {
+    navigation.navigate('Appointments');
+  };
+
+    return(
     <>
     <ScrollView style={styles.scrollView}>
 
     <View style={styles.header}>
     <Text style={styles.welcomeText}>Upcoming Appointments,</Text>
-    <TouchableOpacity onPress={()=> console.log("hi")}>
+    <TouchableOpacity onPress={handleAddAppointment}>
         <Text style={styles.addButton}>+</Text>
     </TouchableOpacity>
     </View>
@@ -129,7 +136,8 @@ const EventsScreen = () => (
     </View>
     </ScrollView>
     </>
-);
+    );
+};
 
 const HomeScreen = () => {
   
