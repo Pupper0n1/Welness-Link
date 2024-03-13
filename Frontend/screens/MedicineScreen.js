@@ -6,16 +6,18 @@ import DropDownPicker from 'react-native-dropdown-picker';
 
 const MedicineScreen = () => {
   const navigation = useNavigation();
-  const medicineData = [
-    { label: 'Medicine A', value: 'Medicine A' },
-    { label: 'Medicine B', value: 'Medicine B' },
-    { label: 'Medicine C', value: 'Medicine C' },
-  ];
-  const [selectedMedicine, setSelectedMedicine] = useState(medicineData[0].value);
 
   const handleGoBack = () => {
     navigation.goBack();
   };
+
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(null);
+  const [items, setItems] = useState([
+    {label: 'Medicine A', value: 'MedA'},
+    {label: 'Medicine B', value: 'MedB'},
+    {label: 'Medicine C', value: 'MedC'}
+  ]);
 
   return (
     <>
@@ -28,18 +30,18 @@ const MedicineScreen = () => {
       </View>
 
       {/* Content */}
+      <Text style={styles.label}>Medicine name</Text>
       <View style={styles.container}>
+        
         {/* Dropdown */}
         <DropDownPicker
-          items={medicineData}
-          defaultValue={selectedMedicine}
-          containerStyle={{ height: 40, width: 200 }}
-          style={{ backgroundColor: '#fafafa' }}
-          itemStyle={{
-            justifyContent: 'flex-start'
-          }}
-          dropDownStyle={{ backgroundColor: '#fafafa' }}
-          onChangeItem={item => setSelectedMedicine(item.value)}
+          open={open}
+          value={value}
+          items={items}
+          setOpen={setOpen}
+          setValue={setValue}
+          setItems={setItems}
+          containerStyle={{ width: '80%' }}
         />
       </View>
     </>
@@ -64,8 +66,14 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
+  },
+  label: {
+    marginTop: 20,
+    marginLeft: 45,
+    marginBottom: 10,
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 
