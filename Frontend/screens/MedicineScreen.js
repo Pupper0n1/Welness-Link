@@ -1,10 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 const MedicineScreen = () => {
   const navigation = useNavigation();
+  const medicineData = [
+    { label: 'Medicine A', value: 'Medicine A' },
+    { label: 'Medicine B', value: 'Medicine B' },
+    { label: 'Medicine C', value: 'Medicine C' },
+  ];
+  const [selectedMedicine, setSelectedMedicine] = useState(medicineData[0].value);
 
   const handleGoBack = () => {
     navigation.goBack();
@@ -22,11 +29,23 @@ const MedicineScreen = () => {
 
       {/* Content */}
       <View style={styles.container}>
-        {/* Add your medicine content here */}
+        {/* Dropdown */}
+        <DropDownPicker
+          items={medicineData}
+          defaultValue={selectedMedicine}
+          containerStyle={{ height: 40, width: 200 }}
+          style={{ backgroundColor: '#fafafa' }}
+          itemStyle={{
+            justifyContent: 'flex-start'
+          }}
+          dropDownStyle={{ backgroundColor: '#fafafa' }}
+          onChangeItem={item => setSelectedMedicine(item.value)}
+        />
       </View>
     </>
   );
 };
+
 
 const styles = StyleSheet.create({
   header: {
