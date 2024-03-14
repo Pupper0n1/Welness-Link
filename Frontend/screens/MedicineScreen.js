@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
-    marginTop: 35,
+    marginTop: 0,
   },
   headerText: {
     fontSize: 18,
