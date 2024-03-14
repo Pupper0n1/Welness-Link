@@ -221,7 +221,13 @@ const HomeScreen = () => {
   );
   
 
-const SettingsScreen = () => (
+const SettingsScreen = () => {
+
+  const handleLogout = () => {
+    //logout Logic
+  };
+
+    return(
     <>
     <ScrollView style={styles.scrollView}>
         <View>
@@ -268,10 +274,17 @@ const SettingsScreen = () => (
                     <Text className="text-xl font-bold text-white text-center">Update Password</Text>
                 </TouchableOpacity>
             </Animated.View>
+
+            <Animated.View className="w-full" style={{ alignItems: 'center', marginTop: 10 }} entering={FadeInDown.delay(400).duration(1000).springify()}>
+              <TouchableOpacity className="w-[90%] bg-red-400 p-3 rounded-2xl mb-3" onPress={handleLogout}>
+                <Text className="text-xl font-bold text-white text-center">Logout</Text>
+              </TouchableOpacity>
+            </Animated.View>
         </View>
     </ScrollView>
   </>
-);
+    );
+};
 
 const App = () => (
   <Tab.Navigator initialRouteName="Home">
