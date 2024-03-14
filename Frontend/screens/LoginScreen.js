@@ -1,14 +1,20 @@
 import { View, Text, Image, SafeAreaView, TextInput, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { StatusBar } from 'expo-status-bar'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, CommonActions } from '@react-navigation/native'
 import Animated, { FadeIn, FadeInDown, FadeInUp } from 'react-native-reanimated';
 
 export default function LoginScreen() {
     const navigation = useNavigation();
 
     const handleLogin = () => {
-        navigation.navigate('Home');
+        // navigation.navigate('Home');
+        navigation.dispatch(
+            CommonActions.reset({
+              index: 0,
+              routes: [{ name: 'Home' }],
+            })
+          );
     };
   return (
     <View className="bg-white h-full w-full">
