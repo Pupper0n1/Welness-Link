@@ -4,7 +4,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialIcons } from '@expo/vector-icons';
 import Animated, { FadeIn, FadeInDown, FadeInUp } from 'react-native-reanimated';
 import { FontAwesome } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native';
 
 const Tab = createBottomTabNavigator();
 
@@ -206,16 +206,32 @@ const HomeScreen = () => {
     );
   };
 
-  const ProfileScreen = () => (
+  const MedicineScreen = () => (
     <>
       <ScrollView style={styles.scrollView}>
-        <Text style={styles.profileInfo}>First Name: John</Text>
-        <Text style={styles.profileInfo}>Last Name: Smith</Text>
-        <Text style={styles.profileInfo}>Birthdate: 01-01-2000</Text>
-        <Text style={styles.profileInfo}>Age: 24</Text>
-        <Text style={styles.profileInfo}>Gender: Male</Text>
-        <Text style={styles.profileInfo}>Country: Canada</Text>
-        <Text style={styles.profileInfo}>E-Mail: John@email.com</Text>
+        <View className="flex items-center mx-5 space-y-4 mt-5">
+          <Animated.View entering={FadeInDown.duration(1000).delay(200).springify()} className="bg-black/5 p-5 rounded-2xl w-full">
+              <TextInput placeholder="Search Medicines..." placeholderTextColor={'gray'} />
+          </Animated.View>
+        </View>
+
+        <Text style={styles.profileInfo}>Most Frequented</Text>
+
+        <View style={styles.container}>
+          <StatusBar backgroundColor="black" barStyle="light-content" />
+          
+          <View style={styles.view}>
+            <Text style={styles.text}>Lisinopril</Text>
+          </View>
+
+          <View style={styles.view}>
+            <Text style={styles.text}>Lisinopril</Text>
+          </View>
+
+          <View style={styles.view}>
+            <Text style={styles.text}>Lisinopril</Text>
+          </View>
+        </View>
       </ScrollView>
     </>
   );
@@ -230,6 +246,14 @@ const SettingsScreen = () => {
     return(
     <>
     <ScrollView style={styles.scrollView}>
+        <Text style={styles.profileInfo}>First Name: John</Text>
+        <Text style={styles.profileInfo}>Last Name: Smith</Text>
+        <Text style={styles.profileInfo}>Birthdate: 01-01-2000</Text>
+        <Text style={styles.profileInfo}>Age: 24</Text>
+        <Text style={styles.profileInfo}>Gender: Male</Text>
+        <Text style={styles.profileInfo}>Country: Canada</Text>
+        <Text style={styles.profileInfo}>E-Mail: John@email.com</Text>
+        <View style={styles.line}></View>
         <View>
             <StatusBar backgroundColor="black" barStyle="light-content" />
 
@@ -275,6 +299,8 @@ const SettingsScreen = () => {
                 </TouchableOpacity>
             </Animated.View>
 
+            <View style={styles.line}></View>
+
             <Animated.View className="w-full" style={{ alignItems: 'center', marginTop: 10 }} entering={FadeInDown.delay(400).duration(1000).springify()}>
               <TouchableOpacity className="w-[90%] bg-red-400 p-3 rounded-2xl mb-3" onPress={handleLogout}>
                 <Text className="text-xl font-bold text-white text-center">Logout</Text>
@@ -307,11 +333,11 @@ const App = () => (
       }}
     />
     <Tab.Screen
-      name="Profile"
-      component={ProfileScreen}
+      name="Medicines"
+      component={MedicineScreen}
       options={{
         tabBarIcon: ({ color, size }) => (
-          <FontAwesome name="user" color={color} size={size} />
+          <FontAwesome name="stethoscope" color={color} size={size} />
         ),
       }}
     />
