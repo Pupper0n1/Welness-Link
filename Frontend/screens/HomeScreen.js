@@ -1,10 +1,11 @@
-import React from 'react';
+import { React, useState, useEffect } from 'react';
 import { View, Text, ScrollView, StatusBar, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialIcons } from '@expo/vector-icons';
 import Animated, { FadeIn, FadeInDown, FadeInUp } from 'react-native-reanimated';
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Tab = createBottomTabNavigator();
 
@@ -150,13 +151,33 @@ const HomeScreen = () => {
     const handleAddMedicine = () => {
       navigation.navigate('Medicine');
     };
+
+    const [firstName, setFirstName] = useState('');
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const response = await fetch('http://10.13.78.53:8000/user/me');
+                if (response.ok) {
+                    const userData = await response.json();
+                    setFirstName(userData.first_name);
+                } else {
+                    console.error('Failed to fetch user data');
+                }
+            } catch (error) {
+                console.error('Error occurred while fetching user data:', error);
+            }
+        };
+
+        fetchUserData();
+    }, []);
   
     return(
     <>
     <ScrollView style={styles.scrollView}>
 
     <View style={styles.header}>
-    <Text style={styles.welcomeText}>Welcome John,</Text>
+    <Text style={styles.welcomeText}>Welcome {firstName},</Text>
     <TouchableOpacity onPress={handleAddMedicine}>
         <Text style={styles.addButton}>+</Text>
     </TouchableOpacity>
@@ -238,9 +259,16 @@ const HomeScreen = () => {
   
 
 const SettingsScreen = () => {
+  const navigation = useNavigation();
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     //logout Logic
+    try {
+          await AsyncStorage.removeItem('token');
+          navigation.navigate('Login');
+      } catch (error) {
+          console.error('Error occurred during logout:', error);
+      }
   };
 
     return(
