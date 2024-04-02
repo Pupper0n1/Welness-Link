@@ -213,36 +213,51 @@ const HomeScreen = () => {
   );
 };
 
-  const MedicineScreen = () => (
-    <>
-      <ScrollView style={styles.scrollView}>
-        <View className="flex items-center mx-5 space-y-4 mt-5">
-          <Animated.View entering={FadeInDown.duration(1000).delay(200).springify()} className="bg-black/5 p-5 rounded-2xl w-full">
-              <TextInput placeholder="Search Medicines..." placeholderTextColor={'gray'} />
-          </Animated.View>
-        </View>
-
-        <Text style={styles.profileInfo}>Most Frequented</Text>
-
-        <View style={styles.container}>
-          <StatusBar backgroundColor="black" barStyle="light-content" />
-          
-          <View style={styles.view}>
-            <Text style={styles.text}>Lisinopril</Text>
-          </View>
-
-          <View style={styles.view}>
-            <Text style={styles.text}>Lisinopril</Text>
-          </View>
-
-          <View style={styles.view}>
-            <Text style={styles.text}>Lisinopril</Text>
-          </View>
-        </View>
-      </ScrollView>
-    </>
-  );
+  const MedicineScreen = () => {
+    const [medicines, setMedicines] = useState([]);
   
+    useEffect(() => {
+      const fetchMedicines = async () => {
+        try {
+          const response = await fetch('http://192.168.255.242:8000/medicine');
+          if (response.ok) {
+            const medicineData = await response.json();
+            setMedicines(medicineData.slice(0, 5));
+          } else {
+            console.error('Failed to fetch medicines');
+          }
+        } catch (error) {
+          console.error('Error occurred while fetching medicines:', error);
+        }
+      };
+  
+      fetchMedicines();
+    }, []);
+  
+    return (
+      <>
+        <ScrollView style={styles.scrollView}>
+          <View className="flex items-center mx-5 space-y-4 mt-5">
+            <Animated.View entering={FadeInDown.duration(1000).delay(200).springify()} className="bg-black/5 p-5 rounded-2xl w-full">
+                <TextInput placeholder="Search Medicines..." placeholderTextColor={'gray'} />
+            </Animated.View>
+          </View>
+  
+          <Text style={styles.profileInfo}>Most Frequented</Text>
+  
+          <View style={styles.container}>
+            <StatusBar backgroundColor="black" barStyle="light-content" />
+            
+            {medicines.map(medicine => (
+              <View key={medicine.id} style={styles.view}>
+                <Text style={styles.text}>{medicine.name}</Text>
+              </View>
+            ))}
+          </View>
+        </ScrollView>
+      </>
+    );
+  };
 
 const SettingsScreen = () => {
   const navigation = useNavigation();
