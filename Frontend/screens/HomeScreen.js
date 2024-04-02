@@ -160,7 +160,7 @@ const HomeScreen = () => {
                 const response = await fetch('http://192.168.255.242:8000/user/me');
                 if (response.ok) {
                     const userData = await response.json();
-                    setFirstName(userData.first_name);
+                    setFirstName(userData.firstName);
                 } else {
                     console.error('Failed to fetch user data');
                 }
