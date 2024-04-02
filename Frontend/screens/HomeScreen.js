@@ -266,6 +266,7 @@ const HomeScreen = () => {
 
 const SettingsScreen = () => {
   const navigation = useNavigation();
+  const [userData, setUserData] = useState(null);
 
   const handleLogout = async () => {
     //logout Logic
@@ -277,12 +278,34 @@ const SettingsScreen = () => {
       }
   };
 
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch('http://192.168.255.242:8000/user/me');
+        if (response.ok) {
+          const userData = await response.json();
+          setUserData(userData);
+        } else {
+          console.error('Failed to fetch user data');
+        }
+      } catch (error) {
+        console.error('Error occurred while fetching user data:', error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
     return(
     <>
     <ScrollView style={styles.scrollView}>
-        <Text style={styles.profileInfo}>First Name: John</Text>
-        <Text style={styles.profileInfo}>Last Name: Smith</Text>
-        <Text style={styles.profileInfo}>E-Mail: John@email.com</Text>
+        {userData && (
+          <>
+            <Text style={styles.profileInfo}>First Name: {userData.firstName}</Text>
+            <Text style={styles.profileInfo}>Last Name: {userData.lastName}</Text>
+            <Text style={styles.profileInfo}>E-Mail: {userData.email}</Text>
+          </>
+        )}
         <View style={styles.line}></View>
         <View>
             <StatusBar backgroundColor="black" barStyle="light-content" />
