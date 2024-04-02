@@ -233,6 +233,7 @@ async def seed_data(session: AsyncSession):
         email="ethan.anderson@gmail.com",
         profile_picture="ethan.jpg",
         specialty="Cardiology",
+        appointments=[]
     )
 
     doctor2 = Doctor (
@@ -241,6 +242,7 @@ async def seed_data(session: AsyncSession):
         email="emma.roberts@gmail.com",
         profile_picture="emma.jpg",
         specialty="Orthopedics",
+        appointments=[]
     )
 
     doctor3 = Doctor (
@@ -249,6 +251,7 @@ async def seed_data(session: AsyncSession):
         email="noah.thompson@gmail.com",
         profile_picture="noah.jpg",
         specialty="Dermatology",
+        appointments=[]
     )
 
     doctor4 = Doctor (
@@ -257,6 +260,7 @@ async def seed_data(session: AsyncSession):
         email="olivia.johnson@gmail.com",
         profile_picture="olivia.jpg",
         specialty="Neurology",
+        appointments=[]
     )
 
     doctor5 = Doctor (
@@ -265,6 +269,7 @@ async def seed_data(session: AsyncSession):
         email="alexander.mitchell@gmail.com",
         profile_picture="alexander.jpg",
         specialty="Gynecology",
+        appointments=[]
     )
 
     session.add_all([company1, company2, company3, doctor1, doctor2, doctor3, doctor4, doctor5])
