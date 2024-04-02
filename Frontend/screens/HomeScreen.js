@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
       backgroundColor: '#38bdf8',
       width: '95%',
       borderRadius: 15,
-      height: 120,
+      height: 135,
       marginBottom: 20,
       elevation: 10,
     },
@@ -145,87 +145,73 @@ const EventsScreen = () => {
 };
 
 const HomeScreen = () => {
-  
-    const navigation = useNavigation();
+  const navigation = useNavigation();
+  const [medicines, setMedicines] = useState([]);
+  const [firstName, setFirstName] = useState('');
 
-    const handleAddMedicine = () => {
-      navigation.navigate('Medicine');
+  const handleAddMedicine = () => {
+    navigation.navigate('Medicine');
+  };
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch('http://192.168.255.242:8000/user/me');
+        if (response.ok) {
+          const userData = await response.json();
+          setFirstName(userData.firstName);
+        } else {
+          console.error('Failed to fetch user data');
+        }
+      } catch (error) {
+        console.error('Error occurred while fetching user data:', error);
+      }
     };
 
-    const [firstName, setFirstName] = useState('');
+    fetchUserData();
+  }, []);
 
-    useEffect(() => {
-        const fetchUserData = async () => {
-            try {
-                const response = await fetch('http://192.168.255.242:8000/user/me');
-                if (response.ok) {
-                    const userData = await response.json();
-                    setFirstName(userData.firstName);
-                } else {
-                    console.error('Failed to fetch user data');
-                }
-            } catch (error) {
-                console.error('Error occurred while fetching user data:', error);
-            }
-        };
+  useEffect(() => {
+    const fetchMedicines = async () => {
+      try {
+        const response = await fetch('http://192.168.255.242:8000/user/me/medicines');
+        if (response.ok) {
+          const userMedicines = await response.json();
+          setMedicines(userMedicines);
+        } else {
+          console.error('Failed to fetch user medicines');
+        }
+      } catch (error) {
+        console.error('Error occurred while fetching user medicines:', error);
+      }
+    };
 
-        fetchUserData();
-    }, []);
-  
-    return(
-    <>
+    fetchMedicines();
+  }, []);
+
+  return (
     <ScrollView style={styles.scrollView}>
-
-    <View style={styles.header}>
-    <Text style={styles.welcomeText}>Welcome {firstName},</Text>
-    <TouchableOpacity onPress={handleAddMedicine}>
-        <Text style={styles.addButton}>+</Text>
-    </TouchableOpacity>
-    </View>
-
-    <View style={styles.container}>
-      <StatusBar backgroundColor="black" barStyle="light-content" />
-      
-      <View style={styles.view}>
-        <Text style={styles.text}>Lisinopril</Text>
-        <Text style={styles.description}>Bought on: </Text>
-        <Text style={styles.description}>Expires: </Text>
+      <View style={styles.header}>
+        <Text style={styles.welcomeText}>Welcome {firstName},</Text>
+        <TouchableOpacity onPress={handleAddMedicine}>
+          <Text style={styles.addButton}>+</Text>
+        </TouchableOpacity>
       </View>
 
-      <View style={styles.view}>
-        <Text style={styles.text}>Lisinopril</Text>
-        <Text style={styles.description}>Bought on: </Text>
-        <Text style={styles.description}>Expires: </Text>
+      <View style={styles.container}>
+        <StatusBar backgroundColor="black" barStyle="light-content" />
+        {medicines.map(medicine => (
+          <View key={medicine.medicineId} style={styles.view}>
+            <Text style={styles.text}>{medicine.medicineName}</Text>
+            <Text style={styles.description}>Dosage: {medicine.dosage}</Text>
+            <Text style={styles.description}>Bought on: {medicine.boughtOn}</Text>
+            <Text style={styles.description}>Expires: {medicine.expires}</Text>
+          </View>
+        ))}
       </View>
-
-      <View style={styles.view}>
-        <Text style={styles.text}>Lisinopril</Text>
-        <Text style={styles.description}>Bought on: </Text>
-        <Text style={styles.description}>Expires: </Text>
-      </View>
-
-      <View style={styles.view}>
-        <Text style={styles.text}>Lisinopril</Text>
-        <Text style={styles.description}>Bought on: </Text>
-        <Text style={styles.description}>Expires: </Text>
-      </View>
-
-      <View style={styles.view}>
-        <Text style={styles.text}>Lisinopril</Text>
-        <Text style={styles.description}>Bought on: </Text>
-        <Text style={styles.description}>Expires: </Text>
-      </View>
-
-      <View style={styles.view}>
-        <Text style={styles.text}>Lisinopril</Text>
-        <Text style={styles.description}>Bought on: </Text>
-        <Text style={styles.description}>Expires: </Text>
-      </View>
-    </View>
     </ScrollView>
-    </>
-    );
-  };
+  );
+};
 
   const MedicineScreen = () => (
     <>
