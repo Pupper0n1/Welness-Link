@@ -24,6 +24,8 @@ from controllers.day import DayController
 
 from models.base import Base
 
+from lib.seed import seed_data
+
 from lib import (
     openapi,
     cache
@@ -56,13 +58,18 @@ async def on_startup() -> None:
     async with db_config.get_engine().begin() as conn:
         # Drop and recreate tables (remove this line if persistence is needed)
 
-        # await conn.run_sync(Base.metadata.drop_all)        
-        # await conn.run_sync(UUIDBase.metadata.drop_all)
-        # await conn.run_sync(UUIDAuditBase.metadata.drop_all)
+        await conn.run_sync(Base.metadata.drop_all)        
+        await conn.run_sync(UUIDBase.metadata.drop_all)
+        await conn.run_sync(UUIDAuditBase.metadata.drop_all)
 
         await conn.run_sync(Base.metadata.create_all)
         await conn.run_sync(UUIDBase.metadata.create_all)
         await conn.run_sync(UUIDAuditBase.metadata.create_all)
+
+    async with db_config.get_session() as session:
+        await seed_data(session)
+        await session.commit()
+
 
 
 
@@ -91,7 +98,7 @@ app = Litestar(
     static_files_config=[   # Static files configuration for user and post images
         StaticFilesConfig(directories=['static/images/users'], path='/user/image'),
         StaticFilesConfig(directories=['static/images/doctors'], path='/doctor/image'),
-        StaticFilesConfig(directories=['static/images/medicine'], path='/medicine/image'),
+        StaticFilesConfig(directories=['static/images/medicines'], path='/medicine/image'),
         StaticFilesConfig(directories=['static/images/companies'], path='/company/image'),
     ]
 )
