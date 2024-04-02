@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Button, TextInput } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Button, TextInput, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -14,36 +14,78 @@ export const AppointmentsScreen = () => {
 
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
-  const [items, setItems] = useState([
-    {label: 'Dr. Ethan Anderson', value: 'dr1'},
-    {label: 'Dr. Emma Roberts', value: 'dr2'},
-    {label: 'Dr. Noah Thompson', value: 'dr3'},
-    {label: 'Dr. Olivia Johnson', value: 'dr4'},
-    {label: 'Dr. Alexander Mitchell', value: 'dr5'},
-  ]);
+  const [items, setItems] = useState([]);
 
+  const [doctor, setDoctor] = useState(null);
+  const [paragraph, setParagraph] = useState('');
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [expiryDate, setExpiryDate] = useState(null);
-  const [paragraph, setParagraph] = useState('');
 
-  const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
-    setShowDatePicker(false);
-    setDate(currentDate);
-    setExpiryDate(currentDate);
+  useEffect(() => {
+    fetchDoctors();
+  }, []);
+
+  const fetchDoctors = async () => {
+    try {
+      const response = await fetch('http://192.168.255.242:8000/doctor');
+      if (response.ok) {
+        const doctors = await response.json();
+        const doctorItems = doctors.map((doctor, index) => ({
+          label: doctor.name,
+          value: doctor.id.toString(),
+        }));
+        setItems(doctorItems);
+      } else {
+        Alert.alert('Error', 'Failed to fetch doctors. Please try again later.');
+      }
+    } catch (error) {
+      console.error('Error fetching doctors:', error);
+      Alert.alert('Error', 'An error occurred while fetching doctors. Please try again later.');
+    }
   };
 
   const showDatepicker = () => {
     setShowDatePicker(true);
   };
 
-  const handleAdd = () => {
-    // Logic to add appointment
+  const handleAdd = async () => {
+    if (!doctor) {
+      Alert.alert('Error', 'Please select a doctor.');
+      return;
+    }
+    if (!date) {
+      Alert.alert('Error', 'Please select an appointment date.');
+      return;
+    }
+
+    try {
+      const response = await fetch('http://192.168.255.242:8000/user/appointment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          doctorId: doctor,
+          date,
+          description: paragraph,
+        }),
+      });
+
+      if (response.ok) {
+        Alert.alert('Success', 'Appointment added successfully.');
+        navigation.goBack();
+      } else {
+        Alert.alert('Error', 'Failed to add appointment. Please try again later.');
+      }
+    } catch (error) {
+      console.error('Error adding appointment:', error);
+      Alert.alert('Error', 'An error occurred while adding the appointment. Please try again later.');
+    }
   };
 
   return (
     <>
+
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={handleGoBack}>
@@ -55,7 +97,6 @@ export const AppointmentsScreen = () => {
       {/* Content */}
       <Text style={styles.label}>Doctor's name</Text>
       <View style={styles.container}>
-        
         {/* Dropdown */}
         <DropDownPicker
           open={open}
@@ -66,48 +107,47 @@ export const AppointmentsScreen = () => {
           setItems={setItems}
           containerStyle={{ width: '90%' }}
           placeholder="Doctor's name"
+          onChangeValue={(selectedDoctor) => setDoctor(selectedDoctor)}
         />
       </View>
 
       {/* Input for Notes */}
       <Text style={styles.label}>Appointment Notes</Text>
-        <TextInput
-            style={styles.input}
-            multiline={true}
-            numberOfLines={4}
-            placeholder="Must fast for at least 12 hours..."
-            onChangeText={text => setParagraph(text)}
-            value={paragraph}
+      <TextInput
+        style={styles.input}
+        multiline={true}
+        numberOfLines={4}
+        placeholder="Must fast for at least 12 hours..."
+        onChangeText={(text) => setParagraph(text)}
+        value={paragraph}
       />
 
       {/* Appointment Date Picker */}
+      <Text style={styles.label}>Appointment Date</Text>
+      <View style={styles.container}>
+        <TouchableOpacity onPress={showDatepicker} style={styles.addButton}>
+          <Text style={styles.buttonText}>Select Appointment Date</Text>
+        </TouchableOpacity>
+        {showDatePicker && (
+          <DateTimePicker
+            value={date}
+            mode="date"
+            display="default"
+            onChange={(event, selectedDate) => {
+              setShowDatePicker(false);
+              setDate(selectedDate || date);
+            }}
+          />
+        )}
+      </View>
 
-        <Text style={styles.label}>Appointment Date</Text>
+      {/* Add Button */}
+      <View style={styles.addButtonContainer}>
+        <TouchableOpacity style={styles.addButton} onPress={handleAdd}>
+          <Text style={styles.buttonText}>Add</Text>
+        </TouchableOpacity>
+      </View>
 
-        <View style={styles.container}>
-            <TouchableOpacity onPress={showDatepicker} style={styles.addButton}>
-            <Text style={styles.buttonText}>Select Appointment Date</Text>
-            </TouchableOpacity>
-            {expiryDate && <Text style={styles.selectedDate}>Appointment date is set to: {expiryDate.toLocaleDateString()}</Text>}
-            {showDatePicker && (
-            <DateTimePicker
-                value={date}
-                mode="date"
-                display="default"
-                onChange={onChange}
-            />
-            )}
-        </View>
-
-        {/* Add Button */}
-
-        <View style={styles.addButtonContainer}>
-            <TouchableOpacity style={styles.addButton} onPress={handleAdd}>
-                <Text style={styles.buttonText}>Add</Text>
-            </TouchableOpacity>
-        </View>
-
-        
     </>
   );
 };
