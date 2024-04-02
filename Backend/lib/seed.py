@@ -84,7 +84,7 @@ async def seed_data(session: AsyncSession):
     company2 = Company(
         id=uuid7(),
         name="Moderna",
-        logo=None,
+        logo="moderna.png",
         address_street="456 Sunset Blvd",
         address_zip="T2N 1N4",
         address_city="Vancouver",
@@ -154,7 +154,7 @@ async def seed_data(session: AsyncSession):
     company3 = Company(
         id=uuid7(),
         name="AstraZeneca",
-        logo=None,
+        logo="astra.png",
         address_street="123 Main St",
         address_zip="12345",
         address_city="Toronto",
