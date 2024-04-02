@@ -270,43 +270,7 @@ async def seed_data(session: AsyncSession):
     session.add_all([company1, company2, company3, doctor1, doctor2, doctor3, doctor4, doctor5])
 
 
-    doctor1 = Doctor(
-        id=uuid7(),
-        name="Dr. John Doe",
-        email="john.doe@hospital.com",
-        profile_picture="john_doe.jpg",
-        specialty="General Practitioner",
-        appointments=[]
-    )
-
-    doctor2 = Doctor(
-        id=uuid7(),
-        name="Dr. Ada Lovelace",
-        email="ada.lovelace@hospital.com",
-        profile_picture="ada_lovelace.jpg",
-        specialty="Neurosurgery",
-        appointments=[]
-    )
-
-    doctor3 = Doctor(
-        id=uuid7(),
-        name="Dr. Alan Turing",
-        email="alan.turing@hospital.com",
-        profile_picture="alan_turing.jpg",
-        specialty="Cardiology",
-        appointments=[]
-    )
-
-    doctor4 = Doctor(
-        id=uuid7(),
-        name="Dr. Grace Hopper",
-        email="grace.hopper@hospital.com",
-        profile_picture="grace_hopper.jpg",
-        specialty="Oncology",
-        appointments=[]
-    )
-
-    session.add_all([doctor1, doctor2, doctor3, doctor4])
+    session.add_all([doctor1, doctor2, doctor3, doctor4, doctor5])
 
     monday = Day(
         id=uuid7(),
