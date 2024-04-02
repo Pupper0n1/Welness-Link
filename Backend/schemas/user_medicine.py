@@ -18,7 +18,7 @@ class UserMedicineAssociationSchema(Schema):
     
     dosage: str
     bought_on: date
-    expires: Optional[date]
+    expires: date
 
     total: int
     current_amount: int

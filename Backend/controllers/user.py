@@ -191,6 +191,4 @@ class UserController(Controller):
         '''
         await redis.set('foo', 'bar')
         return await redis.get('foo')
-    
 
-    # @post('/appointmentws')

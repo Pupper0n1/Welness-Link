@@ -12,6 +12,7 @@ from litestar.contrib.jwt import OAuth2Login, Token
 from litestar.datastructures import UploadFile
 from litestar.enums import RequestEncodingType
 from litestar.params import Body
+from sqlalchemy import delete, select
 from lib.redis import redis
 from sqlalchemy.ext.asyncio import AsyncSession
 from uuid_extensions import uuid7
@@ -78,3 +79,47 @@ class MedicineController(Controller):
         return f"Doctor picture added at: {file_path}"
 
 
+
+    @post('/add/{medicine_id: str}')
+    async def add_medicine(self, medicine_id: str, session: AsyncSession, request: 'Request[User, Token, Any]') -> str:
+        medicine = await get_medicine_by_id(session, medicine_id)
+        user = await get_user_by_id(session, request.user)
+
+        user.medicines.append(medicine)
+        await session.commit()
+
+        return "Medicine Added successfully"
+    
+    @post('/remove/{medicine_id: str}')
+    async def remove_medicine(self, medicine_id: str, session: AsyncSession, request: 'Request[User, Token, Any]') -> str:
+        # medicine = aw?ser_by_id(session, request.user)
+        user = await get_user_by_id(session, request.user)
+        # user.medicines.remove(medicine_id)
+        query = select(UserMedicineAssociation).where(UserMedicineAssociation.user_id == request.user).where(UserMedicineAssociation.medicine_id == medicine_id)
+        result = await session.execute(query)
+        user_medicine = result.scalar_one_or_none()
+        user.medicines.remove(user_medicine)
+        query = delete(UserMedicineAssociation).where(UserMedicineAssociation.user_id == request.user).where(UserMedicineAssociation.medicine_id == medicine_id)
+        await session.execute(query)
+        # user_medicine = result.scalar_one_or_none()
+        # if user_medicine is None:
+        #     return "No such medicine found"
+        
+        # await session.commit()
+
+        return "deleted successfully"
+    
+
+    @post('/take/{medicine_id: str}')
+    async def take_medicine(self, request: 'Request[User, Token, Any]', session: AsyncSession, medicine_id: str) -> str:
+        user = await get_user_by_id(session, request.user)
+
+        from crud.user_medicine import subtract_dosage
+
+        await subtract_dosage(session, user.id, medicine_id)
+
+
+        # user.medicines['medicine_id']
+
+        
+from models.user_medicine import UserMedicineAssociation

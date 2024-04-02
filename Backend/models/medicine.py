@@ -26,6 +26,6 @@ class Medicine(UUIDBase):
         lazy='selectin'
     )
 
-    users = relationship('UserMedicineAssociation', back_populates='medicine')
+    users = relationship('UserMedicineAssociation', back_populates='medicine', cascade='all, delete-orphan')
 
 
