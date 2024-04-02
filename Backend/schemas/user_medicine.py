@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from typing import Optional
 from uuid import UUID
 from enum import Enum
 from .schema import Schema
@@ -17,7 +18,7 @@ class UserMedicineAssociationSchema(Schema):
     
     dosage: str
     bought_on: date
-    expires: date
+    expires: Optional[date]
 
     total: int
     current_amount: int
