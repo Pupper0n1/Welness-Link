@@ -56,7 +56,7 @@ class UserLoginDTO(UserDTO):
 
 class CreateUserDTO(UserDTO):
     config = DTOConfig(
-        include={'username', 'first_name', 'last_name', 'email', 'password'}
+        include={'username', 'first_name', 'last_name', 'email', 'password'},
         rename_strategy='camel',
     )
 
