@@ -384,7 +384,7 @@ async def seed_data(session: AsyncSession):
         medicine_name= medicine2.name,
         dosage="200mg",
         bought_on=date(2022, 3, 1),
-        expires=date(2025, 3, 1),
+        expires=date(2024, 7, 1),
         total=30,
         current_amount=30,
         days=[monday, wednesday, friday]
@@ -396,7 +396,7 @@ async def seed_data(session: AsyncSession):
         medicine_name= medicine4.name,
         dosage="500mg",
         bought_on=date(2022, 6, 11),
-        expires=date(2022, 9, 11),
+        expires=date(2024, 7, 1),
         total=30,
         current_amount=30,
         days=[tuesday, thursday, saturday]
@@ -408,7 +408,7 @@ async def seed_data(session: AsyncSession):
         medicine_name= medicine6.name,
         dosage="10mg",
         bought_on=date(2022, 9, 21),
-        expires=date(2030, 1, 1),
+        expires=date(2024, 7, 1),
         total=30,
         current_amount=30,
         days=[sunday]
@@ -435,7 +435,7 @@ async def seed_data(session: AsyncSession):
         medicine_name= medicine3.name,
         dosage="500mg",
         bought_on=date(2023, 3, 1),
-        expires=date(2028, 1, 1),
+        expires=date(2025, 7, 1),
         total=30,
         current_amount=30,
         days=[monday, wednesday, friday]
@@ -447,7 +447,7 @@ async def seed_data(session: AsyncSession):
         medicine_name= medicine5.name,
         dosage="10mg",
         bought_on=date(2023, 6, 11),
-        expires=date(2026, 6, 11),
+        expires=date(2025, 7, 1),
         total=30,
         current_amount=30,
         days=[tuesday, thursday, saturday]
@@ -459,7 +459,7 @@ async def seed_data(session: AsyncSession):
         medicine_name= medicine7.name,
         dosage="10mg",
         bought_on=date(2023, 9, 21),
-        expires=date(2025, 9, 21),
+        expires=date(2025, 7, 1),
         total=30,
         current_amount=30,
         days=[sunday]
