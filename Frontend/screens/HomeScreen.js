@@ -214,7 +214,12 @@ const HomeScreen = () => {
 };
 
   const MedicineScreen = () => {
+    const navigation = useNavigation();
     const [medicines, setMedicines] = useState([]);
+  
+    const handleMedicineSelected = (medicine) => {
+      navigation.navigate('MedicineInformation', { medicine });
+    };
   
     useEffect(() => {
       const fetchMedicines = async () => {
@@ -249,9 +254,9 @@ const HomeScreen = () => {
             <StatusBar backgroundColor="black" barStyle="light-content" />
             
             {medicines.map(medicine => (
-              <View key={medicine.id} style={styles.view}>
+              <TouchableOpacity key={medicine.id} style={styles.view} onPress={() => handleMedicineSelected(medicine)}>
                 <Text style={styles.text}>{medicine.name}</Text>
-              </View>
+              </TouchableOpacity>
             ))}
           </View>
         </ScrollView>
