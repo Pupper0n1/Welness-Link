@@ -75,7 +75,38 @@ class UserController(Controller):
             UserSchema: The user's information in UserSchema format.
         '''
         return UserSchema.model_validate(await get_user_by_id(session, request.user))
+    
 
+    @get('/me/appointments', return_dto=AppointmentDTO)
+    async def get_my_appointments(self, request: 'Request[User, Token, Any]', session: AsyncSession) -> list[AppointmentSchema]:
+        '''
+        Get the user's own appointments.
+
+        Args:
+            request (Request): The HTTP request object.
+            session (AsyncSession): The database session.
+
+        Returns:
+            list[AppointmentSchema]: A list of the user's appointments in AppointmentSchema format.
+        '''
+        user = await get_user_by_id(session, request.user)
+        return user.appointments
+    
+    @get('/me/medicines', return_dto=UserMedicineAssociationDTO)
+    async def get_my_medicines(self, request: 'Request[User, Token, Any]', session: AsyncSession) -> list[UserMedicineAssociationSchema]:
+        '''
+        Get the user's own medicines.
+
+        Args:
+            request (Request): The HTTP request object.
+            session (AsyncSession): The database session.
+
+        Returns:
+            list[UserMedicineAssociationSchema]: A list of the user's medicines in UserMedicineAssociationSchema format.
+        '''
+        user = await get_user_by_id(session, request.user)
+        return user.medicines
+    
 
     @post('/', dto=CreateUserDTO, exclude_from_auth=True)
     async def create_user_login(self, session: AsyncSession, data: DTOData[UserSchema]) -> Response[OAuth2Login]:
