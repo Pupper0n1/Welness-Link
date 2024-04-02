@@ -69,6 +69,8 @@ const styles = StyleSheet.create({
 
 const EventsScreen = () => {
   const navigation = useNavigation();
+  const [appointments, setAppointments] = useState([]);
+  const [doctors, setDoctors] = useState({});
 
   const handleAddAppointment = () => {
     navigation.navigate('Appointments');
@@ -78,38 +80,65 @@ const EventsScreen = () => {
     navigation.navigate('Symptoms');
   }
 
+  useEffect(() => {
+    const fetchAppointments = async () => {
+      try {
+        const response = await fetch('http://192.168.255.242:8000/user/me/appointments');
+        if (response.ok) {
+          const userAppointments = await response.json();
+          setAppointments(userAppointments);
+        } else {
+          console.error('Failed to fetch user appointments');
+        }
+      } catch (error) {
+        console.error('Error occurred while fetching user appointments:', error);
+      }
+    };
+
+    const fetchDoctors = async () => {
+      try {
+        const response = await fetch('http://192.168.255.242:8000/doctor');
+        if (response.ok) {
+          const doctorData = await response.json();
+          const doctorMap = {};
+          doctorData.forEach(doctor => {
+            doctorMap[doctor.id] = doctor.name;
+          });
+          setDoctors(doctorMap);
+        } else {
+          console.error('Failed to fetch doctors');
+        }
+      } catch (error) {
+        console.error('Error occurred while fetching doctors:', error);
+      }
+    };
+
+    fetchAppointments();
+    fetchDoctors();
+  }, []);
+
     return(
     <>
     <ScrollView style={styles.scrollView}>
 
-    <View style={styles.header}>
-    <Text style={styles.welcomeText}>Upcoming Appointments,</Text>
-    <TouchableOpacity onPress={handleAddAppointment}>
-        <Text style={styles.addButton}>+</Text>
-    </TouchableOpacity>
-    </View>
+        <View style={styles.header}>
+          <Text style={styles.welcomeText}>Upcoming Appointments,</Text>
+          <TouchableOpacity onPress={handleAddAppointment}>
+            <Text style={styles.addButton}>+</Text>
+          </TouchableOpacity>
+        </View>
 
-    <View style={styles.container}>
-      <StatusBar backgroundColor="black" barStyle="light-content" />
-      
-      <View style={styles.view}>
-        <Text style={styles.text}>Dr. Gerald</Text>
-        <Text style={styles.description}>Appointment Date: </Text>
-        <Text style={styles.description}>Notes: </Text>
-      </View>
-
-      <View style={styles.view}>
-        <Text style={styles.text}>Dr. Gerald</Text>
-        <Text style={styles.description}>Appointment Date: </Text>
-        <Text style={styles.description}>Notes: </Text>
-      </View>
-
-      <View style={styles.view}>
-        <Text style={styles.text}>Dr. Gerald</Text>
-        <Text style={styles.description}>Appointment Date: </Text>
-        <Text style={styles.description}>Notes: </Text>
-      </View>
-    </View>
+        <View style={styles.container}>
+          <StatusBar backgroundColor="black" barStyle="light-content" />
+          {appointments.map(appointment => (
+            <View key={appointment.id} style={styles.view}>
+              <Text style={styles.text}>{`Doctor: ${doctors[appointment.doctorId] || 'Unknown'}`}</Text>
+              <Text style={styles.description}>{`Appointment Date: ${appointment.date}`}</Text>
+              <Text style={styles.description}>{`Notes: ${appointment.description}`}</Text>
+            </View>
+          ))}
+        </View>
+        
 
 
     <View style={styles.header}>
