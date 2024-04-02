@@ -1,6 +1,7 @@
 from sqlalchemy import select
 from models.medicine import Medicine
 from models.company import Company
+from models.doctor import Doctor
 from models.user import User
 from schemas.user import UserSchema
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -219,7 +220,47 @@ async def seed_data(session: AsyncSession):
 
     company3.medicines.extend([medicine11, medicine12, medicine13, medicine14, medicine15])
 
-    session.add_all([company1, company2, company3])
+    doctor1 = Doctor (
+        id=uuid7(),
+        name="Ethan Anderson",
+        email="ethan.anderson@gmail.com",
+        profile_picture="ethan.jpg",
+        specialty="Cardiology",
+    )
+
+    doctor2 = Doctor (
+        id=uuid7(),
+        name="Emma Roberts",
+        email="emma.roberts@gmail.com",
+        profile_picture="emma.jpg",
+        specialty="Orthopedics",
+    )
+
+    doctor3 = Doctor (
+        id=uuid7(),
+        name="Noah Thompson",
+        email="noah.thompson@gmail.com",
+        profile_picture="noah.jpg",
+        specialty="Dermatology",
+    )
+
+    doctor4 = Doctor (
+        id=uuid7(),
+        name="Olivia Johnson",
+        email="olivia.johnson@gmail.com",
+        profile_picture="olivia.jpg",
+        specialty="Neurology",
+    )
+
+    doctor5 = Doctor (
+        id=uuid7(),
+        name="Alexander Mitchell",
+        email="alexander.mitchell@gmail.com",
+        profile_picture="alexander.jpg",
+        specialty="Gynecology",
+    )
+
+    session.add_all([company1, company2, company3, doctor1, doctor2, doctor3, doctor4, doctor5])
 
     ## Users
 
