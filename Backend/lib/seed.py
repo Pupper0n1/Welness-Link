@@ -1,20 +1,27 @@
 from sqlalchemy import select
+from models.appointment import Appointment
+from models.doctor import Doctor
 from models.medicine import Medicine
 from models.company import Company
 from models.user import User
 from schemas.user import UserSchema
+from models.appointment import Appointment
 from sqlalchemy.ext.asyncio import AsyncSession
 from faker import Faker
+from models.days import Day
+from models.user_medicine import UserMedicineAssociation
 
 from uuid_extensions import uuid7
-from datetime import date
+from datetime import date, datetime
+
+from .hasher import ph
 
 
 async def seed_data(session: AsyncSession):
     company1 = Company(
         id=uuid7(),
         name="Pfizer",
-        logo="phizer.png",
+        logo="phizer.jpg",
         address_street="123 Main St",
         address_zip="T2A 1A1",
         address_city="Toronto",
@@ -220,6 +227,320 @@ async def seed_data(session: AsyncSession):
     company3.medicines.extend([medicine11, medicine12, medicine13, medicine14, medicine15])
 
     session.add_all([company1, company2, company3])
+
+
+    doctor1 = Doctor(
+        id=uuid7(),
+        name="Dr. John Doe",
+        email="john.doe@hospital.com",
+        profile_picture="john_doe.jpg",
+        specialty="General Practitioner",
+        appointments=[]
+    )
+
+    doctor2 = Doctor(
+        id=uuid7(),
+        name="Dr. Ada Lovelace",
+        email="ada.lovelace@hospital.com",
+        profile_picture="ada_lovelace.jpg",
+        specialty="Neurosurgery",
+        appointments=[]
+    )
+
+    doctor3 = Doctor(
+        id=uuid7(),
+        name="Dr. Alan Turing",
+        email="alan.turing@hospital.com",
+        profile_picture="alan_turing.jpg",
+        specialty="Cardiology",
+        appointments=[]
+    )
+
+    doctor4 = Doctor(
+        id=uuid7(),
+        name="Dr. Grace Hopper",
+        email="grace.hopper@hospital.com",
+        profile_picture="grace_hopper.jpg",
+        specialty="Oncology",
+        appointments=[]
+    )
+
+    session.add_all([doctor1, doctor2, doctor3, doctor4])
+
+    monday = Day(
+        id=uuid7(),
+        day="Monday"
+    )
+
+    tuesday = Day(
+        id=uuid7(),
+        day="Tuesday"
+    )
+
+    wednesday = Day(
+        id=uuid7(),
+        day="Wednesday"
+    )
+
+    thursday = Day(
+        id=uuid7(),
+        day="Thursday"
+    )
+
+    friday = Day(
+        id=uuid7(),
+        day="Friday"
+    )
+
+    saturday = Day(
+        id=uuid7(),
+        day="Saturday"
+    )
+
+    sunday = Day(
+        id=uuid7(),
+        day="Sunday"
+    )
+
+    session.add_all([monday, tuesday, wednesday, thursday, friday, saturday, sunday])
+
+
+    user1 = User(
+        id=uuid7(),
+        username="jane.doe",
+        first_name="Jane",
+        last_name="Doe",
+        email="jane.doe@email.com",
+        profile_picture=None,
+        password=ph.hash("password"),
+        medicines=[],
+        appointments=[]
+    )
+
+    user1_medicine_1 = UserMedicineAssociation(
+        user_id=user1.id,
+        medicine_id=medicine1.id,
+        dosage="500mg",
+        bought_on=date(2023, 3, 1),
+        expires=None,
+        total=30,
+        current_amount=30,
+        days=[monday, wednesday, friday]
+    )
+
+    user1_medicine_6 = UserMedicineAssociation(
+        user_id=user1.id,
+        medicine_id=medicine3.id,
+        dosage="500mg",
+        bought_on=date(2023, 6, 11),
+        expires=None,
+        total=30,
+        current_amount=30,
+        days=[tuesday, thursday, saturday]
+    )
+
+    user1_medicine_11 = UserMedicineAssociation(
+        user_id=user1.id,
+        medicine_id=medicine5.id,
+        dosage="10mg",
+        bought_on=date(2023, 9, 21),
+        expires=None,
+        total=30,
+        current_amount=30,
+        days=[sunday]
+    )
+    
+    user1.medicines.extend([user1_medicine_1, user1_medicine_6, user1_medicine_11])
+
+
+    user2 = User(
+        id=uuid7(),
+        username="andrew_musa",
+        first_name="Andrew",
+        last_name="Musa",
+        email="andrew.musa@ucalgary.ca",
+        profile_picture=None,
+        password=ph.hash("password"),
+        medicines=[],
+        appointments=[]
+    )
+
+    user_2_medicine_2 = UserMedicineAssociation(
+        user_id=user1.id,
+        medicine_id=medicine2.id,
+        dosage="200mg",
+        bought_on=date(2022, 3, 1),
+        expires=None,
+        total=30,
+        current_amount=30,
+        days=[monday, wednesday, friday]
+    )
+
+    user_2_medicine_7 = UserMedicineAssociation(
+        user_id=user1.id,
+        medicine_id=medicine4.id,
+        dosage="500mg",
+        bought_on=date(2022, 6, 11),
+        expires=None,
+        total=30,
+        current_amount=30,
+        days=[tuesday, thursday, saturday]
+    )
+
+    user_2_medicine_12 = UserMedicineAssociation(
+        user_id=user1.id,
+        medicine_id=medicine6.id,
+        dosage="10mg",
+        bought_on=date(2022, 9, 21),
+        expires=None,
+        total=30,
+        current_amount=30,
+        days=[sunday]
+    )
+
+    user2.medicines.extend([user_2_medicine_2, user_2_medicine_7, user_2_medicine_12])
+
+
+    user3 = User(
+        id=uuid7(),
+        username="wilbur",
+        first_name="Wilbur",
+        last_name="Elbouni",
+        email="wilbur.elbouni@ucalgary.ca",
+        profile_picture=None,
+        password=ph.hash("password"),
+        medicines=[],
+        appointments=[]
+    )
+    
+    user3_medicine_3 = UserMedicineAssociation(
+        user_id=user1.id,
+        medicine_id=medicine3.id,
+        dosage="500mg",
+        bought_on=date(2023, 3, 1),
+        expires=None,
+        total=30,
+        current_amount=30,
+        days=[monday, wednesday, friday]
+    )
+
+    user3_medicine_8 = UserMedicineAssociation(
+        user_id=user1.id,
+        medicine_id=medicine5.id,
+        dosage="10mg",
+        bought_on=date(2023, 6, 11),
+        expires=None,
+        total=30,
+        current_amount=30,
+        days=[tuesday, thursday, saturday]
+    )
+
+    user3_medicine_13 = UserMedicineAssociation(
+        user_id=user1.id,
+        medicine_id=medicine7.id,
+        dosage="10mg",
+        bought_on=date(2023, 9, 21),
+        expires=None,
+        total=30,
+        current_amount=30,
+        days=[sunday]
+    )
+
+    user3.medicines.extend([user3_medicine_3, user3_medicine_8, user3_medicine_13])
+
+    app1 = Appointment(
+        id=uuid7(),
+        user_id=user1.id,
+        doctor_id=doctor1.id,
+        date=datetime(2023, 1, 14, 10, 30),
+        description="Consultation for flu symptoms"
+    )
+
+    app2 = Appointment(
+        id=uuid7(),
+        user_id=user2.id,
+        doctor_id=doctor2.id,
+        date=datetime(2023, 1, 15, 10, 30),
+        description="Follow up on surgery",
+    )
+
+    app3 = Appointment(
+        id=uuid7(),
+        user_id=user3.id,
+        doctor_id=doctor3.id,
+        date=datetime(2023, 1, 16, 10, 30),
+        description="Annual physical",
+    )
+
+    session.add_all([user1, user2, user3, app1, app2, app3])
+
+
+
+# class Appointment(UUIDAuditBase):
+#     __tablename__ = 'appointment_table'
+
+#     user_id = Column(UUID, ForeignKey('user_table.id'))
+#     doctor_id = Column(UUID, ForeignKey('doctor_table.id'))
+
+#     date = Column(DateTime)
+#     description = Column(String)
+
+#     doctor = relationship('Doctor', back_populates='appointments')
+#     user = relationship('User', back_populates='appointments')
+
+
+
+
+# class UserMedicineAssociation(UUIDBase):
+#     __tablename__ = 'user_medicine_association_table'
+#     user_id = Column(UUID, ForeignKey('user_table.id'))
+#     medicine_id = Column(UUID, ForeignKey('medicine_table.id'))
+
+#     # dosage = Column(String)
+#     dosage = Column(String)
+#     bought_on = Column(Date)
+#     expires = Column(Date)
+
+#     total = Column(Integer)
+#     current_amount = Column(Integer)
+
+
+#     medicine = relationship('Medicine', back_populates='users')
+#     user = relationship('User', back_populates='medicines')
+
+#     days = Column(String)
+
+
+#     __table_args__ = (
+#         UniqueConstraint('user_id', 'medicine_id'),
+#     )
+
+
+
+    # user3 = User(
+    #     id=uuid7(),
+    #     username="wilbur",
+    #     first_name="Wilbur",
+    #     last_name="Elbouni",
+    #     email="wilbur.elbouni@ucalgary.ca",
+    #     profile_picture=None,
+    #     password=ph.hash("password"),
+    #     medicines=[medicine7, medicine8, medicine9],
+    #     appointments=[]
+    # )
+
+
+
+
+# class Doctor(UUIDAuditBase):
+#     __tablename__ = 'doctor_table'
+#     name: Mapped[str] = mapped_column(String(255))
+#     email: Mapped[str] = mapped_column(String(100))
+#     profile_picture: Mapped[str] = mapped_column(String(100), nullable=True)
+#     specialty: Mapped[str] = mapped_column(String(100))
+
+#     appointments = relationship('Appointment', back_populates='doctor')
+    
 
     ## Users
 
