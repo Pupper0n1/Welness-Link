@@ -28,11 +28,13 @@ class AppointmentSchema(Schema):
 class AppointmentDTO(PydanticDTO[AppointmentSchema]):
     config = DTOConfig(
         max_nested_depth=2,
+        rename_strategy='camel',
     )
 
 class CreateAppointmentDTO(AppointmentDTO):
     config = DTOConfig(
-        include={'doctor_id', 'date', 'description'}
+        include={'doctor_id', 'date', 'description'},
+        rename_strategy='camel'
     )
 
 

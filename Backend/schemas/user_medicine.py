@@ -15,10 +15,11 @@ from litestar.contrib.pydantic import PydanticDTO
 class UserMedicineAssociationSchema(Schema):
     user_id: UUID
     medicine_id: UUID
+    medicine_name: str
     
     dosage: str
     bought_on: date
-    expires: Optional[date]
+    expires: date
 
     total: int
     current_amount: int
@@ -30,7 +31,9 @@ class UserMedicineAssociationSchema(Schema):
 class UserMedicineAssociationDTO(PydanticDTO[UserMedicineAssociationSchema]):
     config = DTOConfig(
         max_nested_depth=2,
+        rename_strategy='camel',
     )
 
 class AddUserMedicineAssociationDTO(UserMedicineAssociationDTO):
-    config = DTOConfig(include={'medicine_id', 'dosage', 'expires', 'total', 'days.0.day'})
+    config = DTOConfig(include={'medicine_id', 'medicine_name', 'dosage', 'expires', 'total', 'days.0.day'},
+                       rename_strategy='camel')

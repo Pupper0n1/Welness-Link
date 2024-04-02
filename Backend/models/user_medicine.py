@@ -12,6 +12,7 @@ class UserMedicineAssociation(UUIDBase):
     __tablename__ = 'user_medicine_association_table'
     user_id = Column(UUID, ForeignKey('user_table.id'))
     medicine_id = Column(UUID, ForeignKey('medicine_table.id'))
+    medicine_name = Column(String)
 
     # dosage = Column(String)
     dosage = Column(String)

@@ -27,11 +27,13 @@ class MedicineSchema(Schema):
 class MedicineDTO(PydanticDTO[MedicineSchema]):
     config = DTOConfig(
         max_nested_depth=2,
+        rename_strategy='camel',
     )
 
 class CreateMedicineDTO(MedicineDTO):
     config = DTOConfig(
-        include={'name', 'DIN', 'Notes', 'usage', 'type', 'company_id'}
+        include={'name', 'DIN', 'Notes', 'usage', 'type', 'company_id'},
+        rename_strategy='camel',
     )
 
 

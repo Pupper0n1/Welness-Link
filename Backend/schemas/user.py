@@ -46,13 +46,19 @@ class UserSchema(Schema):
 class UserDTO(PydanticDTO[UserSchema]):
     config = DTOConfig(
         max_nested_depth=2,
+        rename_strategy='camel',
     )
 
 class UserLoginDTO(UserDTO):
-    config = DTOConfig(include={'username', 'password'})
+    config = DTOConfig(include={'username', 'password'},
+    rename_strategy='camel',
+    )
 
 class CreateUserDTO(UserDTO):
-    config = DTOConfig(include={'username', 'first_name', 'last_name', 'email', 'password'})
+    config = DTOConfig(
+        include={'username', 'first_name', 'last_name', 'email', 'password'},
+        rename_strategy='camel',
+    )
 
 
 
@@ -61,6 +67,7 @@ class UserOutDTO(UserDTO):
     config = DTOConfig(
         exclude = {'password'},
         max_nested_depth=2,
+        rename_strategy='camel',
     )
 
 

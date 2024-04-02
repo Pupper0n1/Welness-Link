@@ -19,5 +19,5 @@ class User(UUIDAuditBase):
 
 
 
-    medicines = relationship(UserMedicineAssociation, back_populates='user', lazy='selectin')
-    appointments = relationship(Appointment, back_populates='user', lazy='selectin')
+    medicines = relationship(UserMedicineAssociation, back_populates='user', lazy='selectin', cascade='all, delete-orphan')
+    appointments = relationship(Appointment, back_populates='user', lazy='selectin', cascade='all, delete-orphan')
