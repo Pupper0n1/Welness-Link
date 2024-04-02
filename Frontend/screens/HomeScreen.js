@@ -157,7 +157,7 @@ const HomeScreen = () => {
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const response = await fetch('http://10.13.78.53:8000/user/me');
+                const response = await fetch('http://192.168.255.242:8000/user/me');
                 if (response.ok) {
                     const userData = await response.json();
                     setFirstName(userData.first_name);
@@ -276,10 +276,6 @@ const SettingsScreen = () => {
     <ScrollView style={styles.scrollView}>
         <Text style={styles.profileInfo}>First Name: John</Text>
         <Text style={styles.profileInfo}>Last Name: Smith</Text>
-        <Text style={styles.profileInfo}>Birthdate: 01-01-2000</Text>
-        <Text style={styles.profileInfo}>Age: 24</Text>
-        <Text style={styles.profileInfo}>Gender: Male</Text>
-        <Text style={styles.profileInfo}>Country: Canada</Text>
         <Text style={styles.profileInfo}>E-Mail: John@email.com</Text>
         <View style={styles.line}></View>
         <View>
