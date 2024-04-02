@@ -24,11 +24,13 @@ class DoctorSchema(Schema):
 class DoctorDTO(PydanticDTO[DoctorSchema]):
     config = DTOConfig(
         max_nested_depth=2,
+        rename_strategy='camel',
     )
 
 class CreateDoctorDTO(DoctorDTO):
     config = DTOConfig(
-        include={'name', 'email', 'specialty'}
+        include={'name', 'email', 'specialty'},
+        rename_strategy='camel'
     )
 
 

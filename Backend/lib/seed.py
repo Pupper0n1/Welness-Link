@@ -330,6 +330,7 @@ async def seed_data(session: AsyncSession):
     user1_medicine_1 = UserMedicineAssociation(
         user_id=user1.id,
         medicine_id=medicine1.id,
+        medicine_name= medicine1.name,
         dosage="500mg",
         bought_on=date(2023, 3, 1),
         expires=date(2025, 6, 1),
@@ -341,6 +342,7 @@ async def seed_data(session: AsyncSession):
     user1_medicine_6 = UserMedicineAssociation(
         user_id=user1.id,
         medicine_id=medicine3.id,
+        medicine_name= medicine3.name,
         dosage="500mg",
         bought_on=date(2023, 6, 11),
         expires=date(2023, 9, 11),
@@ -352,6 +354,7 @@ async def seed_data(session: AsyncSession):
     user1_medicine_11 = UserMedicineAssociation(
         user_id=user1.id,
         medicine_id=medicine5.id,
+        medicine_name= medicine5.name,
         dosage="10mg",
         bought_on=date(2023, 9, 21),
         expires=date(2025, 9, 21),
@@ -378,6 +381,7 @@ async def seed_data(session: AsyncSession):
     user_2_medicine_2 = UserMedicineAssociation(
         user_id=user1.id,
         medicine_id=medicine2.id,
+        medicine_name= medicine2.name,
         dosage="200mg",
         bought_on=date(2022, 3, 1),
         expires=date(2025, 3, 1),
@@ -389,6 +393,7 @@ async def seed_data(session: AsyncSession):
     user_2_medicine_7 = UserMedicineAssociation(
         user_id=user1.id,
         medicine_id=medicine4.id,
+        medicine_name= medicine4.name,
         dosage="500mg",
         bought_on=date(2022, 6, 11),
         expires=date(2022, 9, 11),
@@ -400,6 +405,7 @@ async def seed_data(session: AsyncSession):
     user_2_medicine_12 = UserMedicineAssociation(
         user_id=user1.id,
         medicine_id=medicine6.id,
+        medicine_name= medicine6.name,
         dosage="10mg",
         bought_on=date(2022, 9, 21),
         expires=date(2030, 1, 1),
@@ -426,6 +432,7 @@ async def seed_data(session: AsyncSession):
     user3_medicine_3 = UserMedicineAssociation(
         user_id=user1.id,
         medicine_id=medicine3.id,
+        medicine_name= medicine3.name,
         dosage="500mg",
         bought_on=date(2023, 3, 1),
         expires=date(2028, 1, 1),
@@ -437,6 +444,7 @@ async def seed_data(session: AsyncSession):
     user3_medicine_8 = UserMedicineAssociation(
         user_id=user1.id,
         medicine_id=medicine5.id,
+        medicine_name= medicine5.name,
         dosage="10mg",
         bought_on=date(2023, 6, 11),
         expires=date(2026, 6, 11),
@@ -448,6 +456,7 @@ async def seed_data(session: AsyncSession):
     user3_medicine_13 = UserMedicineAssociation(
         user_id=user1.id,
         medicine_id=medicine7.id,
+        medicine_name= medicine7.name,
         dosage="10mg",
         bought_on=date(2023, 9, 21),
         expires=date(2025, 9, 21),

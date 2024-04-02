@@ -92,21 +92,13 @@ class MedicineController(Controller):
     
     @post('/remove/{medicine_id: str}')
     async def remove_medicine(self, medicine_id: str, session: AsyncSession, request: 'Request[User, Token, Any]') -> str:
-        # medicine = aw?ser_by_id(session, request.user)
         user = await get_user_by_id(session, request.user)
-        # user.medicines.remove(medicine_id)
         query = select(UserMedicineAssociation).where(UserMedicineAssociation.user_id == request.user).where(UserMedicineAssociation.medicine_id == medicine_id)
         result = await session.execute(query)
         user_medicine = result.scalar_one_or_none()
         user.medicines.remove(user_medicine)
         query = delete(UserMedicineAssociation).where(UserMedicineAssociation.user_id == request.user).where(UserMedicineAssociation.medicine_id == medicine_id)
         await session.execute(query)
-        # user_medicine = result.scalar_one_or_none()
-        # if user_medicine is None:
-        #     return "No such medicine found"
-        
-        # await session.commit()
-
         return "deleted successfully"
     
 

@@ -19,11 +19,13 @@ class DaySchema(Schema):
 class DayDTO(PydanticDTO[DaySchema]):
     config = DTOConfig(
         max_nested_depth=2,
+        rename_strategy='camel',
     )
 
 class CreateDayDTO(DayDTO):
     config = DTOConfig(
-        include={'day'}
+        include={'day'},
+        rename_strategy='camel',
     )
 
 

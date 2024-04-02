@@ -31,16 +31,19 @@ class CompanySchema(Schema):
 class CompanyDTO(PydanticDTO[CompanySchema]):
     config = DTOConfig(
         max_nested_depth=2,
+        rename_strategy='camel',
     )
 
 class CreateCompanyDTO(CompanyDTO):
     config = DTOConfig(
-        include={'name'}
+        include={'name'},
+        rename_strategy='camel'
     )
 
 class UpdateCompanyDTO(CompanyDTO):
     config = DTOConfig(
-        exclude={'id', 'logo', 'medicines'}
+        exclude={'id', 'logo', 'medicines'},
+        rename_strategy='camel'
     )
 
 
