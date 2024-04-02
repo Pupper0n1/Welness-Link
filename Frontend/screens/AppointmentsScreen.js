@@ -15,9 +15,11 @@ export const AppointmentsScreen = () => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
-    {label: 'Dr. Alfred', value: 'dr1'},
-    {label: 'Dr. Bob', value: 'dr2'},
-    {label: 'Dr. Carlos', value: 'dr3'}
+    {label: 'Dr. Ethan Anderson', value: 'dr1'},
+    {label: 'Dr. Emma Roberts', value: 'dr2'},
+    {label: 'Dr. Noah Thompson', value: 'dr3'},
+    {label: 'Dr. Olivia Johnson', value: 'dr4'},
+    {label: 'Dr. Alexander Mitchell', value: 'dr5'},
   ]);
 
   const [date, setDate] = useState(new Date());
@@ -37,7 +39,7 @@ export const AppointmentsScreen = () => {
   };
 
   const handleAdd = () => {
-    // Logic to add medicine
+    // Logic to add appointment
   };
 
   return (
@@ -86,7 +88,7 @@ export const AppointmentsScreen = () => {
             <TouchableOpacity onPress={showDatepicker} style={styles.addButton}>
             <Text style={styles.buttonText}>Select Appointment Date</Text>
             </TouchableOpacity>
-            {expiryDate && <Text style={styles.selectedDate}>Expiry Date is set to: {expiryDate.toLocaleDateString()}</Text>}
+            {expiryDate && <Text style={styles.selectedDate}>Appointment date is set to: {expiryDate.toLocaleDateString()}</Text>}
             {showDatePicker && (
             <DateTimePicker
                 value={date}
