@@ -2,6 +2,10 @@ from models.user_medicine import UserMedicineAssociation
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from lib.emailer import send_email
+
+from crud.user import get_user_by_id
+
 
 async def subtract_dosage(session: AsyncSession, user_id, medicine_id):
     query = select(UserMedicineAssociation).filter_by(
@@ -12,6 +16,12 @@ async def subtract_dosage(session: AsyncSession, user_id, medicine_id):
     user_medicine.current_amount -= user_medicine.dosage
     if user_medicine.current_amount < 0:
         user_medicine.current_amount = 0
+
+    user = await get_user_by_id(session, user_id)
+
+    if user_medicine.current_amount <= user_medicine.total*0.3:
+        await send_email(user.email, user_medicine.medicine_name, user_medicine.current_amount)
+    
     await session.commit()
 
 

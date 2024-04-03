@@ -7,6 +7,7 @@ import pytz
 from schemas.user_symptom import UserSymptomDTO, UserSymptomSchema
 from controllers.auth import oauth2_auth
 from crud.user import get_user_by_id, get_user_list
+from crud.medicine import get_user_medicines_today
 from lib.redis import redis
 from litestar import Controller, Request, Response, get, patch, post
 from litestar.contrib.jwt import OAuth2Login, Token
@@ -110,6 +111,11 @@ class UserController(Controller):
         """
         user = await get_user_by_id(session, request.user)
         return user.medicines
+    
+
+    @get('/me/medicines/today', return_dto=UserMedicineAssociationDTO)
+    async def get_my_medicines_today(self, request: 'Request[User, Token, Any]', session: AsyncSession) -> list[UserMedicineAssociationSchema]:
+        return await get_user_medicines_today(session, request.user)
 
     @post("/", dto=CreateUserDTO, exclude_from_auth=True)
     async def create_user_login(
