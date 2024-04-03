@@ -1,19 +1,14 @@
-# from typing import TYPE_CHECKING, Optional
-
-# from sqlalchemy.orm import relationship, DeclarativeBase, Mapped, mapped_column
-# from sqlalchemy import Column, Integer, String, Boolean, DateTime, Text, UUID, ForeignKey, Date
-# import datetime
-# from litestar.contrib.sqlalchemy.base import UUIDAuditBase, UUIDBase
-# from .company_medicine import company_medicine_association
+from litestar.contrib.sqlalchemy.base import UUIDBase
+from sqlalchemy import String, Text
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 
-# class Symptom(UUIDBase):
-#     __tablename__ = 'symptom_table'
+class Symptom(UUIDBase):
+    __tablename__ = "symptom_table"
 
-#     name: Mapped[str] = mapped_column(String(255), unique=True)
+    name: Mapped[str] = mapped_column(String(255), unique=True)
+    description: Mapped[str] = mapped_column(Text)
 
-#     description: Mapped[str] = mapped_column(Text)
-
-
-
-
+    users = relationship(
+        "UserSymptom", back_populates="symptom", cascade="all, delete-orphan"
+    )

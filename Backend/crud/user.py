@@ -1,11 +1,14 @@
-from sqlalchemy import select, delete, orm
-from sqlalchemy.ext.asyncio import AsyncSession
-from litestar.exceptions import HTTPException
 from uuid import UUID
+
+from litestar.exceptions import HTTPException
 from models.user import User
+from sqlalchemy import orm, select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 
-async def get_user_list(session: AsyncSession, limit: int = 100, offset: int = 0) -> list[User]:
+async def get_user_list(
+    session: AsyncSession, limit: int = 100, offset: int = 0
+) -> list[User]:
     """
     Retrieve a list of users with optional pagination.
 
@@ -19,7 +22,12 @@ async def get_user_list(session: AsyncSession, limit: int = 100, offset: int = 0
     """
     # Create a query to select users with a limit and offset for pagination and execute it.
     # query = select(User).options(orm.selectinload(User.communities)).limit(limit).offset(offset)
-    query = select(User).options(orm.selectinload(User.medicines)).limit(limit).offset(offset)
+    query = (
+        select(User)
+        .options(orm.selectinload(User.medicines))
+        .limit(limit)
+        .offset(offset)
+    )
 
     result = await session.execute(query)
     return result.scalars().all()
@@ -41,7 +49,11 @@ async def get_user_by_username(session: AsyncSession, username: str) -> User:
     """
     # Create a query to find the user by username and execute it.
     # query = select(User).options(orm.selectinload(User.communities)).where(User.username == username)
-    query = select(User).options(orm.selectinload(User.medicines)).where(User.username == username)
+    query = (
+        select(User)
+        .options(orm.selectinload(User.medicines))
+        .where(User.username == username)
+    )
 
     result = await session.execute(query)
     try:
@@ -49,7 +61,6 @@ async def get_user_by_username(session: AsyncSession, username: str) -> User:
     except:
         # Raise an HTTP exception if there's an issue retrieving the user.
         raise HTTPException(status_code=401, detail="Error retrieving user")
-
 
 
 async def get_user_by_id(session: AsyncSession, id: UUID) -> User:
@@ -76,4 +87,3 @@ async def get_user_by_id(session: AsyncSession, id: UUID) -> User:
     except:
         # Raise an HTTP exception if there's an issue retrieving the user.
         raise HTTPException(status_code=401, detail="Error retrieving user")
-
