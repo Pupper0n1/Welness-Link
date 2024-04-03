@@ -47,6 +47,14 @@ const styles = StyleSheet.create({
       marginBottom: 20,
       elevation: 10,
     },
+    viewMedicines: {
+      backgroundColor: '#38bdf8',
+      width: '95%',
+      borderRadius: 15,
+      height: 60,
+      marginBottom: 20,
+      elevation: 10,
+    },
     text: {
         color: 'white',
         marginTop: 15,
@@ -345,7 +353,7 @@ const HomeScreen = () => {
             <StatusBar backgroundColor="black" barStyle="light-content" />
             
             {medicines.map(medicine => (
-              <TouchableOpacity key={medicine.id} style={styles.view} onPress={() => handleMedicineSelected(medicine)}>
+              <TouchableOpacity key={medicine.id} style={styles.viewMedicines} onPress={() => handleMedicineSelected(medicine)}>
                 <Text style={styles.text}>{medicine.name}</Text>
               </TouchableOpacity>
             ))}
