@@ -2,7 +2,7 @@ from litestar.contrib.sqlalchemy.base import UUIDAuditBase
 from sqlalchemy import (
     UUID,
     Column,
-    DateTime,
+    Date,
     ForeignKey,
     Integer,
     String,
@@ -19,8 +19,9 @@ class UserSymptom(UUIDAuditBase):
     symptom_id = Column(UUID, ForeignKey("symptom_table.id"))
     symptom_name = Column(String)
 
-    date = Column(DateTime)
+    date = Column(Date)
     intensity = Column(Integer)
+    notes = Column(String)
 
     symptom = relationship(Symptom, back_populates="users")
     user = relationship("User", back_populates="symptoms")

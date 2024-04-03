@@ -7,6 +7,8 @@ from models.doctor import Doctor
 from models.medicine import Medicine
 from models.user import User
 from models.user_medicine import UserMedicineAssociation
+from models.symptom import Symptom
+from models.user_symptom import UserSymptom
 from sqlalchemy.ext.asyncio import AsyncSession
 from uuid_extensions import uuid7
 
@@ -464,6 +466,114 @@ async def seed_data(session: AsyncSession):
     )
 
     session.add_all([user1, user2, user3, app1, app2, app3])
+
+
+    symptom1 = Symptom(
+        id=uuid7(),
+        name="Headache",
+        description="Pain in the head or neck",
+        users=[],
+    )
+
+    symptom2 = Symptom(
+        id=uuid7(),
+        name="Fever",
+        description="Elevated body temperature",
+        users=[],
+    )
+
+    symptom3 = Symptom(
+        id=uuid7(),
+        name="Cough",
+        description="Expelling air from the lungs with a sudden sharp sound",
+        users=[],
+    )
+
+    symptom4 = Symptom(
+        id=uuid7(),
+        name="Fatigue",
+        description="Extreme tiredness",
+        users=[],
+    )
+
+    symptom5 = Symptom(
+        id=uuid7(),
+        name="Nausea",
+        description="Feeling sick to the stomach",
+        users=[],
+    )
+
+    symptom6 = Symptom(
+        id=uuid7(),
+        name="Diarrhea",
+        description="Frequent passage of loose, watery stools",
+        users=[],
+    )
+
+    symptom7 = Symptom(
+        id=uuid7(),
+        name="Dizziness",
+        description="Feeling unsteady or lightheaded",
+        users=[],
+    )
+
+    symptom8 = Symptom(
+        id=uuid7(),
+        name="Shortness of breath",
+        description="Difficulty breathing",
+        users=[],
+    )
+
+    symptom9 = Symptom(
+        id=uuid7(),
+        name="Chest pain",
+        description="Pain or discomfort in the chest",
+        users=[],
+    )
+
+    symptom10 = Symptom(
+        id=uuid7(),
+        name="Back pain",
+        description="Pain in the back",
+        users=[],
+    )
+
+    session.add_all([symptom1, symptom2, symptom3, symptom4, symptom5, symptom6, symptom7, symptom8, symptom9, symptom10])
+
+
+    user_symptom1 = UserSymptom(
+        id=uuid7(),
+        user_id=user1.id,
+        symptom_id=symptom1.id,
+        symptom_name=symptom1.name,
+        date=date(2023, 1, 14),
+        intensity=5,
+        notes="Pain started yesterday",
+    )
+
+    user_symptom2 = UserSymptom(
+        id=uuid7(),
+        user_id=user2.id,
+        symptom_id=symptom2.id,
+        symptom_name=symptom2.name,
+        date=date(2023, 1, 15),
+        intensity=7,
+        notes="Fever started 3 days ago",
+    )
+
+    user_symptom3 = UserSymptom(
+        id=uuid7(),
+        user_id=user3.id,
+        symptom_id=symptom3.id,
+        symptom_name=symptom3.name,
+        date=date(2023, 1, 16),
+        intensity=3,
+        notes="Coughing for a week",
+    )
+
+    session.add_all([user_symptom1, user_symptom2, user_symptom3])
+
+    await session.commit()
 
 
 # class Appointment(UUIDAuditBase):

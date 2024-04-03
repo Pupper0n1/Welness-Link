@@ -7,6 +7,7 @@ from controllers.day import DayController
 from controllers.doctor import DoctorController
 from controllers.medicine import MedicineController
 from controllers.user import UserController
+from controllers.symptom import SymptomController
 from dotenv import load_dotenv
 from lib import cache, openapi
 from lib.seed import seed_data
@@ -67,14 +68,14 @@ cors_config = CORSConfig(allow_origins=["*"])  # NOTE: Change it for production
 
 # Create the Litestar application instance
 app = Litestar(
-    [
+    [   login_handler,
+        logout_handler,
         UserController,
         MedicineController,
         CompanyController,
         DoctorController,
         DayController,
-        login_handler,
-        logout_handler,
+        SymptomController,
     ],  # List of endpoint functions
     dependencies={
         "session": provide_transaction
