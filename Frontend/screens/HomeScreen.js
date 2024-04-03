@@ -358,53 +358,39 @@ const SettingsScreen = () => {
 
             <Text style={styles.label}>Current E-Mail Address</Text>
             <View className="flex items-center mx-5 space-y-4">
-            <Animated.View entering={FadeInDown.duration(1000).springify()} className="bg-black/5 p-5 rounded-2xl w-full">
-                <TextInput placeholder="Current E-Mail Address" placeholderTextColor={'gray'} />
-            </Animated.View>
+                <TextInput placeholder="Current E-Mail Address" placeholderTextColor={'gray'} className="bg-black/5 p-5 rounded-2xl w-full"/>
             </View>
 
             <Text style={styles.label}>New E-Mail Address</Text>
             <View className="flex items-center mx-5 space-y-4">
-            <Animated.View entering={FadeInDown.duration(1000).delay(200).springify()} className="bg-black/5 p-5 rounded-2xl w-full">
-                <TextInput placeholder="New E-Mail Address" placeholderTextColor={'gray'} />
-            </Animated.View>
+                <TextInput placeholder="New E-Mail Address" placeholderTextColor={'gray'} className="bg-black/5 p-5 rounded-2xl w-full"/>
             </View>
 
-            <Animated.View className="w-full" style={{alignItems: 'center', marginTop: 10}} entering={FadeInDown.delay(400).duration(1000).springify()}>
-                <TouchableOpacity className="w-[90%] bg-sky-400 p-3 rounded-2xl mb-3">
-                    <Text className="text-xl font-bold text-white text-center">Update E-Mail</Text>
-                </TouchableOpacity>
-            </Animated.View>
+            <TouchableOpacity className="w-[90%] bg-sky-400 p-3 rounded-2xl mb-3" style={{alignItems: 'center', marginTop: 10, marginLeft: 20}}>
+                <Text className="text-xl font-bold text-white text-center">Update E-Mail</Text>
+            </TouchableOpacity>
 
             <View style={styles.line}></View>
 
             <Text style={styles.label}>Current Password</Text>
             <View className="flex items-center mx-5 space-y-4">
-            <Animated.View entering={FadeInDown.duration(1000).springify()} className="bg-black/5 p-5 rounded-2xl w-full">
-                <TextInput placeholder="Current Password" placeholderTextColor={'gray'} />
-            </Animated.View>
+                <TextInput placeholder="Current Password" placeholderTextColor={'gray'} className="bg-black/5 p-5 rounded-2xl w-full"/>
             </View>
 
             <Text style={styles.label}>New Password</Text>
             <View className="flex items-center mx-5 space-y-4">
-            <Animated.View entering={FadeInDown.duration(1000).delay(200).springify()} className="bg-black/5 p-5 rounded-2xl w-full">
-                <TextInput placeholder="New Password" placeholderTextColor={'gray'} />
-            </Animated.View>
+                <TextInput placeholder="New Password" placeholderTextColor={'gray'} className="bg-black/5 p-5 rounded-2xl w-full"/>
             </View>
 
-            <Animated.View className="w-full" style={{alignItems: 'center', marginTop: 10}} entering={FadeInDown.delay(400).duration(1000).springify()}>
-                <TouchableOpacity className="w-[90%] bg-sky-400 p-3 rounded-2xl mb-3">
-                    <Text className="text-xl font-bold text-white text-center">Update Password</Text>
-                </TouchableOpacity>
-            </Animated.View>
+            <TouchableOpacity className="w-[90%] bg-sky-400 p-3 rounded-2xl mb-3" style={{alignItems: 'center', marginTop: 10, marginLeft: 20}}>
+                <Text className="text-xl font-bold text-white text-center">Update Password</Text>
+            </TouchableOpacity>
 
             <View style={styles.line}></View>
 
-            <Animated.View className="w-full" style={{ alignItems: 'center', marginTop: 10 }} entering={FadeInDown.delay(400).duration(1000).springify()}>
-              <TouchableOpacity className="w-[90%] bg-red-400 p-3 rounded-2xl mb-3" onPress={handleLogout}>
-                <Text className="text-xl font-bold text-white text-center">Logout</Text>
-              </TouchableOpacity>
-            </Animated.View>
+            <TouchableOpacity className="w-[90%] bg-red-400 p-3 rounded-2xl mb-3" style={{ alignItems: 'center', marginTop: 10, marginLeft: 20 }} onPress={handleLogout}>
+              <Text className="text-xl font-bold text-white text-center">Logout</Text>
+            </TouchableOpacity>
         </View>
     </ScrollView>
   </>
