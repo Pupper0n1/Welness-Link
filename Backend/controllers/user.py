@@ -204,3 +204,5 @@ class UserController(Controller):
     async def get_my_symptoms(self, request: 'Request[User, Token, Any]', session: AsyncSession) -> list[UserSymptomSchema]:
         user = await get_user_by_id(session, request.user)
         return user.symptoms
+
+
