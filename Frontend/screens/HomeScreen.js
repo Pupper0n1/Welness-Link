@@ -1,5 +1,5 @@
 import { React, useState, useEffect, useCallback } from 'react';
-import { View, Text, ScrollView, StatusBar, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, ScrollView, StatusBar, StyleSheet, TouchableOpacity, TextInput, Alert } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialIcons } from '@expo/vector-icons';
 import Animated, { FadeIn, FadeInDown, FadeInUp } from 'react-native-reanimated';
@@ -285,6 +285,40 @@ const HomeScreen = () => {
     fetchUserData();
   }, []);
 
+  const handleDeleteMedicine = async (medicineId) => {
+    try {
+      const response = await fetch(`http://192.168.255.242:8000/medicine/remove/${medicineId}`, {
+        method: 'POST'
+      });
+      if (response.ok) {
+        // Remove the deleted medicine from the state
+        setMedicines(medicines.filter(medicine => medicine.medicineId !== medicineId));
+      } else {
+        console.error('Failed to delete medicine');
+      }
+    } catch (error) {
+      console.error('Error occurred while deleting medicine:', error);
+    }
+  };
+
+  const handlePressHoldMedicine = (medicineId) => {
+    Alert.alert(
+      'Delete Medicine',
+      'Are you sure you want to delete this medicine?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel'
+        },
+        {
+          text: 'Delete',
+          onPress: () => handleDeleteMedicine(medicineId)
+        }
+      ],
+      { cancelable: true }
+    );
+  };
+
   return (
     <ScrollView style={styles.scrollView}>
       <View style={styles.header}>
@@ -297,7 +331,7 @@ const HomeScreen = () => {
       <View style={styles.container}>
         <StatusBar backgroundColor="black" barStyle="light-content" />
         {medicines.map((medicine) => (
-          <View key={medicine.medicineId} style={styles.view}>
+          <TouchableOpacity onLongPress={() => handlePressHoldMedicine(medicine.medicineId)} style={[styles.view, styles.touchableOpacity]} key={medicine.medicineId}>
             <Text style={styles.text}>
               {isMedicineToday(medicine) ? `${medicine.medicineName} (Today)` : medicine.medicineName}
             </Text>
@@ -305,7 +339,7 @@ const HomeScreen = () => {
             <Text style={styles.description}>Pills Left: {medicine.total}</Text>
             <Text style={styles.description}>Expires: {medicine.expires}</Text>
             <Text style={styles.description}>Days to Take: {medicine.days.map(day => day.day).join(', ')}</Text>
-          </View>
+          </TouchableOpacity>
         ))}
       </View>
     </ScrollView>
