@@ -23,6 +23,8 @@ from models.base import Base
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from controllers.appointment import AppointmentController
+
 load_dotenv()
 
 
@@ -76,6 +78,7 @@ app = Litestar(
         DoctorController,
         DayController,
         SymptomController,
+        AppointmentController,
     ],  # List of endpoint functions
     dependencies={
         "session": provide_transaction
