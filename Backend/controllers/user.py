@@ -4,6 +4,7 @@ from typing import Any
 
 import argon2
 import pytz
+from schemas.user_symptom import UserSymptomDTO, UserSymptomSchema
 from controllers.auth import oauth2_auth
 from crud.user import get_user_by_id, get_user_list
 from lib.redis import redis
@@ -191,3 +192,9 @@ class UserController(Controller):
         """
         await redis.set("foo", "bar")
         return await redis.get("foo")
+    
+
+    @get('/me/symptoms', return_dto=UserSymptomDTO)
+    async def get_my_symptoms(self, request: 'Request[User, Token, Any]', session: AsyncSession) -> list[UserSymptomSchema]:
+        user = await get_user_by_id(session, request.user)
+        return user.symptoms

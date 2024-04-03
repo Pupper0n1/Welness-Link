@@ -11,7 +11,7 @@ from lib.hasher import ph
 
 from datetime import datetime
 from .schema import Schema
-from .user_symptoms import UserSymptomSchema
+from .user_symptom import UserSymptomSchema
 
 
 
@@ -75,6 +75,6 @@ class UserOutDTO(UserDTO):
 
 from .user_medicine import UserMedicineAssociationSchema
 from .appointment import AppointmentSchema
-from .user_symptoms import UserSymptomSchema
+from .user_symptom import UserSymptomSchema
 UserSchema.model_rebuild()
 
