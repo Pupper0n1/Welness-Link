@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Button, TextInput, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -24,11 +24,30 @@ export const MedicineScreen = () => {
 
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
-  const [items, setItems] = useState([
-    {label: 'Ibuprofen', value: 'MedA'},
-    {label: 'Metformin', value: 'MedB'},
-    {label: 'Amoxicillin', value: 'MedC'}
-  ]);
+  const [items, setItems] = useState([]);
+
+  useEffect(() => {
+    fetchMedicines();
+  }, []);
+
+  const fetchMedicines = async () => {
+    try {
+      const response = await fetch('http://192.168.255.242:8000/medicine');
+      if (response.ok) {
+        const medicines = await response.json();
+        const medicineItems = medicines.map((medicine) => ({
+          label: medicine.name,
+          value: medicine.id,
+        }));
+        setItems(medicineItems);
+      } else {
+        Alert.alert('Error', 'Failed to fetch medicines. Please try again later.');
+      }
+    } catch (error) {
+      console.error('Error fetching medicines:', error);
+      Alert.alert('Error', 'An error occurred while fetching medicines. Please try again later.');
+    }
+  };
 
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -70,7 +89,8 @@ export const MedicineScreen = () => {
           setValue={setValue}
           setItems={setItems}
           containerStyle={{ width: '90%' }}
-          placeholder="Medicine name"
+          placeholder="Select Medicine"
+          
         />
       </View>
 
