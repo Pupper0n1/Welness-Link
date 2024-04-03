@@ -1,10 +1,10 @@
-import { React, useState, useEffect } from 'react';
+import { React, useState, useEffect, useCallback } from 'react';
 import { View, Text, ScrollView, StatusBar, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialIcons } from '@expo/vector-icons';
 import Animated, { FadeIn, FadeInDown, FadeInUp } from 'react-native-reanimated';
 import { FontAwesome } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Tab = createBottomTabNavigator();
@@ -78,44 +78,51 @@ const EventsScreen = () => {
 
   const handleAddSymptom = () => {
     navigation.navigate('Symptoms');
-  }
+  };
+
+  const fetchAppointments = async () => {
+    try {
+      const response = await fetch('http://192.168.255.242:8000/user/me/appointments');
+      if (response.ok) {
+        const userAppointments = await response.json();
+        setAppointments(userAppointments);
+      } else {
+        console.error('Failed to fetch user appointments');
+      }
+    } catch (error) {
+      console.error('Error occurred while fetching user appointments:', error);
+    }
+  };
+
+  const fetchDoctors = async () => {
+    try {
+      const response = await fetch('http://192.168.255.242:8000/doctor');
+      if (response.ok) {
+        const doctorData = await response.json();
+        const doctorMap = {};
+        doctorData.forEach(doctor => {
+          doctorMap[doctor.id] = doctor.name;
+        });
+        setDoctors(doctorMap);
+      } else {
+        console.error('Failed to fetch doctors');
+      }
+    } catch (error) {
+      console.error('Error occurred while fetching doctors:', error);
+    }
+  };
 
   useEffect(() => {
-    const fetchAppointments = async () => {
-      try {
-        const response = await fetch('http://192.168.255.242:8000/user/me/appointments');
-        if (response.ok) {
-          const userAppointments = await response.json();
-          setAppointments(userAppointments);
-        } else {
-          console.error('Failed to fetch user appointments');
-        }
-      } catch (error) {
-        console.error('Error occurred while fetching user appointments:', error);
-      }
-    };
-
-    const fetchDoctors = async () => {
-      try {
-        const response = await fetch('http://192.168.255.242:8000/doctor');
-        if (response.ok) {
-          const doctorData = await response.json();
-          const doctorMap = {};
-          doctorData.forEach(doctor => {
-            doctorMap[doctor.id] = doctor.name;
-          });
-          setDoctors(doctorMap);
-        } else {
-          console.error('Failed to fetch doctors');
-        }
-      } catch (error) {
-        console.error('Error occurred while fetching doctors:', error);
-      }
-    };
-
     fetchAppointments();
     fetchDoctors();
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchAppointments();
+      fetchDoctors();
+    }, [])
+  );
 
     return(
     <>
@@ -138,7 +145,7 @@ const EventsScreen = () => {
             </View>
           ))}
         </View>
-        
+
 
 
     <View style={styles.header}>
@@ -182,6 +189,20 @@ const HomeScreen = () => {
     navigation.navigate('Medicine');
   };
 
+  const fetchMedicines = async () => {
+    try {
+      const response = await fetch('http://192.168.255.242:8000/user/me/medicines');
+      if (response.ok) {
+        const userMedicines = await response.json();
+        setMedicines(userMedicines);
+      } else {
+        console.error('Failed to fetch user medicines');
+      }
+    } catch (error) {
+      console.error('Error occurred while fetching user medicines:', error);
+    }
+  };
+
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -200,23 +221,11 @@ const HomeScreen = () => {
     fetchUserData();
   }, []);
 
-  useEffect(() => {
-    const fetchMedicines = async () => {
-      try {
-        const response = await fetch('http://192.168.255.242:8000/user/me/medicines');
-        if (response.ok) {
-          const userMedicines = await response.json();
-          setMedicines(userMedicines);
-        } else {
-          console.error('Failed to fetch user medicines');
-        }
-      } catch (error) {
-        console.error('Error occurred while fetching user medicines:', error);
-      }
-    };
-
-    fetchMedicines();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      fetchMedicines();
+    }, [])
+  );
 
   return (
     <ScrollView style={styles.scrollView}>
