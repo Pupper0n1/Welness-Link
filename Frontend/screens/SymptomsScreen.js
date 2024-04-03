@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Button, TextInput } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Button, TextInput, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -14,6 +14,10 @@ export const SymptomsScreen = () => {
 
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
+  const [intensity, setIntensity] = useState('');
+  const [notes, setNotes] = useState('');
+  const [date, setDate] = useState(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(false);
   const [symptoms, setSymptoms] = useState([]);
 
   useEffect(() => {
@@ -35,11 +39,6 @@ export const SymptomsScreen = () => {
     }
   };
 
-  const [date, setDate] = useState(new Date());
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [expiryDate, setExpiryDate] = useState(null);
-  const [paragraph, setParagraph] = useState('');
-
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setShowDatePicker(false);
@@ -47,12 +46,53 @@ export const SymptomsScreen = () => {
     setExpiryDate(currentDate);
   };
 
+  const formatDate = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
   const showDatepicker = () => {
     setShowDatePicker(true);
   };
 
-  const handleAdd = () => {
-    // Logic to add medicine
+  const handleAdd = async () => {
+    if (!value) {
+      Alert.alert('Error', 'Please select a symptom.');
+      return;
+    }
+
+    if (!intensity) {
+      Alert.alert('Error', 'Please enter the intensity of the symptom.');
+      return;
+    }
+
+    try {
+      const formattedDate = formatDate(date);
+      const response = await fetch('http://192.168.255.242:8000/symptom/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ symptomId: value, intensity: parseInt(intensity, 10), notes, date: formattedDate }),
+      });
+
+      if (response.ok) {
+        Alert.alert('Success', 'Symptom added successfully.', [
+          { text: 'OK', onPress: () => navigation.goBack() }
+        ]);
+        setValue(null);
+        setIntensity('');
+        setNotes('');
+        setDate(new Date());
+      } else {
+        Alert.alert('Error', 'Failed to add symptom. Please try again later.');
+      }
+    } catch (error) {
+      console.error('Error adding symptom:', error);
+      Alert.alert('Error', 'An error occurred while adding symptom. Please try again later.');
+    }
   };
 
   return (
@@ -82,6 +122,9 @@ export const SymptomsScreen = () => {
         />
       </View>
 
+      <Text style={styles.label}>Intensity (0-10)</Text>
+      <TextInput style={styles.smallInput} placeholder="5/10" keyboardType="numeric" value={intensity} onChangeText={setIntensity}></TextInput>
+
       {/* Input for Notes */}
       <Text style={styles.label}>Symptom Notes</Text>
         <TextInput
@@ -89,8 +132,8 @@ export const SymptomsScreen = () => {
             multiline={true}
             numberOfLines={4}
             placeholder="Feeling weak and dehydrated..."
-            onChangeText={text => setParagraph(text)}
-            value={paragraph}
+            onChangeText={text => setNotes(text)}
+            value={notes}
       />
 
       {/* Symptom Date Picker */}
@@ -101,13 +144,13 @@ export const SymptomsScreen = () => {
             <TouchableOpacity onPress={showDatepicker} style={styles.addButton}>
             <Text style={styles.buttonText}>Select Symptom Date</Text>
             </TouchableOpacity>
-            {expiryDate && <Text style={styles.selectedDate}>Expiry Date is set to: {expiryDate.toLocaleDateString()}</Text>}
             {showDatePicker && (
             <DateTimePicker
                 value={date}
                 mode="date"
                 display="default"
                 onChange={onChange}
+                maximumDate={new Date()}
             />
             )}
         </View>
@@ -163,8 +206,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 5,
   },
+  smallInput: {
+    marginTop: 10,
+    marginLeft: 20,
+    width: '90%',
+    height: 50,
+    borderColor: 'black',
+    borderRadius: 10,
+    backgroundColor: 'white',
+    borderWidth: 1,
+    paddingHorizontal: 10,
+    paddingVertical: 13,
+  },
   addButtonContainer: {
-    marginTop: 200,
+    marginTop: 100,
     alignItems: 'center',
   },
   addButton: {
