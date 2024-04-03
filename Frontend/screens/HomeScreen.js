@@ -196,6 +196,7 @@ const EventsScreen = () => {
 const HomeScreen = () => {
   const navigation = useNavigation();
   const [medicines, setMedicines] = useState([]);
+  const [medicinesToday, setMedicinesToday] = useState([]);
   const [firstName, setFirstName] = useState('');
 
   const handleAddMedicine = () => {
@@ -216,6 +217,32 @@ const HomeScreen = () => {
     }
   };
 
+  const fetchMedicinesToday = async () => {
+    try {
+      const response = await fetch('http://192.168.255.242:8000/user/me/medicines/today');
+      if (response.ok) {
+        const todayMedicines = await response.json();
+        setMedicinesToday(todayMedicines);
+      } else {
+        console.error('Failed to fetch today\'s medicines');
+      }
+    } catch (error) {
+      console.error('Error occurred while fetching today\'s medicines:', error);
+    }
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchMedicines();
+      fetchMedicinesToday();
+    }, [])
+  );
+
+  const isMedicineToday = (medicine) => {
+    const isToday = medicinesToday.find((todayMedicine) => todayMedicine.medicineId === medicine.medicineId);
+    return !!isToday;
+  };
+
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -234,12 +261,6 @@ const HomeScreen = () => {
     fetchUserData();
   }, []);
 
-  useFocusEffect(
-    useCallback(() => {
-      fetchMedicines();
-    }, [])
-  );
-
   return (
     <ScrollView style={styles.scrollView}>
       <View style={styles.header}>
@@ -251,9 +272,11 @@ const HomeScreen = () => {
 
       <View style={styles.container}>
         <StatusBar backgroundColor="black" barStyle="light-content" />
-        {medicines.map(medicine => (
+        {medicines.map((medicine) => (
           <View key={medicine.medicineId} style={styles.view}>
-            <Text style={styles.text}>{medicine.medicineName}</Text>
+            <Text style={styles.text}>
+              {isMedicineToday(medicine) ? `${medicine.medicineName} (Today)` : medicine.medicineName}
+            </Text>
             <Text style={styles.description}>Dosage: {medicine.dosage}</Text>
             <Text style={styles.description}>Bought on: {medicine.boughtOn}</Text>
             <Text style={styles.description}>Expires: {medicine.expires}</Text>
