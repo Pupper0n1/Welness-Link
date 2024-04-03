@@ -31,6 +31,22 @@ const styles = StyleSheet.create({
       marginBottom: 20,
       elevation: 10,
     },
+    viewEventsAppointments: {
+      backgroundColor: '#38bdf8',
+      width: '95%',
+      borderRadius: 15,
+      height: 120,
+      marginBottom: 20,
+      elevation: 10,
+    },
+    viewEventsSymptoms: {
+      backgroundColor: '#38bdf8',
+      width: '95%',
+      borderRadius: 15,
+      height: 140,
+      marginBottom: 20,
+      elevation: 10,
+    },
     text: {
         color: 'white',
         marginTop: 15,
@@ -163,7 +179,7 @@ const EventsScreen = () => {
         <View style={styles.container}>
           <StatusBar backgroundColor="black" barStyle="light-content" />
           {appointments.map(appointment => (
-            <View key={appointment.id} style={styles.view}>
+            <View key={appointment.id} style={styles.viewEventsAppointments}>
               <Text style={styles.text}>{`Dr. ${doctors[appointment.doctorId] || 'Unknown'}`}</Text>
               <Text style={styles.description}>{`Date: ${formatAppointmentDate(appointment.date)}`}</Text>
               <Text style={styles.description}>{`Notes: ${appointment.description}`}</Text>
@@ -180,7 +196,7 @@ const EventsScreen = () => {
 
         <View style={styles.container}>
           {symptoms.map(symptom => (
-            <View key={symptom.symptomId} style={styles.view}>
+            <View key={symptom.symptomId} style={styles.viewEventsSymptoms}>
               <Text style={styles.text}>{symptom.symptomName}</Text>
               <Text style={styles.description}>{`Date: ${symptom.date}`}</Text>
               <Text style={styles.description}>{`Intensity: ${symptom.intensity}`}</Text>
