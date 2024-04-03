@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Button, TextInput } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Button, TextInput, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -8,6 +8,16 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 export const MedicineScreen = () => {
   const navigation = useNavigation();
 
+  const [selectedDays, setSelectedDays] = useState([]);
+
+  const toggleDay = (day) => {
+    if (selectedDays.includes(day)) {
+      setSelectedDays(selectedDays.filter((d) => d !== day));
+    } else {
+      setSelectedDays([...selectedDays, day]);
+    }
+  };
+
   const handleGoBack = () => {
     navigation.goBack();
   };
@@ -15,9 +25,9 @@ export const MedicineScreen = () => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
-    {label: 'Medicine A', value: 'MedA'},
-    {label: 'Medicine B', value: 'MedB'},
-    {label: 'Medicine C', value: 'MedC'}
+    {label: 'Ibuprofen', value: 'MedA'},
+    {label: 'Metformin', value: 'MedB'},
+    {label: 'Amoxicillin', value: 'MedC'}
   ]);
 
   const [date, setDate] = useState(new Date());
@@ -42,7 +52,6 @@ export const MedicineScreen = () => {
 
   return (
     <>
-      {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={handleGoBack}>
           <MaterialIcons name="arrow-back" size={24} color="black" />
@@ -50,11 +59,9 @@ export const MedicineScreen = () => {
         <Text style={styles.headerText}>Add Medicine</Text>
       </View>
 
-      {/* Content */}
-      <Text style={styles.label}>Medicine name</Text>
+      <Text style={styles.label}>Medicine Name</Text>
       <View style={styles.container}>
         
-        {/* Dropdown */}
         <DropDownPicker
           open={open}
           value={value}
@@ -67,45 +74,49 @@ export const MedicineScreen = () => {
         />
       </View>
 
-      {/* Input for Notes */}
-      <Text style={styles.label}>Perscription Notes</Text>
-        <TextInput
-            style={styles.input}
-            multiline={true}
-            numberOfLines={4}
-            placeholder="Take pill twice per day..."
-            onChangeText={text => setParagraph(text)}
-            value={paragraph}
-      />
+      <Text style={styles.label}>Dosage in mg</Text>
+      <TextInput style={styles.smallInput} placeholder="Dosage in mg" keyboardType="numeric"></TextInput>
 
-      {/* Expiry Date Picker */}
+      <Text style={styles.label}>Total Number of Pills</Text>
+      <TextInput style={styles.smallInput} placeholder="Total number of pills" keyboardType="numeric"></TextInput>
 
-        <Text style={styles.label}>Expiry Date</Text>
-
-        <View style={styles.container}>
-            <TouchableOpacity onPress={showDatepicker} style={styles.addButton}>
-            <Text style={styles.buttonText}>Select Expiry Date</Text>
+      <View style={styles.daySelectionContainer}>
+        <Text style={styles.label}>Select Days</Text>
+        <View style={styles.dayButtons}>
+          {['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].map((day) => (
+            <TouchableOpacity
+              key={day}
+              style={[styles.dayButton, selectedDays.includes(day) && styles.selectedDayButton]}
+              onPress={() => toggleDay(day)}>
+              <Text style={[styles.dayButtonText, selectedDays.includes(day) && styles.selectedDayButtonText]}>
+                {day}
+              </Text>
             </TouchableOpacity>
-            {expiryDate && <Text style={styles.selectedDate}>Expiry Date is set to: {expiryDate.toLocaleDateString()}</Text>}
-            {showDatePicker && (
-            <DateTimePicker
-                value={date}
-                mode="date"
-                display="default"
-                onChange={onChange}
-            />
-            )}
+          ))}
         </View>
+      </View>
 
-        {/* Add Button */}
+      <Text style={styles.label}>Expiry Date</Text>
 
-        <View style={styles.addButtonContainer}>
-            <TouchableOpacity style={styles.addButton} onPress={handleAdd}>
-                <Text style={styles.buttonText}>Add</Text>
-            </TouchableOpacity>
-        </View>
+      <View style={styles.container}>
+          <TouchableOpacity onPress={showDatepicker} style={styles.addButton}>
+          <Text style={styles.buttonText}>Select Expiry Date</Text>
+          </TouchableOpacity>
+          {showDatePicker && (
+          <DateTimePicker
+              value={date}
+              mode="date"
+              display="default"
+              onChange={onChange}
+          />
+          )}
+      </View>
 
-        
+      <View style={styles.addButtonContainer}>
+          <TouchableOpacity style={styles.addButton} onPress={handleAdd}>
+              <Text style={styles.buttonText}>Add</Text>
+          </TouchableOpacity>
+      </View>
     </>
   );
 };
@@ -130,7 +141,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   label: {
-    marginTop: 20,
+    marginTop: 10,
     marginLeft: 20,
     marginBottom: 10,
     fontSize: 16,
@@ -148,8 +159,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 5,
   },
+  smallInput: {
+    marginTop: 10,
+    marginLeft: 20,
+    width: '90%',
+    height: 50,
+    borderColor: 'black',
+    borderRadius: 10,
+    backgroundColor: 'white',
+    borderWidth: 1,
+    paddingHorizontal: 10,
+    paddingVertical: 13,
+  },
   addButtonContainer: {
-    marginTop: 200,
+    marginTop: 50,
     alignItems: 'center',
   },
   addButton: {
@@ -164,6 +187,34 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
     fontSize: 16,
+  },
+  daySelectionContainer: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    marginBottom: 0,
+  },
+  dayButtons: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+  },
+  dayButton: {
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    margin: 5,
+    borderWidth: 1,
+    borderColor: '#333',
+    borderRadius: 5,
+  },
+  selectedDayButton: {
+    backgroundColor: '#333',
+  },
+  dayButtonText: {
+    fontSize: 16,
+    color: '#333',
+  },
+  selectedDayButtonText: {
+    color: '#fff',
   },
 });
 
