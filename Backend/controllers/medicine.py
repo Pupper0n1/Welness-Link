@@ -112,8 +112,8 @@ class MedicineController(Controller):
         await session.commit()
         return "Medicine Added successfully"
 
-    @post("/remove/{medicine_id: str}")
-    async def remove_medicine(
+    @post("/remove/{medicine_id:str}")
+    async def remove_muser_medicine(
         self,
         medicine_id: str,
         session: AsyncSession,
@@ -128,11 +128,6 @@ class MedicineController(Controller):
         result = await session.execute(query)
         user_medicine = result.scalar_one_or_none()
         user.medicines.remove(user_medicine)
-        query = (
-            delete(UserMedicineAssociation)
-            .where(UserMedicineAssociation.user_id == request.user)
-            .where(UserMedicineAssociation.medicine_id == medicine_id)
-        )
         await session.execute(query)
         return "deleted successfully"
 
@@ -145,8 +140,6 @@ class MedicineController(Controller):
     ) -> str:
         user = await get_user_by_id(session, request.user)
         await subtract_dosage(session, user.id, medicine_id)
-
-        return "Medicine Taken"
 
 
 from models.user_medicine import UserMedicineAssociation  # noqa: E402
