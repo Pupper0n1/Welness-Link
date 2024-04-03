@@ -43,7 +43,6 @@ export const SymptomsScreen = () => {
     const currentDate = selectedDate || date;
     setShowDatePicker(false);
     setDate(currentDate);
-    setExpiryDate(currentDate);
   };
 
   const formatDate = (date) => {
