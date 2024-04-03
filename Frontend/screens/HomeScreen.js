@@ -80,6 +80,14 @@ const EventsScreen = () => {
     navigation.navigate('Symptoms');
   };
 
+  const formatAppointmentDate = (dateString) => {
+    const dateObject = new Date(dateString);
+    const year = dateObject.getFullYear();
+    const month = ('0' + (dateObject.getMonth() + 1)).slice(-2);
+    const day = ('0' + dateObject.getDate()).slice(-2);
+    return `${year}-${month}-${day}`;
+  };
+
   const fetchAppointments = async () => {
     try {
       const response = await fetch('http://192.168.255.242:8000/user/me/appointments');
@@ -140,7 +148,7 @@ const EventsScreen = () => {
           {appointments.map(appointment => (
             <View key={appointment.id} style={styles.view}>
               <Text style={styles.text}>{`Doctor: ${doctors[appointment.doctorId] || 'Unknown'}`}</Text>
-              <Text style={styles.description}>{`Appointment Date: ${appointment.date}`}</Text>
+              <Text style={styles.description}>{`Appointment Date: ${formatAppointmentDate(appointment.date)}`}</Text>
               <Text style={styles.description}>{`Notes: ${appointment.description}`}</Text>
             </View>
           ))}
