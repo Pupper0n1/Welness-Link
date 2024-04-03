@@ -1,11 +1,10 @@
-from redis.asyncio import Redis
+import os
 
 from dotenv import load_dotenv
-import os
+from redis.asyncio import Redis
 
 load_dotenv()
 
 __all__ = ["redis"]
 
 redis = Redis.from_url(os.getenv("REDIS_URL"))
-

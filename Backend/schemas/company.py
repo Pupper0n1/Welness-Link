@@ -1,13 +1,13 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Optional
-import argon2
+from typing import Optional
 from uuid import UUID
 
-from litestar.dto import DTOConfig
 from litestar.contrib.pydantic import PydanticDTO
-from .schema import Schema
+from litestar.dto import DTOConfig
+
 from .medicine import MedicineSchema
+from .schema import Schema
 
 
 class CompanySchema(Schema):

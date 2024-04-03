@@ -1,19 +1,16 @@
-from sqlalchemy import select
+from datetime import date, datetime
+
 from models.appointment import Appointment
+from models.company import Company
+from models.day import Day
 from models.doctor import Doctor
 from models.medicine import Medicine
-from models.company import Company
-from models.doctor import Doctor
 from models.user import User
-from schemas.user import UserSchema
-from models.appointment import Appointment
-from sqlalchemy.ext.asyncio import AsyncSession
-from faker import Faker
-from models.days import Day
 from models.user_medicine import UserMedicineAssociation
-
+from models.symptom import Symptom
+from models.user_symptom import UserSymptom
+from sqlalchemy.ext.asyncio import AsyncSession
 from uuid_extensions import uuid7
-from datetime import date, datetime
 
 from .hasher import ph
 
@@ -28,7 +25,7 @@ async def seed_data(session: AsyncSession):
         address_city="Toronto",
         address_province="Ontario",
         address_country="Canada",
-        medicines=[]
+        medicines=[],
     )
 
     medicine1 = Medicine(
@@ -39,7 +36,7 @@ async def seed_data(session: AsyncSession):
         usage="Once a day",
         type="Vitamin",
         image=None,
-        company_id=company1.id
+        company_id=company1.id,
     )
 
     medicine2 = Medicine(
@@ -50,7 +47,7 @@ async def seed_data(session: AsyncSession):
         usage="Every 4-6 hours as needed",
         type="Nonsteroidal anti-inflammatory drug (NSAID)",
         image=None,
-        company_id=company1.id
+        company_id=company1.id,
     )
 
     medicine3 = Medicine(
@@ -61,7 +58,7 @@ async def seed_data(session: AsyncSession):
         usage="Twice a day with meals",
         type="Antidiabetic medication",
         image=None,
-        company_id=company1.id
+        company_id=company1.id,
     )
 
     medicine4 = Medicine(
@@ -72,7 +69,7 @@ async def seed_data(session: AsyncSession):
         usage="Every 8 hours for 7 days",
         type="Antibiotic",
         image=None,
-        company_id=company1.id
+        company_id=company1.id,
     )
 
     medicine5 = Medicine(
@@ -83,11 +80,10 @@ async def seed_data(session: AsyncSession):
         usage="Once daily",
         type="ACE inhibitor",
         image=None,
-        company_id=company1.id
+        company_id=company1.id,
     )
 
     company1.medicines.extend([medicine1, medicine2, medicine3, medicine4, medicine5])
-
 
     company2 = Company(
         id=uuid7(),
@@ -98,7 +94,7 @@ async def seed_data(session: AsyncSession):
         address_city="Vancouver",
         address_province="Ontario",
         address_country="Canada",
-        medicines=[]
+        medicines=[],
     )
 
     medicine6 = Medicine(
@@ -109,7 +105,7 @@ async def seed_data(session: AsyncSession):
         usage="Once daily",
         type="Statins",
         image=None,
-        company_id=company2.id
+        company_id=company2.id,
     )
 
     medicine7 = Medicine(
@@ -120,7 +116,7 @@ async def seed_data(session: AsyncSession):
         usage="Once daily in the morning",
         type="Thyroid hormone",
         image=None,
-        company_id=company2.id
+        company_id=company2.id,
     )
 
     medicine8 = Medicine(
@@ -131,7 +127,7 @@ async def seed_data(session: AsyncSession):
         usage="Once daily",
         type="Calcium channel blocker",
         image=None,
-        company_id=company2.id
+        company_id=company2.id,
     )
 
     medicine9 = Medicine(
@@ -142,7 +138,7 @@ async def seed_data(session: AsyncSession):
         usage="As needed",
         type="Bronchodilator",
         image=None,
-        company_id=company2.id
+        company_id=company2.id,
     )
 
     medicine10 = Medicine(
@@ -153,11 +149,10 @@ async def seed_data(session: AsyncSession):
         usage="Varies depending on condition",
         type="Corticosteroid",
         image=None,
-        company_id=company2.id
+        company_id=company2.id,
     )
 
     company2.medicines.extend([medicine6, medicine7, medicine8, medicine9, medicine10])
-
 
     company3 = Company(
         id=uuid7(),
@@ -168,7 +163,7 @@ async def seed_data(session: AsyncSession):
         address_city="Toronto",
         address_province="Ontario",
         address_country="Canada",
-        medicines=[]
+        medicines=[],
     )
 
     medicine11 = Medicine(
@@ -179,7 +174,7 @@ async def seed_data(session: AsyncSession):
         usage="Once daily in the morning",
         type="Proton pump inhibitor",
         image=None,
-        company_id=company3.id
+        company_id=company3.id,
     )
 
     medicine12 = Medicine(
@@ -190,7 +185,7 @@ async def seed_data(session: AsyncSession):
         usage="Once daily",
         type="Angiotensin II receptor blocker",
         image=None,
-        company_id=company3.id
+        company_id=company3.id,
     )
 
     medicine13 = Medicine(
@@ -200,7 +195,7 @@ async def seed_data(session: AsyncSession):
         usage="Once daily",
         type="Antihistamine",
         image=None,
-        company_id=company3.id
+        company_id=company3.id,
     )
 
     medicine14 = Medicine(
@@ -211,7 +206,7 @@ async def seed_data(session: AsyncSession):
         usage="Once daily in the morning",
         type="Selective serotonin reuptake inhibitor (SSRI)",
         image=None,
-        company_id=company3.id
+        company_id=company3.id,
     )
 
     medicine15 = Medicine(
@@ -222,98 +217,79 @@ async def seed_data(session: AsyncSession):
         usage="Once daily",
         type="Long-acting insulin",
         image=None,
-        company_id=company3.id
+        company_id=company3.id,
     )
 
-    company3.medicines.extend([medicine11, medicine12, medicine13, medicine14, medicine15])
+    company3.medicines.extend(
+        [medicine11, medicine12, medicine13, medicine14, medicine15]
+    )
 
-    doctor1 = Doctor (
+    doctor1 = Doctor(
         id=uuid7(),
         name="Ethan Anderson",
         email="ethan.anderson@gmail.com",
         profile_picture="ethan.jpg",
         specialty="Cardiology",
-        appointments=[]
+        appointments=[],
     )
 
-    doctor2 = Doctor (
+    doctor2 = Doctor(
         id=uuid7(),
         name="Emma Roberts",
         email="emma.roberts@gmail.com",
         profile_picture="emma.jpg",
         specialty="Orthopedics",
-        appointments=[]
+        appointments=[],
     )
 
-    doctor3 = Doctor (
+    doctor3 = Doctor(
         id=uuid7(),
         name="Noah Thompson",
         email="noah.thompson@gmail.com",
         profile_picture="noah.jpg",
         specialty="Dermatology",
-        appointments=[]
+        appointments=[],
     )
 
-    doctor4 = Doctor (
+    doctor4 = Doctor(
         id=uuid7(),
         name="Olivia Johnson",
         email="olivia.johnson@gmail.com",
         profile_picture="olivia.jpg",
         specialty="Neurology",
-        appointments=[]
+        appointments=[],
     )
 
-    doctor5 = Doctor (
+    doctor5 = Doctor(
         id=uuid7(),
         name="Alexander Mitchell",
         email="alexander.mitchell@gmail.com",
         profile_picture="alexander.jpg",
         specialty="Gynecology",
-        appointments=[]
+        appointments=[],
     )
 
-    session.add_all([company1, company2, company3, doctor1, doctor2, doctor3, doctor4, doctor5])
-
+    session.add_all(
+        [company1, company2, company3, doctor1, doctor2, doctor3, doctor4, doctor5]
+    )
 
     session.add_all([doctor1, doctor2, doctor3, doctor4, doctor5])
 
-    monday = Day(
-        id=uuid7(),
-        day="Monday"
-    )
+    monday = Day(id=uuid7(), day="Monday")
 
-    tuesday = Day(
-        id=uuid7(),
-        day="Tuesday"
-    )
+    tuesday = Day(id=uuid7(), day="Tuesday")
 
-    wednesday = Day(
-        id=uuid7(),
-        day="Wednesday"
-    )
+    wednesday = Day(id=uuid7(), day="Wednesday")
 
-    thursday = Day(
-        id=uuid7(),
-        day="Thursday"
-    )
+    thursday = Day(id=uuid7(), day="Thursday")
 
-    friday = Day(
-        id=uuid7(),
-        day="Friday"
-    )
+    friday = Day(id=uuid7(), day="Friday")
 
-    saturday = Day(
-        id=uuid7(),
-        day="Saturday"
-    )
+    saturday = Day(id=uuid7(), day="Saturday")
 
-    sunday = Day(
-        id=uuid7(),
-        day="Sunday"
-    )
+    sunday = Day(id=uuid7(), day="Sunday")
 
     session.add_all([monday, tuesday, wednesday, thursday, friday, saturday, sunday])
-
 
     user1 = User(
         id=uuid7(),
@@ -324,47 +300,46 @@ async def seed_data(session: AsyncSession):
         profile_picture=None,
         password=ph.hash("password"),
         medicines=[],
-        appointments=[]
+        appointments=[],
     )
 
     user1_medicine_1 = UserMedicineAssociation(
         user_id=user1.id,
         medicine_id=medicine1.id,
-        medicine_name= medicine1.name,
-        dosage="500mg",
+        medicine_name=medicine1.name,
+        dosage=500,
         bought_on=date(2023, 3, 1),
         expires=date(2025, 6, 1),
         total=30,
         current_amount=30,
-        days=[monday, wednesday, friday]
+        days=[monday, wednesday, friday],
     )
 
     user1_medicine_6 = UserMedicineAssociation(
         user_id=user1.id,
         medicine_id=medicine3.id,
-        medicine_name= medicine3.name,
-        dosage="500mg",
+        medicine_name=medicine3.name,
+        dosage=500,
         bought_on=date(2023, 6, 11),
         expires=date(2023, 9, 11),
         total=30,
         current_amount=30,
-        days=[tuesday, thursday, saturday]
+        days=[tuesday, thursday, saturday],
     )
 
     user1_medicine_11 = UserMedicineAssociation(
         user_id=user1.id,
         medicine_id=medicine5.id,
-        medicine_name= medicine5.name,
-        dosage="10mg",
+        medicine_name=medicine5.name,
+        dosage=10,
         bought_on=date(2023, 9, 21),
         expires=date(2025, 9, 21),
         total=30,
         current_amount=30,
-        days=[sunday]
+        days=[sunday],
     )
-    
-    user1.medicines.extend([user1_medicine_1, user1_medicine_6, user1_medicine_11])
 
+    user1.medicines.extend([user1_medicine_1, user1_medicine_6, user1_medicine_11])
 
     user2 = User(
         id=uuid7(),
@@ -375,47 +350,46 @@ async def seed_data(session: AsyncSession):
         profile_picture=None,
         password=ph.hash("password"),
         medicines=[],
-        appointments=[]
+        appointments=[],
     )
 
     user_2_medicine_2 = UserMedicineAssociation(
         user_id=user1.id,
         medicine_id=medicine2.id,
-        medicine_name= medicine2.name,
-        dosage="200mg",
+        medicine_name=medicine2.name,
+        dosage=200,
         bought_on=date(2022, 3, 1),
         expires=date(2024, 7, 1),
         total=30,
         current_amount=30,
-        days=[monday, wednesday, friday]
+        days=[monday, wednesday, friday],
     )
 
     user_2_medicine_7 = UserMedicineAssociation(
         user_id=user1.id,
         medicine_id=medicine4.id,
-        medicine_name= medicine4.name,
-        dosage="500mg",
+        medicine_name=medicine4.name,
+        dosage=500,
         bought_on=date(2022, 6, 11),
         expires=date(2024, 7, 1),
         total=30,
         current_amount=30,
-        days=[tuesday, thursday, saturday]
+        days=[tuesday, thursday, saturday],
     )
 
     user_2_medicine_12 = UserMedicineAssociation(
         user_id=user1.id,
         medicine_id=medicine6.id,
-        medicine_name= medicine6.name,
-        dosage="10mg",
+        medicine_name=medicine6.name,
+        dosage=10,
         bought_on=date(2022, 9, 21),
         expires=date(2024, 7, 1),
         total=30,
         current_amount=30,
-        days=[sunday]
+        days=[sunday],
     )
 
     user2.medicines.extend([user_2_medicine_2, user_2_medicine_7, user_2_medicine_12])
-
 
     user3 = User(
         id=uuid7(),
@@ -426,43 +400,43 @@ async def seed_data(session: AsyncSession):
         profile_picture=None,
         password=ph.hash("password"),
         medicines=[],
-        appointments=[]
+        appointments=[],
     )
-    
+
     user3_medicine_3 = UserMedicineAssociation(
         user_id=user1.id,
         medicine_id=medicine3.id,
-        medicine_name= medicine3.name,
-        dosage="500mg",
+        medicine_name=medicine3.name,
+        dosage=500,
         bought_on=date(2023, 3, 1),
         expires=date(2025, 7, 1),
         total=30,
         current_amount=30,
-        days=[monday, wednesday, friday]
+        days=[monday, wednesday, friday],
     )
 
     user3_medicine_8 = UserMedicineAssociation(
         user_id=user1.id,
         medicine_id=medicine5.id,
-        medicine_name= medicine5.name,
-        dosage="10mg",
+        medicine_name=medicine5.name,
+        dosage=10,
         bought_on=date(2023, 6, 11),
         expires=date(2025, 7, 1),
         total=30,
         current_amount=30,
-        days=[tuesday, thursday, saturday]
+        days=[tuesday, thursday, saturday],
     )
 
     user3_medicine_13 = UserMedicineAssociation(
         user_id=user1.id,
         medicine_id=medicine7.id,
-        medicine_name= medicine7.name,
-        dosage="10mg",
+        medicine_name=medicine7.name,
+        dosage=10,
         bought_on=date(2023, 9, 21),
         expires=date(2025, 7, 1),
         total=30,
         current_amount=30,
-        days=[sunday]
+        days=[sunday],
     )
 
     user3.medicines.extend([user3_medicine_3, user3_medicine_8, user3_medicine_13])
@@ -472,7 +446,7 @@ async def seed_data(session: AsyncSession):
         user_id=user1.id,
         doctor_id=doctor1.id,
         date=datetime(2023, 1, 14, 10, 30),
-        description="Consultation for flu symptoms"
+        description="Consultation for flu symptoms",
     )
 
     app2 = Appointment(
@@ -494,6 +468,113 @@ async def seed_data(session: AsyncSession):
     session.add_all([user1, user2, user3, app1, app2, app3])
 
 
+    symptom1 = Symptom(
+        id=uuid7(),
+        name="Headache",
+        description="Pain in the head or neck",
+        users=[],
+    )
+
+    symptom2 = Symptom(
+        id=uuid7(),
+        name="Fever",
+        description="Elevated body temperature",
+        users=[],
+    )
+
+    symptom3 = Symptom(
+        id=uuid7(),
+        name="Cough",
+        description="Expelling air from the lungs with a sudden sharp sound",
+        users=[],
+    )
+
+    symptom4 = Symptom(
+        id=uuid7(),
+        name="Fatigue",
+        description="Extreme tiredness",
+        users=[],
+    )
+
+    symptom5 = Symptom(
+        id=uuid7(),
+        name="Nausea",
+        description="Feeling sick to the stomach",
+        users=[],
+    )
+
+    symptom6 = Symptom(
+        id=uuid7(),
+        name="Diarrhea",
+        description="Frequent passage of loose, watery stools",
+        users=[],
+    )
+
+    symptom7 = Symptom(
+        id=uuid7(),
+        name="Dizziness",
+        description="Feeling unsteady or lightheaded",
+        users=[],
+    )
+
+    symptom8 = Symptom(
+        id=uuid7(),
+        name="Shortness of breath",
+        description="Difficulty breathing",
+        users=[],
+    )
+
+    symptom9 = Symptom(
+        id=uuid7(),
+        name="Chest pain",
+        description="Pain or discomfort in the chest",
+        users=[],
+    )
+
+    symptom10 = Symptom(
+        id=uuid7(),
+        name="Back pain",
+        description="Pain in the back",
+        users=[],
+    )
+
+    session.add_all([symptom1, symptom2, symptom3, symptom4, symptom5, symptom6, symptom7, symptom8, symptom9, symptom10])
+
+
+    user_symptom1 = UserSymptom(
+        id=uuid7(),
+        user_id=user1.id,
+        symptom_id=symptom1.id,
+        symptom_name=symptom1.name,
+        date=date(2023, 1, 14),
+        intensity=5,
+        notes="Pain started yesterday",
+    )
+
+    user_symptom2 = UserSymptom(
+        id=uuid7(),
+        user_id=user2.id,
+        symptom_id=symptom2.id,
+        symptom_name=symptom2.name,
+        date=date(2023, 1, 15),
+        intensity=7,
+        notes="Fever started 3 days ago",
+    )
+
+    user_symptom3 = UserSymptom(
+        id=uuid7(),
+        user_id=user3.id,
+        symptom_id=symptom3.id,
+        symptom_name=symptom3.name,
+        date=date(2023, 1, 16),
+        intensity=3,
+        notes="Coughing for a week",
+    )
+
+    session.add_all([user_symptom1, user_symptom2, user_symptom3])
+
+    await session.commit()
+
 
 # class Appointment(UUIDAuditBase):
 #     __tablename__ = 'appointment_table'
@@ -506,8 +587,6 @@ async def seed_data(session: AsyncSession):
 
 #     doctor = relationship('Doctor', back_populates='appointments')
 #     user = relationship('User', back_populates='appointments')
-
-
 
 
 # class UserMedicineAssociation(UUIDBase):
@@ -535,20 +614,17 @@ async def seed_data(session: AsyncSession):
 #     )
 
 
-
-    # user3 = User(
-    #     id=uuid7(),
-    #     username="wilbur",
-    #     first_name="Wilbur",
-    #     last_name="Elbouni",
-    #     email="wilbur.elbouni@ucalgary.ca",
-    #     profile_picture=None,
-    #     password=ph.hash("password"),
-    #     medicines=[medicine7, medicine8, medicine9],
-    #     appointments=[]
-    # )
-
-
+# user3 = User(
+#     id=uuid7(),
+#     username="wilbur",
+#     first_name="Wilbur",
+#     last_name="Elbouni",
+#     email="wilbur.elbouni@ucalgary.ca",
+#     profile_picture=None,
+#     password=ph.hash("password"),
+#     medicines=[medicine7, medicine8, medicine9],
+#     appointments=[]
+# )
 
 
 # class Doctor(UUIDAuditBase):
@@ -559,21 +635,20 @@ async def seed_data(session: AsyncSession):
 #     specialty: Mapped[str] = mapped_column(String(100))
 
 #     appointments = relationship('Appointment', back_populates='doctor')
-    
 
-    ## Users
 
-    # user1 = User(
-    #     id=uuid7(),
-    #     first_name="Jane",
-    #     last_name="Doe",
-    #     email="jane.doe@email.com",
-    #     profile_picture=None,
-    #     password="password",
-    #     medicines=[medicine1, medicine2, medicine3],
-    #     appointments=[]
-    # )
+## Users
 
+# user1 = User(
+#     id=uuid7(),
+#     first_name="Jane",
+#     last_name="Doe",
+#     email="jane.doe@email.com",
+#     profile_picture=None,
+#     password="password",
+#     medicines=[medicine1, medicine2, medicine3],
+#     appointments=[]
+# )
 
 
 # class User(UUIDAuditBase):
@@ -584,8 +659,6 @@ async def seed_data(session: AsyncSession):
 #     email: Mapped[str] = mapped_column(String(100))
 #     profile_picture: Mapped[str] = mapped_column(String(100), nullable=True)
 #     password: Mapped[str] = mapped_column(String(255))
-
-
 
 
 #     medicines = relationship(UserMedicineAssociation, back_populates='user', lazy='selectin')

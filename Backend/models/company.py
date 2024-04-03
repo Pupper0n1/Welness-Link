@@ -1,14 +1,17 @@
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING
 
-from sqlalchemy.orm import relationship, DeclarativeBase, Mapped, mapped_column
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, Text
-import datetime
-from litestar.contrib.sqlalchemy.base import UUIDAuditBase, UUIDBase
+from litestar.contrib.sqlalchemy.base import UUIDBase
+from sqlalchemy import String
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
 from .company_medicine import company_medicine_association
-# from .medicine import Medicine
+
+if TYPE_CHECKING:
+    from .medicine import Medicine
+
 
 class Company(UUIDBase):
-    __tablename__ = 'company_table'
+    __tablename__ = "company_table"
     name: Mapped[str] = mapped_column(String(255), unique=True)
     logo: Mapped[str] = mapped_column(String(255), nullable=True)
 
@@ -18,8 +21,8 @@ class Company(UUIDBase):
     address_province = mapped_column(String(255), nullable=True)
     address_country = mapped_column(String(255), nullable=True)
 
-    medicines: Mapped[list['Medicine']] = relationship(
+    medicines: Mapped[list["Medicine"]] = relationship(
         secondary=company_medicine_association,
-        back_populates='companies',
-        lazy='selectin'
+        back_populates="companies",
+        lazy="selectin",
     )
