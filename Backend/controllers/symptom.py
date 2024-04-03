@@ -1,32 +1,17 @@
 # Import necessary modules and libraries
 import datetime
-import os
-from typing import Annotated, Any
+from typing import Any
 
-import aiofiles
-from crud.company import get_company_by_id
-from crud.day import get_day_by_name
-from crud.medicine import get_medicine_by_id, get_medicine_list
-from crud.user import get_user_by_id
-from litestar import Controller, MediaType, Request, get, patch, post
+from crud.symptom import get_symptom_by_id, get_symptom_list
+from litestar import Controller, Request, get, post
 from litestar.contrib.jwt import Token
-from litestar.datastructures import UploadFile
 from litestar.dto import DTOData
-from litestar.enums import RequestEncodingType
-from litestar.params import Body
-from models.medicine import Medicine
 from models.user import User
-from schemas.medicine import CreateMedicineDTO, MedicineDTO, MedicineSchema
-from schemas.user_medicine import (
-    AddUserMedicineAssociationDTO,
-    UserMedicineAssociationSchema,
-)
-from sqlalchemy import delete, select
+from models.user_symptom import UserSymptom
+from schemas.symptom import SymptomDTO, SymptomSchema
+from schemas.user_symptom import AddUserSymptomDTO, UserSymptomSchema
 from sqlalchemy.ext.asyncio import AsyncSession
-from uuid_extensions import uuid7
-from crud.user_medicine import subtract_dosage
-from schemas.symptom import SymptomSchema, SymptomDTO
-from crud.symptom import get_symptom_list
+
 
 class SymptomController(Controller):
     path = "/symptom"
@@ -42,4 +27,26 @@ class SymptomController(Controller):
     ) -> list[SymptomSchema]:
         user = await get_symptom_list(session, limit, offset)
         return user
-    
+
+    @post("/", dto=AddUserSymptomDTO)
+    async def add_symptom(
+        self,
+        session: AsyncSession,
+        request: "Request[User, Token, Any]",
+        data: DTOData[UserSymptomSchema],
+    ) -> str:
+        symptom = await get_symptom_by_id(session, data.as_builtins()["symptom_id"])
+
+        user_symptom = UserSymptom(
+            user_id=request.user,
+            symptom_id=symptom.id,
+            symptom_name=symptom.name,
+            date=datetime.datetime.now(),
+            intensity=data.as_builtins()["intensity"],
+            notes=data.as_builtins()["notes"],
+        )
+
+        session.add(user_symptom)
+        await session.commit()
+
+        return "Added symptom"
