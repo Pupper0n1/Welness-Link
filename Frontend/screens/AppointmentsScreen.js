@@ -59,7 +59,7 @@ export const AppointmentsScreen = () => {
     }
 
     try {
-      const response = await fetch('http://192.168.255.242:8000/user/appointment', {
+      const response = await fetch('http://192.168.255.242:8000/appointment/appointment', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

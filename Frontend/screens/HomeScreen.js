@@ -173,6 +173,76 @@ const EventsScreen = () => {
     }, [])
   );
 
+  const handleDeleteAppointment = (appointmentId) => {
+    Alert.alert(
+      'Delete Appointment',
+      'Are you sure you want to delete this appointment?',
+      [
+        {
+          text: 'CANCEL',
+          style: 'cancel',
+        },
+        {
+          text: 'DELETE',
+          onPress: async () => {
+            try {
+              const response = await fetch(`http://192.168.255.242:8000/appointment/appointment/${appointmentId}`, {
+                method: 'DELETE',
+              });
+  
+              if (response.ok) {
+                Alert.alert('Success', 'Appointment deleted successfully.');
+                // Fetch appointments again to update the list
+                fetchAppointments();
+              } else {
+                Alert.alert('Error', 'Failed to delete appointment. Please try again later.');
+              }
+            } catch (error) {
+              console.error('Error deleting appointment:', error);
+              Alert.alert('Error', 'An error occurred while deleting appointment. Please try again later.');
+            }
+          },
+        },
+      ],
+      { cancelable: false }
+    );
+  };  
+
+  const handleDeleteSymptom = (symptomId) => {
+    Alert.alert(
+      'Delete Symptom',
+      'Are you sure you want to delete this symptom?',
+      [
+        {
+          text: 'CANCEL',
+          style: 'cancel',
+        },
+        {
+          text: 'DELETE',
+          onPress: async () => {
+            try {
+              const response = await fetch(`http://192.168.255.242:8000/symptom/delete/${symptomId}`, {
+                method: 'DELETE',
+              });
+  
+              if (response.ok) {
+                Alert.alert('Success', 'Symptom deleted successfully.');
+                // Fetch symptoms again to update the list
+                fetchSymptoms();
+              } else {
+                Alert.alert('Error', 'Failed to delete symptom. Please try again later.');
+              }
+            } catch (error) {
+              console.error('Error deleting symptom:', error);
+              Alert.alert('Error', 'An error occurred while deleting symptom. Please try again later.');
+            }
+          },
+        },
+      ],
+      { cancelable: false }
+    );
+  };  
+
     return(
     <>
     <ScrollView style={styles.scrollView}>
@@ -187,11 +257,11 @@ const EventsScreen = () => {
         <View style={styles.container}>
           <StatusBar backgroundColor="black" barStyle="light-content" />
           {appointments.map(appointment => (
-            <View key={appointment.id} style={styles.viewEventsAppointments}>
+            <TouchableOpacity key={appointment.id} style={styles.viewEventsAppointments} onLongPress={() => handleDeleteAppointment(appointment.appointmentId)}>
               <Text style={styles.text}>{`Dr. ${doctors[appointment.doctorId] || 'Unknown'}`}</Text>
               <Text style={styles.description}>{`Date: ${formatAppointmentDate(appointment.date)}`}</Text>
               <Text style={styles.description}>{`Notes: ${appointment.description}`}</Text>
-            </View>
+            </TouchableOpacity>
           ))}
         </View>
 
@@ -204,12 +274,12 @@ const EventsScreen = () => {
 
         <View style={styles.container}>
           {symptoms.map(symptom => (
-            <View key={symptom.symptomId} style={styles.viewEventsSymptoms}>
+            <TouchableOpacity key={symptom.symptomId} style={styles.viewEventsSymptoms} onLongPress={() => handleDeleteSymptom(symptom.symptomId)}>
               <Text style={styles.text}>{symptom.symptomName}</Text>
               <Text style={styles.description}>{`Date: ${symptom.date}`}</Text>
               <Text style={styles.description}>{`Intensity: ${symptom.intensity}`}</Text>
               <Text style={styles.description}>{`Notes: ${symptom.notes}`}</Text>
-            </View>
+            </TouchableOpacity>
           ))}
         </View>
     </ScrollView>
