@@ -5,6 +5,8 @@ from models.user import User
 from sqlalchemy import orm, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from datetime import datetime, date
+
 
 async def get_user_list(
     session: AsyncSession, limit: int = 100, offset: int = 0
@@ -87,3 +89,4 @@ async def get_user_by_id(session: AsyncSession, id: UUID) -> User:
     except:
         # Raise an HTTP exception if there's an issue retrieving the user.
         raise HTTPException(status_code=401, detail="Error retrieving user")
+
