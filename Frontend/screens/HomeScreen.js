@@ -71,6 +71,7 @@ const EventsScreen = () => {
   const navigation = useNavigation();
   const [appointments, setAppointments] = useState([]);
   const [doctors, setDoctors] = useState({});
+  const [symptoms, setSymptoms] = useState([]);
 
   const handleAddAppointment = () => {
     navigation.navigate('Appointments');
@@ -120,15 +121,31 @@ const EventsScreen = () => {
     }
   };
 
+  const fetchSymptoms = async () => {
+    try {
+      const response = await fetch('http://192.168.255.242:8000/user/me/symptoms');
+      if (response.ok) {
+        const userSymptoms = await response.json();
+        setSymptoms(userSymptoms);
+      } else {
+        console.error('Failed to fetch user symptoms');
+      }
+    } catch (error) {
+      console.error('Error occurred while fetching user symptoms:', error);
+    }
+  };
+
   useEffect(() => {
     fetchAppointments();
     fetchDoctors();
+    fetchSymptoms();
   }, []);
 
   useFocusEffect(
     useCallback(() => {
       fetchAppointments();
       fetchDoctors();
+      fetchSymptoms();
     }, [])
   );
 
@@ -154,35 +171,23 @@ const EventsScreen = () => {
           ))}
         </View>
 
+        <View style={styles.header}>
+          <Text style={styles.welcomeText}>Symptoms Tracking,</Text>
+          <TouchableOpacity onPress={handleAddSymptom}>
+            <Text style={styles.addButton}>+</Text>
+          </TouchableOpacity>
+        </View>
 
-
-    <View style={styles.header}>
-    <Text style={styles.welcomeText}>Symptoms Tracking,</Text>
-    <TouchableOpacity onPress={handleAddSymptom}>
-        <Text style={styles.addButton}>+</Text>
-    </TouchableOpacity>
-    </View>
-
-    
-    <View style={styles.container}>
-      <View style={styles.view}>
-        <Text style={styles.text}>Fever</Text>
-        <Text style={styles.description}>Starting Date: </Text>
-        <Text style={styles.description}>Notes: </Text>
-      </View>
-
-      <View style={styles.view}>
-        <Text style={styles.text}>Fever</Text>
-        <Text style={styles.description}>Starting Date: </Text>
-        <Text style={styles.description}>Notes: </Text>
-      </View>
-
-      <View style={styles.view}>
-        <Text style={styles.text}>Fever</Text>
-        <Text style={styles.description}>Starting Date: </Text>
-        <Text style={styles.description}>Notes: </Text>
-      </View>
-    </View>
+        <View style={styles.container}>
+          {symptoms.map(symptom => (
+            <View key={symptom.symptomId} style={styles.view}>
+              <Text style={styles.text}>{symptom.symptomName}</Text>
+              <Text style={styles.description}>{`Date: ${symptom.date}`}</Text>
+              <Text style={styles.description}>{`Intensity: ${symptom.intensity}`}</Text>
+              <Text style={styles.description}>{`Notes: ${symptom.notes}`}</Text>
+            </View>
+          ))}
+        </View>
     </ScrollView>
     </>
     );
