@@ -108,10 +108,10 @@ export default function LoginScreen() {
                         entering={FadeInDown.delay(600).duration(1000).springify()}
                         className="flex-row justify-center">
 
-                        {/* <Text>Don't have an account? </Text>
+                        <Text>Don't have an account? </Text>
                         <TouchableOpacity onPress={() => navigation.push('Signup')}>
                             <Text className="text-sky-600">SignUp</Text>
-                        </TouchableOpacity> */}
+                        </TouchableOpacity>
                     </Animated.View>
                 </View>
             </View>
