@@ -147,8 +147,8 @@ const EventsScreen = () => {
           <StatusBar backgroundColor="black" barStyle="light-content" />
           {appointments.map(appointment => (
             <View key={appointment.id} style={styles.view}>
-              <Text style={styles.text}>{`Doctor: ${doctors[appointment.doctorId] || 'Unknown'}`}</Text>
-              <Text style={styles.description}>{`Appointment Date: ${formatAppointmentDate(appointment.date)}`}</Text>
+              <Text style={styles.text}>{`Dr. ${doctors[appointment.doctorId] || 'Unknown'}`}</Text>
+              <Text style={styles.description}>{`Date: ${formatAppointmentDate(appointment.date)}`}</Text>
               <Text style={styles.description}>{`Notes: ${appointment.description}`}</Text>
             </View>
           ))}
