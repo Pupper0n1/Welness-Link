@@ -5,7 +5,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import DropDownPicker from 'react-native-dropdown-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-export const MedicineScreen = () => {
+export const SymptomsScreen = () => {
   const navigation = useNavigation();
 
   const handleGoBack = () => {
@@ -15,9 +15,9 @@ export const MedicineScreen = () => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
-    {label: 'Medicine A', value: 'MedA'},
-    {label: 'Medicine B', value: 'MedB'},
-    {label: 'Medicine C', value: 'MedC'}
+    {label: 'Headache', value: 'Headache'},
+    {label: 'Loss of appetite', value: 'LossOfAppetite'},
+    {label: 'Sweating', value: 'Sweating'}
   ]);
 
   const [date, setDate] = useState(new Date());
@@ -47,11 +47,11 @@ export const MedicineScreen = () => {
         <TouchableOpacity onPress={handleGoBack}>
           <MaterialIcons name="arrow-back" size={24} color="black" />
         </TouchableOpacity>
-        <Text style={styles.headerText}>Add Medicine</Text>
+        <Text style={styles.headerText}>Add Symptoms</Text>
       </View>
 
       {/* Content */}
-      <Text style={styles.label}>Medicine name</Text>
+      <Text style={styles.label}>Symptom</Text>
       <View style={styles.container}>
         
         {/* Dropdown */}
@@ -63,28 +63,28 @@ export const MedicineScreen = () => {
           setValue={setValue}
           setItems={setItems}
           containerStyle={{ width: '90%' }}
-          placeholder="Medicine name"
+          placeholder="Symptom"
         />
       </View>
 
       {/* Input for Notes */}
-      <Text style={styles.label}>Perscription Notes</Text>
+      <Text style={styles.label}>Symptom Notes</Text>
         <TextInput
             style={styles.input}
             multiline={true}
             numberOfLines={4}
-            placeholder="Take pill twice per day..."
+            placeholder="Feeling weak and dehydrated..."
             onChangeText={text => setParagraph(text)}
             value={paragraph}
       />
 
-      {/* Expiry Date Picker */}
+      {/* Symptom Date Picker */}
 
-        <Text style={styles.label}>Expiry Date</Text>
+        <Text style={styles.label}>Symptom Date</Text>
 
         <View style={styles.container}>
             <TouchableOpacity onPress={showDatepicker} style={styles.addButton}>
-            <Text style={styles.buttonText}>Select Expiry Date</Text>
+            <Text style={styles.buttonText}>Select Symptom Date</Text>
             </TouchableOpacity>
             {expiryDate && <Text style={styles.selectedDate}>Expiry Date is set to: {expiryDate.toLocaleDateString()}</Text>}
             {showDatePicker && (
@@ -167,4 +167,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MedicineScreen;
+export default SymptomsScreen;
