@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Button, TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -14,11 +14,26 @@ export const SymptomsScreen = () => {
 
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
-  const [items, setItems] = useState([
-    {label: 'Headache', value: 'Headache'},
-    {label: 'Loss of appetite', value: 'LossOfAppetite'},
-    {label: 'Sweating', value: 'Sweating'}
-  ]);
+  const [symptoms, setSymptoms] = useState([]);
+
+  useEffect(() => {
+    fetchSymptoms();
+  }, []);
+
+  const fetchSymptoms = async () => {
+    try {
+      const response = await fetch('http://192.168.255.242:8000/symptom');
+      if (response.ok) {
+        const fetchedSymptoms = await response.json();
+        setSymptoms(fetchedSymptoms);
+      } else {
+        Alert.alert('Error', 'Failed to fetch symptoms. Please try again later.');
+      }
+    } catch (error) {
+      console.error('Error fetching symptoms:', error);
+      Alert.alert('Error', 'An error occurred while fetching symptoms. Please try again later.');
+    }
+  };
 
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -58,12 +73,12 @@ export const SymptomsScreen = () => {
         <DropDownPicker
           open={open}
           value={value}
-          items={items}
+          items={symptoms.map(symptom => ({ label: symptom.name, value: symptom.id }))}
           setOpen={setOpen}
           setValue={setValue}
-          setItems={setItems}
+          setItems={setSymptoms}
           containerStyle={{ width: '90%' }}
-          placeholder="Symptom"
+          placeholder="Select Symptom"
         />
       </View>
 
