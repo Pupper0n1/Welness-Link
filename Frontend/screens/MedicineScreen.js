@@ -152,10 +152,10 @@ export const MedicineScreen = () => {
       </View>
 
       <Text style={styles.label}>Dosage in mg</Text>
-      <TextInput style={styles.smallInput} placeholder="Dosage in mg" keyboardType="numeric" value={dosage} onChangeText={setDosage}></TextInput>
+      <TextInput style={styles.smallInput} placeholder="Dosage in mg" keyboardType="numeric" value={dosage.toString()} onChangeText={setDosage}></TextInput>
 
       <Text style={styles.label}>Total Number of Pills</Text>
-      <TextInput style={styles.smallInput} placeholder="Total number of pills" keyboardType="numeric" value={totalPills} onChangeText={setTotalPills}></TextInput>
+      <TextInput style={styles.smallInput} placeholder="Total number of pills" keyboardType="numeric" value={totalPills.toString()} onChangeText={setTotalPills}></TextInput>
 
       <View style={styles.daySelectionContainer}>
         <Text style={styles.label}>Select Days</Text>
