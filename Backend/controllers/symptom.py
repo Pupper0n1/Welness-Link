@@ -3,7 +3,7 @@ import datetime
 from typing import Any
 
 from crud.symptom import get_symptom_by_id, get_symptom_list
-from litestar import Controller, Request, get, post
+from litestar import Controller, Request, get, post, delete
 from litestar.contrib.jwt import Token
 from litestar.dto import DTOData
 from models.user import User
@@ -11,6 +11,7 @@ from models.user_symptom import UserSymptom
 from schemas.symptom import SymptomDTO, SymptomSchema
 from schemas.user_symptom import AddUserSymptomDTO, UserSymptomSchema
 from sqlalchemy.ext.asyncio import AsyncSession
+from crud.symptom import get_symptom_by_id, get_symptom_list, delete_user_symptom_by_id
 
 
 class SymptomController(Controller):
@@ -28,8 +29,8 @@ class SymptomController(Controller):
         user = await get_symptom_list(session, limit, offset)
         return user
 
-    @post("/", dto=AddUserSymptomDTO)
-    async def add_symptom(
+    @post("/add", dto=AddUserSymptomDTO)
+    async def add_user_symptom(
         self,
         session: AsyncSession,
         request: "Request[User, Token, Any]",
@@ -50,3 +51,13 @@ class SymptomController(Controller):
         await session.commit()
 
         return "Added symptom"
+
+
+    @delete('/delete/{symptom_id:str}')
+    async def user_delete_symptom(
+        self,
+        session: AsyncSession,
+        request: "Request[User, Token, Any]",
+        symptom_id: str
+    ) -> None:
+        await delete_user_symptom_by_id(session, request.user, symptom_id)

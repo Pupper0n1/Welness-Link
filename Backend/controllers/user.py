@@ -161,20 +161,7 @@ class UserController(Controller):
         except Exception as e:
             raise HTTPException(status_code=409, detail=f"error: {e}")
 
-    @post("/appointment", dto=CreateAppointmentDTO, return_dto=AppointmentDTO)
-    async def add_appointment(
-        self,
-        request: "Request[User, Token, Any]",
-        session: AsyncSession,
-        data: DTOData[AppointmentSchema],
-    ) -> str:
-        user = await get_user_by_id(session, request.user)
-        appointment = data.create_instance(id=uuid7(), user_id=request.user)
-        validated_appointment = AppointmentSchema.model_validate(appointment)
 
-        user.appointments.append(Appointment(**validated_appointment.__dict__))
-
-        return "Added Appointment"
 
     @patch("/", dto=CreateUserDTO)
     async def update_user(
@@ -204,3 +191,5 @@ class UserController(Controller):
     async def get_my_symptoms(self, request: 'Request[User, Token, Any]', session: AsyncSession) -> list[UserSymptomSchema]:
         user = await get_user_by_id(session, request.user)
         return user.symptoms
+
+
