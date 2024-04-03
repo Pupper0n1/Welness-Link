@@ -141,25 +141,7 @@ class UserController(Controller):
         except Exception as e:
             raise HTTPException(status_code=409, detail=f'error: {e}')
         
-    
-    @post('/medicine{medicine_id: str}', dto=AddUserMedicineAssociationDTO)
-    async def add_medicine_by(self, request: 'Request[User, Token, Any]', session: AsyncSession, data: DTOData[UserMedicineAssociationSchema]) -> str:
-        user = await get_user_by_id(session, request.user)
-        data_values = data.as_builtins()
 
-        today = datetime.date.today()
-        user_medicine = data.create_instance(id=uuid7(), user_id=request.user, bought_on=today, current_amount=data_values['total'])
-        validated_user_medicine = UserMedicineAssociationSchema.model_validate(user_medicine)
-        days = user_medicine.days
-        validated_user_medicine.days = []
-        user_medicine = UserMedicineAssociation(**validated_user_medicine.__dict__)
-
-        for day in days:
-            day_object = await get_day_by_name(session, day.day)
-            user_medicine.days.append(day_object)
-
-        user.medicines.append(user_medicine)
-        return "Added medicine"
 
 
     @post('/appointment', dto=CreateAppointmentDTO, return_dto=AppointmentDTO)

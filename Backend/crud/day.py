@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from litestar.exceptions import HTTPException
 from uuid import UUID
 
-from models.days import Day
+from models.day import Day
 from schemas.day import DaySchema
 
 async def get_days_list(session: AsyncSession) -> list[DaySchema]:

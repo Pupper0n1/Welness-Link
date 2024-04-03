@@ -35,5 +35,5 @@ class UserMedicineAssociationDTO(PydanticDTO[UserMedicineAssociationSchema]):
     )
 
 class AddUserMedicineAssociationDTO(UserMedicineAssociationDTO):
-    config = DTOConfig(include={'medicine_id', 'medicine_name', 'dosage', 'expires', 'total', 'days.0.day'},
+    config = DTOConfig(include={'medicine_id', 'dosage', 'expires', 'total', 'days.0.day'},
                        rename_strategy='camel')

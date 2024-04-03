@@ -9,7 +9,7 @@ from schemas.user import UserSchema
 from models.appointment import Appointment
 from sqlalchemy.ext.asyncio import AsyncSession
 from faker import Faker
-from models.days import Day
+from models.day import Day
 from models.user_medicine import UserMedicineAssociation
 
 from uuid_extensions import uuid7

@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine, select
 from sqlalchemy.ext.asyncio import AsyncSession
-from models.user_medicine import UserMedicine
+from models.user_medicine import UserMedicineAssociation
 import re
 import uuid
 
@@ -21,7 +21,7 @@ async def convert_to_mg(value, unit):
 Helper function that subtracts the dosage from the current amount of a UserMedicine record.
 '''
 async def subtract_dosage(session: AsyncSession, user_id, medicine_id):
-    query = select(UserMedicine).filter_by(user_id=user_id, medicine_id=medicine_id)
+    query = select(UserMedicineAssociation).filter_by(user_id=user_id, medicine_id=medicine_id)
     result = await session.execute(query)
     user_medicine = result.scalar_one_or_none()
     if user_medicine:
@@ -50,3 +50,10 @@ async def subtract_dosage(session: AsyncSession, user_id, medicine_id):
             print("Error parsing dosage or current amount.")
     else:
         print("UserMedicine record not found.")
+
+
+
+async def get_user_medicine_by_id(session: AsyncSession, user_id, medicine_id):
+    query = select(UserMedicineAssociation).filter_by(user_id=user_id, medicine_id=medicine_id)
+    result = await session.execute(query)
+    return result.scalar_one()

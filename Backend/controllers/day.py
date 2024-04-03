@@ -12,6 +12,7 @@ from litestar.contrib.jwt import OAuth2Login, Token
 from litestar.datastructures import UploadFile
 from litestar.enums import RequestEncodingType
 from litestar.params import Body
+from sqlalchemy import select
 from lib.redis import redis
 from sqlalchemy.ext.asyncio import AsyncSession
 from uuid_extensions import uuid7
@@ -28,7 +29,7 @@ from models.doctor import Doctor
 from crud.day import get_days_list
 from schemas.doctor import DoctorDTO, DoctorSchema, CreateDoctorDTO
 from schemas.day import DayDTO, DaySchema, CreateDayDTO
-from models.days import Day
+from models.day import Day
 
 
 class DayController(Controller):
@@ -53,6 +54,16 @@ class DayController(Controller):
         await session.commit()
         return validated_day_data
     
+
+    
+    @get('/{day_name:str}', exclude_from_auth=True)
+    async def get_day_by_name(self, session: AsyncSession, day_name: str) -> DaySchema:
+        query = select(Day).where(Day.day == day_name)
+        result = await session.execute(query)
+        day = result.scalar_one_or_none()
+        if day is None:
+            raise HTTPException(404, "Day not found")
+        return day
 
 
 

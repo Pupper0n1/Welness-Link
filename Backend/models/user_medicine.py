@@ -2,7 +2,7 @@
 from sqlalchemy import Column, ForeignKey, String, UUID, Date, Integer
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 from litestar.contrib.sqlalchemy.base import UUIDBase
-from .days import Day
+from .day import Day
 from .user_medicine_day import user_medicine_day
 
 from sqlalchemy.schema import UniqueConstraint

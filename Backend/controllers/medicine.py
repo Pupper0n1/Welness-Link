@@ -19,14 +19,19 @@ from uuid_extensions import uuid7
 import aiofiles
 
 from schemas.medicine import MedicineDTO, MedicineSchema, CreateMedicineDTO
+from schemas.user_medicine import UserMedicineAssociationSchema, AddUserMedicineAssociationDTO, UserMedicineAssociationDTO
 from models.user import User
 from crud.user import get_user_by_id, get_user_by_username, get_user_list
+from crud.user_medicine import get_user_medicine_by_id
 from controllers.auth import oauth2_auth
 
 from crud.medicine import get_medicine_list, get_medicine_by_id
 from models.medicine import Medicine
 
 from crud.company import get_company_by_id
+from crud.day import get_day_by_name
+from models.day import Day
+from schemas.day import DaySchema
 
 
 class MedicineController(Controller):
@@ -80,14 +85,20 @@ class MedicineController(Controller):
 
 
 
-    @post('/add/{medicine_id: str}')
-    async def add_medicine(self, medicine_id: str, session: AsyncSession, request: 'Request[User, Token, Any]') -> str:
-        medicine = await get_medicine_by_id(session, medicine_id)
+    @post('/add', dto=AddUserMedicineAssociationDTO)
+    async def user_add_medicine(self, session: AsyncSession, request: 'Request[User, Token, Any]', data: DTOData[UserMedicineAssociationSchema]) -> str:
+        medicine = await get_medicine_by_id(session, data.as_builtins()['medicine_id'])
+        new_medicine = data.create_instance(id=uuid7(), medicine_name=medicine.name, current_amount = data.as_builtins()['total'], user_id=request.user, bought_on=datetime.date.today(), days=[])
         user = await get_user_by_id(session, request.user)
+        days = []
+        for i in data.as_builtins()['days']:
+            days.append(await get_day_by_name(session, i.day))
 
-        user.medicines.append(medicine)
+        user_medicine_association = UserMedicineAssociation(**new_medicine.__dict__)
+        user_medicine_association.days = days
+        user.medicines.append(user_medicine_association)
+
         await session.commit()
-
         return "Medicine Added successfully"
     
     @post('/remove/{medicine_id: str}')
