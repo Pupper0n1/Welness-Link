@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
       backgroundColor: '#38bdf8',
       width: '95%',
       borderRadius: 15,
-      height: 135,
+      height: 155,
       marginBottom: 20,
       elevation: 10,
     },
@@ -278,8 +278,9 @@ const HomeScreen = () => {
               {isMedicineToday(medicine) ? `${medicine.medicineName} (Today)` : medicine.medicineName}
             </Text>
             <Text style={styles.description}>Dosage: {medicine.dosage}</Text>
-            <Text style={styles.description}>Bought on: {medicine.boughtOn}</Text>
+            <Text style={styles.description}>Pills Left: {medicine.total}</Text>
             <Text style={styles.description}>Expires: {medicine.expires}</Text>
+            <Text style={styles.description}>Days to Take: {medicine.days.map(day => day.day).join(', ')}</Text>
           </View>
         ))}
       </View>
