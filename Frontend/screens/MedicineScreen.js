@@ -96,13 +96,17 @@ export const MedicineScreen = () => {
       }
   
       const formattedExpiryDate = expiryDate.toISOString().split('T')[0];
+
+      const formattedSelectedDays = selectedDays.map(day => {
+        return { day: day.toString() };
+      });
   
       const response = await fetch('http://192.168.255.242:8000/medicine/add', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ medicineId, dosage: parseInt(dosage), total: parseInt(totalPills), selectedDays, expires: formattedExpiryDate }),
+        body: JSON.stringify({ medicineId, dosage: parseInt(dosage), total: parseInt(totalPills), days: formattedSelectedDays, expires: formattedExpiryDate }),
       });
   
       if (response.ok) {
