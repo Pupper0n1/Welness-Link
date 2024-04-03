@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Button, TextInput, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Button, TextInput, ScrollView, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -52,7 +52,8 @@ export const MedicineScreen = () => {
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [expiryDate, setExpiryDate] = useState(null);
-  const [paragraph, setParagraph] = useState('');
+  const [dosage, setDosage] = useState(0);
+  const [totalPills, setTotalPills] = useState('');
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -65,10 +66,63 @@ export const MedicineScreen = () => {
     setShowDatePicker(true);
   };
 
-  const handleAdd = () => {
-    // Logic to add medicine
+  const handleAdd = async () => {
+    try {
+      const medicineId = value;
+      
+      if (!medicineId) {
+        Alert.alert('Error', 'Please select a medicine.');
+        return;
+      }
+  
+      if (!dosage) {
+        Alert.alert('Error', 'Please enter the dosage.');
+        return;
+      }
+  
+      if (!totalPills) {
+        Alert.alert('Error', 'Please enter the total number of pills.');
+        return;
+      }
+  
+      if (selectedDays.length === 0) {
+        Alert.alert('Error', 'Please select at least one day.');
+        return;
+      }
+  
+      if (!expiryDate) {
+        Alert.alert('Error', 'Please select the expiry date.');
+        return;
+      }
+  
+      const formattedExpiryDate = expiryDate.toISOString().split('T')[0];
+  
+      const response = await fetch('http://192.168.255.242:8000/medicine/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ medicineId, dosage: parseInt(dosage), total: parseInt(totalPills), selectedDays, expires: formattedExpiryDate }),
+      });
+  
+      if (response.ok) {
+        Alert.alert('Success', 'Medicine added successfully.', [
+          {
+            text: 'OK',
+            onPress: () => {
+              navigation.goBack();
+            }
+          }
+        ]);
+      } else {
+        Alert.alert('Error', 'Failed to add medicine. Please try again later.');
+      }
+    } catch (error) {
+      console.error('Error adding medicine:', error);
+      Alert.alert('Error', 'An error occurred while adding medicine. Please try again later.');
+    }
   };
-
+  
   return (
     <>
       <View style={styles.header}>
@@ -90,15 +144,14 @@ export const MedicineScreen = () => {
           setItems={setItems}
           containerStyle={{ width: '90%' }}
           placeholder="Select Medicine"
-          
         />
       </View>
 
       <Text style={styles.label}>Dosage in mg</Text>
-      <TextInput style={styles.smallInput} placeholder="Dosage in mg" keyboardType="numeric"></TextInput>
+      <TextInput style={styles.smallInput} placeholder="Dosage in mg" keyboardType="numeric" value={dosage} onChangeText={setDosage}></TextInput>
 
       <Text style={styles.label}>Total Number of Pills</Text>
-      <TextInput style={styles.smallInput} placeholder="Total number of pills" keyboardType="numeric"></TextInput>
+      <TextInput style={styles.smallInput} placeholder="Total number of pills" keyboardType="numeric" value={totalPills} onChangeText={setTotalPills}></TextInput>
 
       <View style={styles.daySelectionContainer}>
         <Text style={styles.label}>Select Days</Text>
