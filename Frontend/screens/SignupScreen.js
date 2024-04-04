@@ -1,44 +1,53 @@
-import { View, Text, Image, SafeAreaView, TextInput, TouchableOpacity, Pressable } from 'react-native'
-import React from 'react'
+import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native'
+import React, { useState } from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { useNavigation } from '@react-navigation/native'
-import Animated, { FadeIn, FadeInDown, FadeInUp } from 'react-native-reanimated';
-
+import Animated, { FadeInDown } from 'react-native-reanimated';
 
 export default function SignupScreen() {
     const navigation = useNavigation();
+
+    const [formData, setFormData] = useState({
+        username: '',
+        firstName: '',
+        lastName: '',
+        email: '',
+        password: ''
+    });
+
+    const handleSignup = async () => {
+        try {
+            const response = await fetch('http://192.168.255.242:8000/user', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+
+            if (response.ok) {
+                navigation.navigate('Home');
+            } else {
+                Alert.alert('Signup Failed', 'Please check your details and try again.');
+            }
+        } catch (error) {
+            console.error('Error signing up:', error);
+            Alert.alert('Error', 'An unexpected error occurred. Please try again later.');
+        }
+    };
+
+    const handleChangeText = (key, value) => {
+        setFormData(prevState => ({
+            ...prevState,
+            [key]: value
+        }));
+    };
   return (
     <View className="bg-white h-full w-full">
-      <StatusBar style="light" />
-      <Image className="h-full w-full absolute" source={require('../assets/images/background.png')} />
+      <StatusBar style="black" />
+      
+      <View  className="w-full flex justify-around pt-28">
 
-      {/* lights */}
-      <View className="flex-row justify-around w-full absolute">
-        <Animated.Image 
-            entering={FadeInUp.delay(200).duration(1000).springify()} 
-            source={require('../assets/images/light.png')} 
-            className="h-[225] w-[90]"
-        />
-        <Animated.Image 
-            entering={FadeInUp.delay(400).duration(1000).springify()} 
-            source={require('../assets/images/light.png')} 
-            className="h-[160] w-[65] opacity-75" 
-        />
-      </View>
-
-      {/* title and form */}
-      <View  className="h-full w-full flex justify-around pt-48">
-        
-        {/* title */}
-        <View className="flex items-center">
-            <Animated.Text 
-                entering={FadeInUp.duration(1000).springify()} 
-                className="text-white font-bold tracking-wider text-5xl">
-                    Sign Up
-            </Animated.Text>
-        </View>
-
-        {/* form */}
         <View className="flex items-center mx-5 space-y-4">
             <Animated.View 
                 entering={FadeInDown.duration(1000).springify()} 
@@ -46,6 +55,28 @@ export default function SignupScreen() {
                 <TextInput
                     placeholder="Username"
                     placeholderTextColor={'gray'}
+                    value={formData.username}
+                    onChangeText={text => handleChangeText('username', text)}
+                />
+            </Animated.View>
+            <Animated.View 
+                entering={FadeInDown.duration(1000).springify()} 
+                className="bg-black/5 p-5 rounded-2xl w-full">
+                <TextInput
+                    placeholder="First Name"
+                    placeholderTextColor={'gray'}
+                    value={formData.firstName}
+                    onChangeText={text => handleChangeText('firstName', text)}
+                />
+            </Animated.View>
+            <Animated.View 
+                entering={FadeInDown.duration(1000).springify()} 
+                className="bg-black/5 p-5 rounded-2xl w-full">
+                <TextInput
+                    placeholder="Last Name"
+                    placeholderTextColor={'gray'}
+                    value={formData.lastName}
+                    onChangeText={text => handleChangeText('lastName', text)}
                 />
             </Animated.View>
             <Animated.View 
@@ -54,6 +85,8 @@ export default function SignupScreen() {
                 <TextInput
                     placeholder="Email"
                     placeholderTextColor={'gray'}
+                    value={formData.email}
+                    onChangeText={text => handleChangeText('email', text)}
                 />
             </Animated.View>
             <Animated.View 
@@ -63,11 +96,13 @@ export default function SignupScreen() {
                     placeholder="Password"
                     placeholderTextColor={'gray'}
                     secureTextEntry
+                    value={formData.password}
+                    onChangeText={text => handleChangeText('password', text)}
                 />
             </Animated.View>
 
             <Animated.View className="w-full" entering={FadeInDown.delay(600).duration(1000).springify()}>
-                <TouchableOpacity className="w-full bg-sky-400 p-3 rounded-2xl mb-3">
+                <TouchableOpacity className="w-full bg-sky-400 p-3 rounded-2xl mb-3" onPress={handleSignup}>
                     <Text className="text-xl font-bold text-white text-center">SignUp</Text>
                 </TouchableOpacity>
             </Animated.View>
