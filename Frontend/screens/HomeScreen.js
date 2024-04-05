@@ -416,56 +416,75 @@ const HomeScreen = () => {
   );
 };
 
+
   const MedicineScreen = () => {
     const navigation = useNavigation();
     const [medicines, setMedicines] = useState([]);
-  
+    const [searchQuery, setSearchQuery] = useState('');
+    const [filteredMedicines, setFilteredMedicines] = useState([]);
+
     const handleMedicineSelected = (medicine) => {
-      navigation.navigate('MedicineInformation', { medicine });
+        navigation.navigate('MedicineInformation', { medicine });
     };
-  
+
+    const filterMedicines = () => {
+        const filtered = medicines.filter(medicine =>
+            medicine.name.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+        setFilteredMedicines(filtered);
+    };
+
     useEffect(() => {
-      const fetchMedicines = async () => {
-        try {
-          const response = await fetch('http://192.168.255.242:8000/medicine');
-          if (response.ok) {
-            const medicineData = await response.json();
-            setMedicines(medicineData.slice(0, 5));
-          } else {
-            console.error('Failed to fetch medicines');
-          }
-        } catch (error) {
-          console.error('Error occurred while fetching medicines:', error);
-        }
-      };
-  
-      fetchMedicines();
+        const fetchMedicines = async () => {
+            try {
+                const response = await fetch('http://192.168.255.242:8000/medicine');
+                if (response.ok) {
+                    const medicineData = await response.json();
+                    setMedicines(medicineData);
+                } else {
+                    console.error('Failed to fetch medicines');
+                }
+            } catch (error) {
+                console.error('Error occurred while fetching medicines:', error);
+            }
+        };
+
+        fetchMedicines();
     }, []);
-  
+
+    useEffect(() => {
+        filterMedicines();
+    }, [searchQuery, medicines]);
+
     return (
-      <>
-        <ScrollView style={styles.scrollView}>
-          <View className="flex items-center mx-5 space-y-4 mt-5">
-            <Animated.View entering={FadeInDown.duration(1000).delay(200).springify()} className="bg-black/5 p-5 rounded-2xl w-full">
-                <TextInput placeholder="Search Medicines..." placeholderTextColor={'gray'} />
-            </Animated.View>
-          </View>
-  
-          <Text style={styles.profileInfo}>Most Frequented</Text>
-  
-          <View style={styles.container}>
-            <StatusBar backgroundColor="black" barStyle="light-content" />
-            
-            {medicines.map(medicine => (
-              <TouchableOpacity key={medicine.id} style={styles.viewMedicines} onPress={() => handleMedicineSelected(medicine)}>
-                <Text style={styles.text}>{medicine.name}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        </ScrollView>
-      </>
+        <>
+            <ScrollView style={styles.scrollView}>
+                <View className="flex items-center mx-5 space-y-4 mt-5">
+                    <Animated.View entering={FadeInDown.duration(1000).delay(200).springify()} className="bg-black/5 p-5 rounded-2xl w-full">
+                        <TextInput
+                            placeholder="Search Medicines..."
+                            placeholderTextColor={'gray'}
+                            value={searchQuery}
+                            onChangeText={setSearchQuery}
+                        />
+                    </Animated.View>
+                </View>
+
+                <Text style={styles.profileInfo}>Most Frequented</Text>
+
+                <View style={styles.container}>
+                    <StatusBar backgroundColor="black" barStyle="light-content" />
+
+                    {filteredMedicines.map(medicine => (
+                        <TouchableOpacity key={medicine.id} style={styles.viewMedicines} onPress={() => handleMedicineSelected(medicine)}>
+                            <Text style={styles.text}>{medicine.name}</Text>
+                        </TouchableOpacity>
+                    ))}
+                </View>
+            </ScrollView>
+        </>
     );
-  };
+};
 
 const SettingsScreen = () => {
   const navigation = useNavigation();
