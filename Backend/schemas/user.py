@@ -62,7 +62,17 @@ class CreateUserDTO(UserDTO):
         rename_strategy='camel',
     )
 
+class UpdateUserEmailDTO(UserDTO):
+    config = DTOConfig(
+        include={'email'},
+        rename_strategy='camel',
+    )
 
+class UpdateUserPasswordDTO(UserDTO):
+    config = DTOConfig(
+        include={'password'},
+        rename_strategy='camel',
+    )
 
 
 class UserOutDTO(UserDTO):
