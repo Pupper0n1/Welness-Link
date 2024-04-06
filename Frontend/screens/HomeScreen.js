@@ -1,5 +1,5 @@
 import { React, useState, useEffect, useCallback } from 'react';
-import { View, Text, ScrollView, StatusBar, StyleSheet, TouchableOpacity, TextInput, Alert } from 'react-native';
+import { View, Text, ScrollView, StatusBar, StyleSheet, TouchableOpacity, TextInput, Alert, Image } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialIcons } from '@expo/vector-icons';
 import Animated, { FadeIn, FadeInDown, FadeInUp } from 'react-native-reanimated';
