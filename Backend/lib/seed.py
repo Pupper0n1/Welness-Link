@@ -35,7 +35,7 @@ async def seed_data(session: AsyncSession):
         Notes="Take with food",
         usage="Once a day",
         type="Vitamin",
-        image=None,
+        image='123456.jpg',
         company_id=company1.id,
     )
 
@@ -46,7 +46,7 @@ async def seed_data(session: AsyncSession):
         Notes="May cause drowsiness or dizziness",
         usage="Every 4-6 hours as needed",
         type="Nonsteroidal anti-inflammatory drug (NSAID)",
-        image=None,
+        image='234567.jpg',
         company_id=company1.id,
     )
 
@@ -57,7 +57,7 @@ async def seed_data(session: AsyncSession):
         Notes="Take with meals to reduce stomach upset",
         usage="Twice a day with meals",
         type="Antidiabetic medication",
-        image=None,
+        image='345678.jpg',
         company_id=company1.id,
     )
 
@@ -68,7 +68,7 @@ async def seed_data(session: AsyncSession):
         Notes="Complete the full course even if you feel better",
         usage="Every 8 hours for 7 days",
         type="Antibiotic",
-        image=None,
+        image='456789.jpg',
         company_id=company1.id,
     )
 
@@ -79,7 +79,7 @@ async def seed_data(session: AsyncSession):
         Notes="Avoid potassium supplements",
         usage="Once daily",
         type="ACE inhibitor",
-        image=None,
+        image='567890.jpg',
         company_id=company1.id,
     )
 
@@ -104,7 +104,7 @@ async def seed_data(session: AsyncSession):
         Notes="Take once a day in the evening",
         usage="Once daily",
         type="Statins",
-        image=None,
+        image='678901.jpg',
         company_id=company2.id,
     )
 
@@ -115,7 +115,7 @@ async def seed_data(session: AsyncSession):
         Notes="Take on an empty stomach, 30 to 60 minutes before breakfast",
         usage="Once daily in the morning",
         type="Thyroid hormone",
-        image=None,
+        image='789012.jpg',
         company_id=company2.id,
     )
 
@@ -126,7 +126,7 @@ async def seed_data(session: AsyncSession):
         Notes="May cause swelling in the feet or ankles",
         usage="Once daily",
         type="Calcium channel blocker",
-        image=None,
+        image='890123.jpg',
         company_id=company2.id,
     )
 
@@ -137,7 +137,7 @@ async def seed_data(session: AsyncSession):
         Notes="Use 15 minutes before exercise or as needed",
         usage="As needed",
         type="Bronchodilator",
-        image=None,
+        image='901234.jpg',
         company_id=company2.id,
     )
 
@@ -148,7 +148,7 @@ async def seed_data(session: AsyncSession):
         Notes="Take with food to reduce stomach irritation",
         usage="Varies depending on condition",
         type="Corticosteroid",
-        image=None,
+        image='492303.jpg',
         company_id=company2.id,
     )
 
@@ -173,7 +173,7 @@ async def seed_data(session: AsyncSession):
         Notes="Take 30 minutes before a meal",
         usage="Once daily in the morning",
         type="Proton pump inhibitor",
-        image=None,
+        image='1234567.jpg',
         company_id=company3.id,
     )
 
@@ -184,7 +184,7 @@ async def seed_data(session: AsyncSession):
         Notes="May cause dizziness in the first few days",
         usage="Once daily",
         type="Angiotensin II receptor blocker",
-        image=None,
+        image='2345678.jpg',
         company_id=company3.id,
     )
 
@@ -194,7 +194,7 @@ async def seed_data(session: AsyncSession):
         Notes="Non-drowsy formula available, but may still cause some drowsiness",
         usage="Once daily",
         type="Antihistamine",
-        image=None,
+        image='3456789.jpg',
         company_id=company3.id,
     )
 
@@ -205,7 +205,7 @@ async def seed_data(session: AsyncSession):
         Notes="May take 4 to 6 weeks to notice improvement",
         usage="Once daily in the morning",
         type="Selective serotonin reuptake inhibitor (SSRI)",
-        image=None,
+        image='4567890.jpg',
         company_id=company3.id,
     )
 
@@ -216,7 +216,7 @@ async def seed_data(session: AsyncSession):
         Notes="Inject subcutaneously once a day at the same time every day",
         usage="Once daily",
         type="Long-acting insulin",
-        image=None,
+        image='5678901.jpg',
         company_id=company3.id,
     )
 
