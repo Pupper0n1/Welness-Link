@@ -41,7 +41,7 @@ oauth2_auth = OAuth2PasswordBearerAuth[User](
     token_secret=os.getenv("JWT_SECRET"),
     token_url="/login",
     default_token_expiration=timedelta(seconds=6000),
-    exclude=["/login", "/schema", '/doctor/image/*', '/user/image/*', '/company/image/*'],
+    exclude=["/login", "/schema", '/doctor/image/*', '/user/image/*', '/company/image/*', '/medicine/image/*'],
 )
 
 
