@@ -171,8 +171,10 @@ class UserController(Controller):
     @patch('/password', dto=UpdateUserPasswordDTO)
     async def update_user_password(self, request: 'Request[User, Token, Any]', session: AsyncSession, data: DTOData[UserSchema]) -> str:
         user = await get_user_by_id(session, request.user)
-        validated_user = UserSchema.model_validate(user).set_password(data.as_builtins()['password'])
-        data.update_instance(validated_user)
+        print(user)
+        validated_user = UserSchema.model_validate(user)
+        validated_user.set_password(data.as_builtins()['password'])
+        user.password = validated_user.password
         return "user updated"
 
 

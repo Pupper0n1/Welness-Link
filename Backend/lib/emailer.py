@@ -1,7 +1,6 @@
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 from models.user import User
 from sqlalchemy import select
