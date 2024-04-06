@@ -16,7 +16,7 @@ from litestar.exceptions import HTTPException
 from models.appointment import Appointment
 from models.user import User
 from schemas.appointment import AppointmentDTO, AppointmentSchema, CreateAppointmentDTO
-from schemas.user import CreateUserDTO, UserOutDTO, UserSchema
+from schemas.user import CreateUserDTO, UpdateUserPasswordDTO, UserOutDTO, UserSchema, UpdateUserEmailDTO
 from schemas.user_medicine import (
     UserMedicineAssociationDTO,
     UserMedicineAssociationSchema,
@@ -161,6 +161,19 @@ class UserController(Controller):
         except Exception as e:
             raise HTTPException(status_code=409, detail=f"error: {e}")
 
+
+    @patch('/email', dto=UpdateUserEmailDTO)
+    async def update_user_email(self, request: 'Request[User, Token, Any]', session: AsyncSession, data: DTOData[UserSchema]) -> str:
+        user = await get_user_by_id(session, request.user)
+        data.update_instance(user)
+        return "user updated"
+    
+    @patch('/password', dto=UpdateUserPasswordDTO)
+    async def update_user_password(self, request: 'Request[User, Token, Any]', session: AsyncSession, data: DTOData[UserSchema]) -> str:
+        user = await get_user_by_id(session, request.user)
+        validated_user = UserSchema.model_validate(user).set_password(user.password)
+        data.update_instance(validated_user)
+        return "user updated"
 
 
     @patch("/", dto=CreateUserDTO)
