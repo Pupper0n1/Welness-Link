@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
 
@@ -7,10 +7,18 @@ const MedicineInformation = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const { medicine } = route.params;
+  const [company, setCompany] = useState(null);
 
   const handleGoBack = () => {
     navigation.goBack();
   };
+
+  useEffect(() => {
+    fetch(`http://192.168.255.242:8000/company/${medicine.companyId}`)
+      .then(response => response.json())
+      .then(data => setCompany(data))
+      .catch(error => console.error('Error fetching company:', error));
+  }, [medicine.companyId]);
 
   return (
     <>
@@ -27,7 +35,14 @@ const MedicineInformation = () => {
         <Text style={styles.text}>Notes: {medicine.Notes}</Text>
         <Text style={styles.text}>Usage: {medicine.usage}</Text>
         <Text style={styles.text}>Type: {medicine.type}</Text>
-        {/* Add more details as needed */}
+        <Text style={styles.text}>Type: {medicine.DIN}</Text>
+        <Image source={{ uri: `http://192.168.255.242:8000/medicine/image/${medicine.image}` }} style={{ height: 50, width: 50 }} />
+        {company && (
+          <>
+            <Text style={styles.text}>Company: {company.name}</Text>
+            <Image source={{ uri: `http://192.168.255.242:8000/company/image/${company.logo}` }} style={{ height: 50, width: 50 }} />
+          </>
+        )}
       </View>
     </>
   );
