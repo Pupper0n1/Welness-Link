@@ -40,7 +40,7 @@ const MedicineInformation = () => {
         {company && (
           <>
             <Text style={styles.text}>Company: {company.name}</Text>
-            <Image source={{ uri: `http://192.168.255.242:8000/company/image/${company.logo}` }} style={{ height: 50, width: 50 }} />
+            <Image source={{ uri: `http://192.168.255.242:8000/company/image/${company.logo}` }} style={{ height: 200, width: 300, resizeMode: 'contain' }} />
           </>
         )}
       </View>
