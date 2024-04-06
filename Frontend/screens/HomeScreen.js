@@ -486,167 +486,11 @@ const HomeScreen = () => {
     );
 };
 
-
-// const SettingsScreen = () => {
-//   const navigation = useNavigation();
-//   const [userData, setUserData] = useState(null);
-//   const [newEmail, setNewEmail] = useState('');
-//   const [currentPassword, setCurrentPassword] = useState('');
-//   const [currentPassword1, setCurrentPassword1] = useState('');
-//   const [newPassword, setNewPassword] = useState('');
-
-//   const handleLogout = async () => {
-//     //logout Logic
-//     try {
-//           await AsyncStorage.removeItem('token');
-//           navigation.navigate('Login');
-//       } catch (error) {
-//           console.error('Error occurred during logout:', error);
-//       }
-//   };
-
-//   useEffect(() => {
-//     fetchUserData();
-//   }, []);
-
-//   const fetchUserData = async () => {
-//     try {
-//       const response = await fetch('http://192.168.255.242:8000/user/me');
-//       if (response.ok) {
-//         const userData = await response.json();
-//         setUserData(userData);
-//       } else {
-//         console.error('Failed to fetch user data');
-//       }
-//     } catch (error) {
-//       console.error('Error occurred while fetching user data:', error);
-//     }
-//   };
-
-//   const updateEmail = async () => {
-//     try {
-//       const response = await fetch('http://192.168.255.242:8000/user', {
-//         method: 'PATCH',
-//         headers: {
-//           'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify({
-//           username: userData.username,
-//           firstName: userData.firstName,
-//           lastName: userData.lastName,
-//           email: newEmail,
-//           password: currentPassword
-//         })
-//       });
-  
-//       const responseData = await response.json();
-  
-//       if (response.ok) {
-//         fetchUserData();
-//         setCurrentPassword('');
-//         setNewEmail('');
-//         setCurrentPassword1('');
-//         setNewPassword('');
-//         Alert.alert('Success', 'Email updated successfully');
-//       } else {
-//         console.error('Failed to update profile:', responseData);
-//       }
-//     } catch (error) {
-//       console.error('Error updating profile:', error);
-//     }
-//   };
-
-//   const updatePassword = async () => {
-//     try {
-//       const response = await fetch('http://192.168.255.242:8000/user', {
-//         method: 'PATCH',
-//         headers: {
-//           'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify({
-//           username: userData.username,
-//           firstName: userData.firstName,
-//           lastName: userData.lastName,
-//           email: userData.email,
-//           password: newPassword
-//         })
-//       });
-  
-//       const responseData = await response.json();
-  
-//       if (response.ok) {
-//         fetchUserData();
-//         setCurrentPassword('');
-//         setNewEmail('');
-//         setCurrentPassword1('');
-//         setNewPassword('');
-//         Alert.alert('Success', 'Password updated successfully');
-//       } else {
-//         console.error('Failed to update profile:', responseData);
-//       }
-//     } catch (error) {
-//       console.error('Error updating profile:', error);
-//     }
-//   };
-
-//     return(
-//     <>
-//     <ScrollView style={styles.scrollView}>
-//         {userData && (
-//           <>
-//             <Text style={styles.profileInfo}>First Name: {userData.firstName}</Text>
-//             <Text style={styles.profileInfo}>Last Name: {userData.lastName}</Text>
-//             <Text style={styles.profileInfo}>E-Mail: {userData.email}</Text>
-//           </>
-//         )}
-//         <View style={styles.line}></View>
-//         <View>
-//             <StatusBar backgroundColor="black" barStyle="light-content" />
-
-//             <Text style={styles.label}>Current Password</Text>
-//             <View className="flex items-center mx-5 space-y-4">
-//                 <TextInput value={currentPassword} onChangeText={setCurrentPassword} secureTextEntry={true} placeholder="Current Password" placeholderTextColor={'gray'} className="bg-black/5 p-5 rounded-2xl w-full"/>
-//             </View>
-
-//             <Text style={styles.label}>New E-Mail Address</Text>
-//             <View className="flex items-center mx-5 space-y-4">
-//                 <TextInput value={newEmail} onChangeText={setNewEmail} placeholder="New E-Mail Address" placeholderTextColor={'gray'} className="bg-black/5 p-5 rounded-2xl w-full"/>
-//             </View>
-
-//             <TouchableOpacity onPress={updateEmail} className="w-[90%] bg-sky-400 p-3 rounded-2xl mb-3" style={{alignItems: 'center', marginTop: 10, marginLeft: 20}}>
-//                 <Text className="text-xl font-bold text-white text-center">Update E-Mail</Text>
-//             </TouchableOpacity>
-
-//             <View style={styles.line}></View>
-
-//             <Text style={styles.label}>Current Password</Text>
-//             <View className="flex items-center mx-5 space-y-4">
-//                 <TextInput value={currentPassword1} onChangeText={setCurrentPassword1} secureTextEntry={true} placeholder="Current Password" placeholderTextColor={'gray'} className="bg-black/5 p-5 rounded-2xl w-full"/>
-//             </View>
-
-//             <Text style={styles.label}>New Password</Text>
-//             <View className="flex items-center mx-5 space-y-4">
-//                 <TextInput value={newPassword} onChangeText={setNewPassword} secureTextEntry={true} placeholder="New Password" placeholderTextColor={'gray'} className="bg-black/5 p-5 rounded-2xl w-full"/>
-//             </View>
-
-//             <TouchableOpacity onPress={updatePassword} className="w-[90%] bg-sky-400 p-3 rounded-2xl mb-3" style={{alignItems: 'center', marginTop: 10, marginLeft: 20}}>
-//                 <Text className="text-xl font-bold text-white text-center">Update Password</Text>
-//             </TouchableOpacity>
-
-//             <View style={styles.line}></View>
-
-//             <TouchableOpacity className="w-[90%] bg-red-400 p-3 rounded-2xl mb-3" style={{ alignItems: 'center', marginTop: 10, marginLeft: 20 }} onPress={handleLogout}>
-//               <Text className="text-xl font-bold text-white text-center">Logout</Text>
-//             </TouchableOpacity>
-//         </View>
-//     </ScrollView>
-//   </>
-//     );
-// };
-
 const SettingsScreen = () => {
   const navigation = useNavigation();
   const [userData, setUserData] = useState(null);
+  const [newEmail, setNewEmail] = useState('');
+  const [newPassword, setNewPassword] = useState('');
 
   const handleLogout = async () => {
     //logout Logic
@@ -658,23 +502,65 @@ const SettingsScreen = () => {
       }
   };
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await fetch('http://192.168.255.242:8000/user/me');
-        if (response.ok) {
-          const userData = await response.json();
-          setUserData(userData);
-        } else {
-          console.error('Failed to fetch user data');
-        }
-      } catch (error) {
-        console.error('Error occurred while fetching user data:', error);
+  const fetchUserData = async () => {
+    try {
+      const response = await fetch('http://192.168.255.242:8000/user/me');
+      if (response.ok) {
+        const userData = await response.json();
+        setUserData(userData);
+      } else {
+        console.error('Failed to fetch user data');
       }
-    };
+    } catch (error) {
+      console.error('Error occurred while fetching user data:', error);
+    }
+  };
 
+  useEffect(() => {
     fetchUserData();
   }, []);
+
+  const updateEmail = async () => {
+    try {
+      const response = await fetch('http://192.168.255.242:8000/user/email', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: newEmail }),
+      });
+      if (response.ok) {
+        setNewEmail('');
+        Alert.alert('Success', 'Email updated successfully');
+        fetchUserData();
+      } else {
+        console.error('Failed to update email');
+      }
+    } catch (error) {
+      console.error('Error occurred while updating email:', error);
+    }
+  };
+
+  const updatePassword = async () => {
+    try {
+      const response = await fetch('http://192.168.255.242:8000/user/password', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ password: newPassword }),
+      });
+      if (response.ok) {
+        setNewPassword('');
+        Alert.alert('Success', 'Password updated successfully');
+        fetchUserData();
+      } else {
+        console.error('Failed to update password');
+      }
+    } catch (error) {
+      console.error('Error occurred while updating password:', error);
+    }
+  };
 
     return(
     <>
@@ -690,33 +576,23 @@ const SettingsScreen = () => {
         <View>
             <StatusBar backgroundColor="black" barStyle="light-content" />
 
-            <Text style={styles.label}>Current E-Mail Address</Text>
-            <View className="flex items-center mx-5 space-y-4">
-                <TextInput placeholder="Current E-Mail Address" placeholderTextColor={'gray'} className="bg-black/5 p-5 rounded-2xl w-full"/>
-            </View>
-
             <Text style={styles.label}>New E-Mail Address</Text>
             <View className="flex items-center mx-5 space-y-4">
-                <TextInput placeholder="New E-Mail Address" placeholderTextColor={'gray'} className="bg-black/5 p-5 rounded-2xl w-full"/>
+                <TextInput value={newEmail} onChangeText={setNewEmail} placeholder="New E-Mail Address" placeholderTextColor={'gray'} className="bg-black/5 p-5 rounded-2xl w-full"/>
             </View>
 
-            <TouchableOpacity className="w-[90%] bg-sky-400 p-3 rounded-2xl mb-3" style={{alignItems: 'center', marginTop: 10, marginLeft: 20}}>
+            <TouchableOpacity onPress={updateEmail} className="w-[90%] bg-sky-400 p-3 rounded-2xl mb-3" style={{alignItems: 'center', marginTop: 10, marginLeft: 20}}>
                 <Text className="text-xl font-bold text-white text-center">Update E-Mail</Text>
             </TouchableOpacity>
 
             <View style={styles.line}></View>
 
-            <Text style={styles.label}>Current Password</Text>
-            <View className="flex items-center mx-5 space-y-4">
-                <TextInput placeholder="Current Password" placeholderTextColor={'gray'} className="bg-black/5 p-5 rounded-2xl w-full"/>
-            </View>
-
             <Text style={styles.label}>New Password</Text>
             <View className="flex items-center mx-5 space-y-4">
-                <TextInput placeholder="New Password" placeholderTextColor={'gray'} className="bg-black/5 p-5 rounded-2xl w-full"/>
+                <TextInput value={newPassword} onChangeText={setNewPassword} placeholder="New Password" placeholderTextColor={'gray'} className="bg-black/5 p-5 rounded-2xl w-full"/>
             </View>
 
-            <TouchableOpacity className="w-[90%] bg-sky-400 p-3 rounded-2xl mb-3" style={{alignItems: 'center', marginTop: 10, marginLeft: 20}}>
+            <TouchableOpacity onPress={updatePassword} className="w-[90%] bg-sky-400 p-3 rounded-2xl mb-3" style={{alignItems: 'center', marginTop: 10, marginLeft: 20}}>
                 <Text className="text-xl font-bold text-white text-center">Update Password</Text>
             </TouchableOpacity>
 
