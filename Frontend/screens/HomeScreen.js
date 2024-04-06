@@ -2,7 +2,7 @@ import { React, useState, useEffect, useCallback } from 'react';
 import { View, Text, ScrollView, StatusBar, StyleSheet, TouchableOpacity, TextInput, Alert, Image } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialIcons } from '@expo/vector-icons';
-import Animated, { FadeIn, FadeInDown, FadeInUp } from 'react-native-reanimated';
+import Animated, { FadeInDown } from 'react-native-reanimated';
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
 const EventsScreen = () => {
   const navigation = useNavigation();
   const [appointments, setAppointments] = useState([]);
-  const [doctors, setDoctors] = useState({});
+  const [doctors, setDoctors] = useState([]);
   const [symptoms, setSymptoms] = useState([]);
 
   const handleAddAppointment = () => {
@@ -132,18 +132,14 @@ const EventsScreen = () => {
       const response = await fetch('http://192.168.255.242:8000/doctor');
       if (response.ok) {
         const doctorData = await response.json();
-        const doctorMap = {};
-        doctorData.forEach(doctor => {
-          doctorMap[doctor.id] = doctor.name;
-        });
-        setDoctors(doctorMap);
+        setDoctors(doctorData);
       } else {
         console.error('Failed to fetch doctors');
       }
     } catch (error) {
       console.error('Error occurred while fetching doctors:', error);
     }
-  };
+  };  
 
   const fetchSymptoms = async () => {
     try {
@@ -256,13 +252,21 @@ const EventsScreen = () => {
 
         <View style={styles.container}>
           <StatusBar backgroundColor="black" barStyle="light-content" />
-          {appointments.map(appointment => (
-            <TouchableOpacity key={appointment.id} style={styles.viewEventsAppointments} onLongPress={() => handleDeleteAppointment(appointment.appointmentId)}>
-              <Text style={styles.text}>{`Dr. ${doctors[appointment.doctorId] || 'Unknown'}`}</Text>
-              <Text style={styles.description}>{`Date: ${formatAppointmentDate(appointment.date)}`}</Text>
-              <Text style={styles.description}>{`Notes: ${appointment.description}`}</Text>
-            </TouchableOpacity>
-          ))}
+          {appointments.map(appointment => {
+            const doctor = doctors.find(doctor => doctor.id === appointment.doctorId);
+            return (
+              <TouchableOpacity key={appointment.id} style={styles.viewEventsAppointments} onLongPress={() => handleDeleteAppointment(appointment.appointmentId)}>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  {doctor && doctor.profilePicture && (
+                    <Image source={{ uri: `http://192.168.255.242:8000/doctor/image/${doctor.profilePicture}` }} style={{ width: 50, height: 50, borderRadius: 25, marginTop: 3, marginLeft: 5 }} />
+                  )}
+                  <Text style={styles.text}>{doctor ? `Dr. ${doctor.name}` : 'Unknown'}</Text>
+                </View>
+                <Text style={styles.description}>{`Date: ${formatAppointmentDate(appointment.date)}`}</Text>
+                <Text style={styles.description}>{`Notes: ${appointment.description}`}</Text>
+              </TouchableOpacity>
+            );
+          })}
         </View>
 
         <View style={styles.header}>
