@@ -17,7 +17,7 @@ class Medicine(UUIDBase):
     Notes: Mapped[str] = mapped_column(Text)
     usage: Mapped[str] = mapped_column(String(255))
     type: Mapped[str] = mapped_column(String(255))
-    image: Mapped[str] = mapped_column(String(255), nullable=True, default=None)
+    image: Mapped[str] = mapped_column(String(255), nullable=True)
 
     company_id: Mapped[UUID] = mapped_column(ForeignKey("company_table.id"))
     companies: Mapped[list["Company"]] = relationship(
