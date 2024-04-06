@@ -36,7 +36,7 @@ const MedicineInformation = () => {
         <Text style={styles.text}>Usage: {medicine.usage}</Text>
         <Text style={styles.text}>Type: {medicine.type}</Text>
         <Text style={styles.text}>Type: {medicine.DIN}</Text>
-        <Image source={{ uri: `http://192.168.255.242:8000/medicine/image/${medicine.image}` }} style={{ height: 50, width: 50 }} />
+        <Image source={{ uri: `http://192.168.255.242:8000/medicine/image/${medicine.DIN}.jpg` }} style={{ height: 200, width: 300, resizeMode: 'contain' }} />
         {company && (
           <>
             <Text style={styles.text}>Company: {company.name}</Text>
