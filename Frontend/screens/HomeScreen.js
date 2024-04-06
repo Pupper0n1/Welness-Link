@@ -580,7 +580,7 @@ const SettingsScreen = () => {
         <View>
             <StatusBar backgroundColor="black" barStyle="light-content" />
 
-            <Text style={styles.label}>New E-Mail Address</Text>
+            <Text style={styles.label}>Update E-Mail Address</Text>
             <View className="flex items-center mx-5 space-y-4">
                 <TextInput value={newEmail} onChangeText={setNewEmail} placeholder="New E-Mail Address" placeholderTextColor={'gray'} className="bg-black/5 p-5 rounded-2xl w-full"/>
             </View>
@@ -591,7 +591,7 @@ const SettingsScreen = () => {
 
             <View style={styles.line}></View>
 
-            <Text style={styles.label}>New Password</Text>
+            <Text style={styles.label}>Update Password</Text>
             <View className="flex items-center mx-5 space-y-4">
                 <TextInput value={newPassword} onChangeText={setNewPassword} placeholder="New Password" placeholderTextColor={'gray'} className="bg-black/5 p-5 rounded-2xl w-full"/>
             </View>
