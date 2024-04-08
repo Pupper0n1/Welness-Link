@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Button, TextInput, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Button, TextInput, Alert, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -105,6 +105,7 @@ export const SymptomsScreen = () => {
       </View>
 
       {/* Content */}
+      <ScrollView>
       <Text style={styles.label}>Symptom</Text>
       <View style={styles.container}>
         
@@ -161,6 +162,7 @@ export const SymptomsScreen = () => {
                 <Text style={styles.buttonText}>Add</Text>
             </TouchableOpacity>
         </View>
+        </ScrollView>
 
         
     </>
