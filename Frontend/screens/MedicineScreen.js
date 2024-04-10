@@ -136,6 +136,8 @@ export const MedicineScreen = () => {
         <Text style={styles.headerText}>Add Medicine</Text>
       </View>
 
+      <ScrollView>
+
       <Text style={styles.label}>Medicine Name</Text>
       <View style={styles.container}>
         
@@ -194,6 +196,7 @@ export const MedicineScreen = () => {
               <Text style={styles.buttonText}>Add</Text>
           </TouchableOpacity>
       </View>
+      </ScrollView>
     </>
   );
 };
