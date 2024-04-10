@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { useNavigation } from '@react-navigation/native'
 import Animated, { FadeInDown } from 'react-native-reanimated';
+import link from '../link.json';
 
 export default function SignupScreen() {
     const navigation = useNavigation();
@@ -17,7 +18,7 @@ export default function SignupScreen() {
 
     const handleSignup = async () => {
         try {
-            const response = await fetch('http://192.168.255.242:8000/user', {
+            const response = await fetch(`${link.link}/user`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
 import DropDownPicker from 'react-native-dropdown-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import link from '../link.json';
 
 export const AppointmentsScreen = () => {
   const navigation = useNavigation();
@@ -27,7 +28,7 @@ export const AppointmentsScreen = () => {
 
   const fetchDoctors = async () => {
     try {
-      const response = await fetch('http://192.168.255.242:8000/doctor');
+      const response = await fetch(`${link.link}/doctor`);
       if (response.ok) {
         const doctors = await response.json();
         const doctorItems = doctors.map((doctor, index) => ({
@@ -59,7 +60,7 @@ export const AppointmentsScreen = () => {
     }
 
     try {
-      const response = await fetch('http://192.168.255.242:8000/appointment/appointment', {
+      const response = await fetch(`${link.link}/appointment/appointment`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

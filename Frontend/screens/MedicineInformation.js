@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
+import link from '../link.json';
 
 const MedicineInformation = () => {
   const navigation = useNavigation();
@@ -36,11 +37,11 @@ const MedicineInformation = () => {
         <Text style={styles.text}>Usage: {medicine.usage}</Text>
         <Text style={styles.text}>Type: {medicine.type}</Text>
         <Text style={styles.text}>Type: {medicine.DIN}</Text>
-        <Image source={{ uri: `http://192.168.255.242:8000/medicine/image/${medicine.DIN}.jpg` }} style={{ height: 200, width: 300, resizeMode: 'contain' }} />
+        <Image source={{ uri: `${link.link}/medicine/image/${medicine.DIN}.jpg` }} style={{ height: 200, width: 300, resizeMode: 'contain' }} />
         {company && (
           <>
             <Text style={styles.text}>Company: {company.name}</Text>
-            <Image source={{ uri: `http://192.168.255.242:8000/company/image/${company.logo}` }} style={{ height: 200, width: 300, resizeMode: 'contain' }} />
+            <Image source={{ uri: `${link.link}/company/image/${company.logo}` }} style={{ height: 200, width: 300, resizeMode: 'contain' }} />
           </>
         )}
       </View>

@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
 import DropDownPicker from 'react-native-dropdown-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import link from '../link.json';
 
 export const SymptomsScreen = () => {
   const navigation = useNavigation();
@@ -26,7 +27,7 @@ export const SymptomsScreen = () => {
 
   const fetchSymptoms = async () => {
     try {
-      const response = await fetch('http://192.168.255.242:8000/symptom');
+      const response = await fetch(`${link.link}/symptom`);
       if (response.ok) {
         const fetchedSymptoms = await response.json();
         setSymptoms(fetchedSymptoms);
@@ -69,7 +70,7 @@ export const SymptomsScreen = () => {
 
     try {
       const formattedDate = formatDate(date);
-      const response = await fetch('http://192.168.255.242:8000/symptom/add', {
+      const response = await fetch(`${link.link}/symptom/add`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

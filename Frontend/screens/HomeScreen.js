@@ -6,6 +6,7 @@ import Animated, { FadeInDown } from 'react-native-reanimated';
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import link from '../link.json';
 
 const Tab = createBottomTabNavigator();
 
@@ -115,7 +116,7 @@ const EventsScreen = () => {
 
   const fetchAppointments = async () => {
     try {
-      const response = await fetch('http://192.168.255.242:8000/user/me/appointments');
+      const response = await fetch(`${link.link}/user/me/appointments`);
       if (response.ok) {
         const userAppointments = await response.json();
         setAppointments(userAppointments);
@@ -129,7 +130,7 @@ const EventsScreen = () => {
 
   const fetchDoctors = async () => {
     try {
-      const response = await fetch('http://192.168.255.242:8000/doctor');
+      const response = await fetch(`${link.link}/doctor`);
       if (response.ok) {
         const doctorData = await response.json();
         setDoctors(doctorData);
@@ -143,7 +144,7 @@ const EventsScreen = () => {
 
   const fetchSymptoms = async () => {
     try {
-      const response = await fetch('http://192.168.255.242:8000/user/me/symptoms');
+      const response = await fetch(`${link.link}/user/me/symptoms`);
       if (response.ok) {
         const userSymptoms = await response.json();
         setSymptoms(userSymptoms);
@@ -182,7 +183,7 @@ const EventsScreen = () => {
           text: 'DELETE',
           onPress: async () => {
             try {
-              const response = await fetch(`http://192.168.255.242:8000/appointment/appointment/${appointmentId}`, {
+              const response = await fetch(`${link.link}/appointment/appointment/${appointmentId}`, {
                 method: 'DELETE',
               });
   
@@ -217,7 +218,7 @@ const EventsScreen = () => {
           text: 'DELETE',
           onPress: async () => {
             try {
-              const response = await fetch(`http://192.168.255.242:8000/symptom/delete/${symptomId}`, {
+              const response = await fetch(`${link.link}/symptom/delete/${symptomId}`, {
                 method: 'DELETE',
               });
   
@@ -258,7 +259,7 @@ const EventsScreen = () => {
               <TouchableOpacity key={appointment.id} style={styles.viewEventsAppointments} onLongPress={() => handleDeleteAppointment(appointment.appointmentId)}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                   {doctor && doctor.profilePicture && (
-                    <Image source={{ uri: `http://192.168.255.242:8000/doctor/image/${doctor.profilePicture}` }} style={{ width: 50, height: 50, borderRadius: 25, marginTop: 3, marginLeft: 5 }} />
+                    <Image source={{ uri: `${link.link}/doctor/image/${doctor.profilePicture}` }} style={{ width: 50, height: 50, borderRadius: 25, marginTop: 3, marginLeft: 5 }} />
                   )}
                   <Text style={styles.text}>{doctor ? `Dr. ${doctor.name}` : 'Unknown'}</Text>
                 </View>
@@ -303,7 +304,7 @@ const HomeScreen = () => {
 
   const fetchMedicines = async () => {
     try {
-      const response = await fetch('http://192.168.255.242:8000/user/me/medicines');
+      const response = await fetch(`${link.link}/user/me/medicines`);
       if (response.ok) {
         const userMedicines = await response.json();
         setMedicines(userMedicines);
@@ -317,7 +318,7 @@ const HomeScreen = () => {
 
   const fetchMedicinesToday = async () => {
     try {
-      const response = await fetch('http://192.168.255.242:8000/user/me/medicines/today');
+      const response = await fetch(`${link.link}/user/me/medicines/today`);
       if (response.ok) {
         const todayMedicines = await response.json();
         setMedicinesToday(todayMedicines);
@@ -344,7 +345,7 @@ const HomeScreen = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch('http://192.168.255.242:8000/user/me');
+        const response = await fetch(`${link.link}/user/me`);
         if (response.ok) {
           const userData = await response.json();
           setFirstName(userData.firstName);
@@ -361,7 +362,7 @@ const HomeScreen = () => {
 
   const handleDeleteMedicine = async (medicineId) => {
     try {
-      const response = await fetch(`http://192.168.255.242:8000/medicine/remove/${medicineId}`, {
+      const response = await fetch(`${link.link}/medicine/remove/${medicineId}`, {
         method: 'POST'
       });
       if (response.ok) {
@@ -441,7 +442,7 @@ const HomeScreen = () => {
     useEffect(() => {
         const fetchMedicines = async () => {
             try {
-                const response = await fetch('http://192.168.255.242:8000/medicine');
+                const response = await fetch(`${link.link}/medicine`);
                 if (response.ok) {
                     const medicineData = await response.json();
                     setMedicines(medicineData);
@@ -508,7 +509,7 @@ const SettingsScreen = () => {
 
   const fetchUserData = async () => {
     try {
-      const response = await fetch('http://192.168.255.242:8000/user/me');
+      const response = await fetch(`${link.link}/user/me`);
       if (response.ok) {
         const userData = await response.json();
         setUserData(userData);
@@ -526,7 +527,7 @@ const SettingsScreen = () => {
 
   const updateEmail = async () => {
     try {
-      const response = await fetch('http://192.168.255.242:8000/user/email', {
+      const response = await fetch(`${link.link}/user/email`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -547,7 +548,7 @@ const SettingsScreen = () => {
 
   const updatePassword = async () => {
     try {
-      const response = await fetch('http://192.168.255.242:8000/user/password', {
+      const response = await fetch(`${link.link}/user/password`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
