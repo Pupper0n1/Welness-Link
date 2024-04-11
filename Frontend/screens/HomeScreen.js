@@ -394,6 +394,22 @@ const HomeScreen = () => {
     );
   };
 
+  const handleTakeMedicine = async (medicineId) => {
+    try {
+      const response = await fetch(`${link.link}/medicine/take/${medicineId}`, {
+        method: 'POST'
+      });
+      if (response.ok) {
+        fetchMedicines();
+        fetchMedicinesToday();
+      } else {
+        console.error('Failed to take medicine');
+      }
+    } catch (error) {
+      console.error('Error occurred while taking medicine:', error);
+    }
+  };
+
   return (
     <ScrollView style={styles.scrollView}>
       <View style={styles.header}>
@@ -406,7 +422,7 @@ const HomeScreen = () => {
       <View style={styles.container}>
         <StatusBar backgroundColor="black" barStyle="light-content" />
         {medicines.map((medicine) => (
-          <TouchableOpacity onLongPress={() => handlePressHoldMedicine(medicine.medicineId)} style={[styles.view, styles.touchableOpacity]} key={medicine.medicineId}>
+          <TouchableOpacity onPress={() => handleTakeMedicine(medicine.medicineId)} onLongPress={() => handlePressHoldMedicine(medicine.medicineId)} style={[styles.view, styles.touchableOpacity]} key={medicine.medicineId}>
             <Text style={styles.text}>
               {isMedicineToday(medicine) ? `${medicine.medicineName} (Today)` : medicine.medicineName}
             </Text>
