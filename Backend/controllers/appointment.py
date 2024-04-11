@@ -19,14 +19,16 @@ from schemas.user import CreateUserDTO, UserOutDTO, UserSchema
 from sqlalchemy.ext.asyncio import AsyncSession
 from uuid_extensions import uuid7
 
-from crud.appointment import delete_appointment_by_id
+from crud.appointment import delete_appointment_by_id, get_appointment_list_by_doctor_and_day
+from crud.doctor import get_doctor_by_id
+from datetime import date, datetime, time
 
 
 class AppointmentController(Controller):
     path = "/appointment"
     return_dto = AppointmentDTO
 
-    @post("/appointment", dto=CreateAppointmentDTO,)
+    @post("/", dto=CreateAppointmentDTO,)
     async def add_appointment(
         self,
         request: "Request[User, Token, Any]",
@@ -42,7 +44,7 @@ class AppointmentController(Controller):
         return "Added Appointment"
     
 
-    @delete("/appointment/{appointment_id:str}")
+    @delete("/{appointment_id:str}")
     async def delete_appointment(
         self,
         request: "Request[User, Token, Any]",
@@ -51,3 +53,9 @@ class AppointmentController(Controller):
     ) -> None:
         await delete_appointment_by_id(session, appointment_id)
         await session.commit()
+
+
+    @get('/{doctor_id:str}', exclude_from_auth = True)
+    async def get_appointment_by_doctor_id(self, request: "Request[User, Token, Any]", session: AsyncSession, doctor_id: str, day: date) -> list[datetime]:
+        appointments = await get_appointment_list_by_doctor_and_day(session, doctor_id, day)
+        return [appointment.date.time() for appointment in appointments]
