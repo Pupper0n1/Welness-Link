@@ -366,7 +366,6 @@ const HomeScreen = () => {
         method: 'POST'
       });
       if (response.ok) {
-        // Remove the deleted medicine from the state
         setMedicines(medicines.filter(medicine => medicine.medicineId !== medicineId));
       } else {
         console.error('Failed to delete medicine');
@@ -400,8 +399,23 @@ const HomeScreen = () => {
         method: 'POST'
       });
       if (response.ok) {
-        fetchMedicines();
-        fetchMedicinesToday();
+        setMedicines(prevMedicines => {
+          return prevMedicines.map(medicine => {
+            if (medicine.medicineId === medicineId) {
+              return { ...medicine, total: medicine.total - 1 };
+            }
+            return medicine;
+          });
+        });
+        
+        setMedicinesToday(prevMedicinesToday => {
+          return prevMedicinesToday.map(todayMedicine => {
+            if (todayMedicine.medicineId === medicineId) {
+              return { ...todayMedicine, isTaken: true };
+            }
+            return todayMedicine;
+          });
+        });
       } else {
         console.error('Failed to take medicine');
       }
