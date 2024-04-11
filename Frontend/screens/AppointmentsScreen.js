@@ -22,10 +22,56 @@ export const AppointmentsScreen = () => {
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
 
-  const [time, setTime] = useState(null);
+  const [doctorId, setDoctorId] = useState(null);
+  const [time, setTime] = useState('');
   const [open1, setOpen1] = useState(false);
   const [value1, setValue1] = useState(null);
   const [items1, setItems1] = useState([]);
+  const [availableTimes, setAvailableTimes] = useState([]);
+
+  const fetchAppointments = (selectedTime) => {
+    if (doctor) {
+      const formattedDate = selectedTime.toISOString().split('T')[0];
+      console.log(formattedDate);
+      const endpoint = `http://192.168.255.242:8000/appointment/${doctor}?day=${formattedDate}`;
+      console.log("API call to endpoint: ", endpoint);
+
+      fetch(endpoint)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log("Response from endpoint:", data);
+        // generateAvailableTimes(data);
+        const availableTimes = generateAvailableTimes(data);
+        setAvailableTimes(availableTimes);
+        setItems1(availableTimes.map(time => ({ label: time, value: time })));
+      })
+      .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+      });
+    } else {
+      console.error("Doctor ID is not selected.");
+    }
+  };
+
+  const generateAvailableTimes = (bookedTimes) => {
+    const availableTimesList = [];
+    for (let i = 8; i <= 15; i++) {
+        const time = `${i.toString().padStart(2, '0')}:00:00`;
+        if (!bookedTimes.includes(time)) {
+            availableTimesList.push(time);
+        }
+        const time2 = `${i.toString().padStart(2, '0')}:30:00`;
+        if (!bookedTimes.includes(time2)) {
+            availableTimesList.push(time2);
+        }
+    }
+    return availableTimesList;
+  };
 
   useEffect(() => {
     fetchDoctors();
@@ -55,6 +101,8 @@ export const AppointmentsScreen = () => {
   };
 
   const handleAdd = async () => {
+    const modifiedDate = new Date(date.getTime() - 86400000);
+    const formattedDate = modifiedDate.toISOString().split('T')[0];
     if (!doctor) {
       Alert.alert('Error', 'Please select a doctor.');
       return;
@@ -64,6 +112,10 @@ export const AppointmentsScreen = () => {
       return;
     }
 
+    console.log(date);
+    console.log(formattedDate);
+    console.log(`${formattedDate}T${value1}`);
+
     try {
       const response = await fetch(`${link.link}/appointment`, {
         method: 'POST',
@@ -72,7 +124,7 @@ export const AppointmentsScreen = () => {
         },
         body: JSON.stringify({
           doctorId: doctor,
-          date,
+          date: `${formattedDate}T${value1}`,
           description: paragraph,
         }),
       });
@@ -87,6 +139,11 @@ export const AppointmentsScreen = () => {
       console.error('Error adding appointment:', error);
       Alert.alert('Error', 'An error occurred while adding the appointment. Please try again later.');
     }
+  };
+
+  const dateTest = (selectedDate) => {
+    selectedDate = new Date(selectedDate.getTime() - 86400000)
+    fetchAppointments(selectedDate);
   };
 
   return (
@@ -143,6 +200,7 @@ export const AppointmentsScreen = () => {
             onChange={(event, selectedDate) => {
               setShowDatePicker(false);
               setDate(selectedDate || date);
+              dateTest(selectedDate);
             }}
           />
         )}
@@ -155,10 +213,11 @@ export const AppointmentsScreen = () => {
         <DropDownPicker
           open={open1}
           value={value1}
-          items={items1}
+          // items={items1}
+          items={availableTimes.map(time => ({ label: time, value: time }))}
           setOpen={setOpen1}
           setValue={setValue1}
-          setItems={setItems1}
+          // setItems={setItems1}
           containerStyle={{ width: '90%' }}
           placeholder="Time"
           onChangeValue={(selectedTime) => setTime(selectedTime)}
@@ -207,7 +266,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginLeft: 20,
     width: '90%',
-    height: 150,
+    height: 50,
     borderColor: 'black',
     borderRadius: 10,
     backgroundColor: 'white',
@@ -216,7 +275,7 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
   },
   addButtonContainer: {
-    marginTop: 100,
+    marginTop: 210,
     alignItems: 'center',
   },
   addButton: {

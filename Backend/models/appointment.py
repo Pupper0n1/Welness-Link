@@ -1,5 +1,5 @@
 from litestar.contrib.sqlalchemy.base import UUIDAuditBase
-from sqlalchemy import UUID, Column, DateTime, ForeignKey, String
+from sqlalchemy import UUID, Column, DateTime, ForeignKey, String, UniqueConstraint
 from sqlalchemy.orm import relationship
 
 
@@ -14,3 +14,5 @@ class Appointment(UUIDAuditBase):
 
     doctor = relationship("Doctor", back_populates="appointments")
     user = relationship("User", back_populates="appointments")
+
+    __table_args__ = (UniqueConstraint("doctor_id", "date"),)

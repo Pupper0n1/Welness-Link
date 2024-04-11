@@ -183,7 +183,7 @@ const EventsScreen = () => {
           text: 'DELETE',
           onPress: async () => {
             try {
-              const response = await fetch(`${link.link}/appointment/appointment/${appointmentId}`, {
+              const response = await fetch(`${link.link}/appointment/${appointmentId}`, {
                 method: 'DELETE',
               });
   
@@ -256,7 +256,7 @@ const EventsScreen = () => {
           {appointments.map(appointment => {
             const doctor = doctors.find(doctor => doctor.id === appointment.doctorId);
             return (
-              <TouchableOpacity key={appointment.id} style={styles.viewEventsAppointments} onLongPress={() => handleDeleteAppointment(appointment.appointmentId)}>
+              <TouchableOpacity key={appointment.id} style={styles.viewEventsAppointments} onLongPress={() => handleDeleteAppointment(appointment.id)}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                   {doctor && doctor.profilePicture && (
                     <Image source={{ uri: `${link.link}/doctor/image/${doctor.profilePicture}` }} style={{ width: 50, height: 50, borderRadius: 25, marginTop: 3, marginLeft: 5 }} />
