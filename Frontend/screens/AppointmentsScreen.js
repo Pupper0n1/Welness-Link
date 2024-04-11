@@ -22,6 +22,11 @@ export const AppointmentsScreen = () => {
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
 
+  const [time, setTime] = useState(null);
+  const [open1, setOpen1] = useState(false);
+  const [value1, setValue1] = useState(null);
+  const [items1, setItems1] = useState([]);
+
   useEffect(() => {
     fetchDoctors();
   }, []);
@@ -60,7 +65,7 @@ export const AppointmentsScreen = () => {
     }
 
     try {
-      const response = await fetch(`${link.link}/appointment/appointment`, {
+      const response = await fetch(`${link.link}/appointment`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -143,6 +148,23 @@ export const AppointmentsScreen = () => {
         )}
       </View>
 
+      {/* Appointment Time Picker */}
+      <Text style={styles.label}>Appointment Time</Text>
+      <View style={styles.container}>
+        {/* Dropdown */}
+        <DropDownPicker
+          open={open1}
+          value={value1}
+          items={items1}
+          setOpen={setOpen1}
+          setValue={setValue1}
+          setItems={setItems1}
+          containerStyle={{ width: '90%' }}
+          placeholder="Time"
+          onChangeValue={(selectedTime) => setTime(selectedTime)}
+        />
+      </View>
+
       {/* Add Button */}
       <View style={styles.addButtonContainer}>
         <TouchableOpacity style={styles.addButton} onPress={handleAdd}>
@@ -194,7 +216,7 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
   },
   addButtonContainer: {
-    marginTop: 200,
+    marginTop: 100,
     alignItems: 'center',
   },
   addButton: {
