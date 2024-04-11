@@ -67,7 +67,7 @@ db_config = SQLAlchemyAsyncConfig(connection_string=os.getenv("DB_URL"))
 
 
 cors_config = CORSConfig(allow_origins=["*"])  # NOTE: Change it for production
-
+from litestar.openapi.plugins import SwaggerRenderPlugin
 # Create the Litestar application instance
 app = Litestar(
     [   login_handler,

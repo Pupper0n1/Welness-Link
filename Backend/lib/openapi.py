@@ -1,5 +1,9 @@
 from litestar.openapi.config import OpenAPIConfig
 from litestar.openapi.spec.license import License
+from litestar.openapi.plugins import SwaggerRenderPlugin
+
+swagger_render_plugin = SwaggerRenderPlugin()
+swagger_render_plugin.favicon = "/Users/wassemelbouni/Downloads/favicon_package_v0.16/favicon.ico"
 
 config = OpenAPIConfig(
     title="Wellness-Link API",
@@ -11,5 +15,10 @@ config = OpenAPIConfig(
         name="This project is under the MIT License",
         url="https://opensource.org/licenses/MIT",
     ),
+    render_plugins=[swagger_render_plugin],
+    # favicon_url="https://www.ucalgary.ca/favicon.ico",
 )
 """OpenAPI config for app."""
+
+
+
