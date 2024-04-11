@@ -19,9 +19,11 @@ async def subtract_dosage(session: AsyncSession, user_id, medicine_id):
 
     user = await get_user_by_id(session, user_id)
 
-    if user_medicine.current_amount <= user_medicine.total*0.3:
-        await send_email(user.email, user_medicine.medicine_name, user_medicine.current_amount)
-    
+    try:
+        if user_medicine.current_amount <= user_medicine.total*0.3:
+            await send_email(user.email, user_medicine.medicine_name, user_medicine.current_amount)
+    except:
+        pass
     await session.commit()
 
 
