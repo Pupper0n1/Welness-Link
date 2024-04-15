@@ -101,8 +101,8 @@ export const AppointmentsScreen = () => {
   };
 
   const handleAdd = async () => {
-    const modifiedDate = new Date(date.getTime() - 86400000);
-    const formattedDate = modifiedDate.toISOString().split('T')[0];
+    // const modifiedDate = new Date(date.getTime() - 86400000);
+    const formattedDate = date.toISOString().split('T')[0];
     if (!doctor) {
       Alert.alert('Error', 'Please select a doctor.');
       return;
@@ -142,7 +142,7 @@ export const AppointmentsScreen = () => {
   };
 
   const dateTest = (selectedDate) => {
-    selectedDate = new Date(selectedDate.getTime() - 86400000)
+    // selectedDate = new Date(selectedDate.getTime() - 86400000)
     fetchAppointments(selectedDate);
   };
 
