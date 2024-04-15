@@ -37,6 +37,7 @@ This repository contains the source code for the Wellness-Link application. Foll
 
 ## Notes
 
+- Please ensure that you go into the file called link.json in the Frontend folder to change the IP address to your public IP address.
 - Ensure all dependencies are installed and services are running properly before accessing the application.
 - Make sure Docker is running and the Docker services are up and running.
 - Replace YOUR_PUBLIC_IP with your actual public IP address before running the backend server.
