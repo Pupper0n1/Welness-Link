@@ -3,6 +3,7 @@ import { View, Text, Image, SafeAreaView, TextInput, TouchableOpacity } from 're
 import { StatusBar } from 'expo-status-bar';
 import { useNavigation, CommonActions } from '@react-navigation/native';
 import Animated, { FadeIn, FadeInDown, FadeInUp } from 'react-native-reanimated';
+import link from '../link.json';
 
 export default function LoginScreen() {
     const navigation = useNavigation();
@@ -11,7 +12,7 @@ export default function LoginScreen() {
 
     const handleLogin = async () => {
         try {
-            const response = await fetch('http://192.168.255.242:8000/login', {
+            const response = await fetch(`${link.link}/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
